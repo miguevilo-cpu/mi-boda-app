@@ -20,7 +20,7 @@
     .font-raleway { font-family: 'Raleway', sans-serif; }
     .font-lora { font-family: 'Lora', serif; }
 
-    /* Fondo general */
+    /* Fondo general del sitio */
     .textura-cartulina-hilo {
       background-color: <%= invitation.colorFondo %>;
       <% if (invitation.imagenFondo && invitation.imagenFondo.length > 0) { %>
@@ -34,32 +34,23 @@
       <% } %>
     }
 
-    /* Estilo Pergamino Auténtico */
-    .tarjeta-pergamino {
+    /* Pergamino con Borde Rasgado Artesanal (Deckle Edge / Paper Cutout) */
+    .tarjeta-pergamino-corte {
       background-color: #fcf8f2;
       background-image: radial-gradient(#e8dec9 1px, transparent 0), url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E");
-      border: 1px solid #e2d3b7;
-      box-shadow: 0 20px 50px rgba(70, 50, 30, 0.15), inset 0 0 80px rgba(180, 150, 110, 0.18);
+      border-left: 1px solid #e0d0b5;
+      border-right: 1px solid #e0d0b5;
+      box-shadow: 0 20px 50px rgba(70, 50, 30, 0.12), inset 0 0 70px rgba(180, 150, 110, 0.15);
       position: relative;
-      border-radius: 12px;
     }
 
-    /* Rollos de pergamino en extremos */
-    .tarjeta-pergamino::before, .tarjeta-pergamino::after {
-      content: '';
-      position: absolute;
-      left: -12px;
-      right: -12px;
-      height: 22px;
-      background: linear-gradient(to right, #bca888, #eadecc 15%, #f5eee2 50%, #eadecc 85%, #bca888);
-      border: 1px solid #ad9773;
-      border-radius: 11px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.18);
-      z-index: 15;
-      pointer-events: none;
+    /* Recorte superior e inferior del pergamino */
+    .tarjeta-pergamino-corte {
+      clip-path: polygon(
+        0% 12px, 2% 3px, 4% 15px, 7% 2px, 10% 12px, 14% 1px, 18% 13px, 22% 3px, 27% 14px, 32% 1px, 37% 12px, 42% 2px, 47% 15px, 52% 3px, 58% 13px, 63% 1px, 68% 14px, 73% 2px, 78% 12px, 83% 3px, 88% 15px, 93% 2px, 97% 12px, 100% 1px,
+        100% calc(100% - 1px), 97% calc(100% - 12px), 93% calc(100% - 2px), 88% calc(100% - 15px), 83% calc(100% - 3px), 78% calc(100% - 12px), 73% calc(100% - 2px), 68% calc(100% - 14px), 63% calc(100% - 1px), 58% calc(100% - 13px), 52% calc(100% - 3px), 47% calc(100% - 15px), 42% calc(100% - 2px), 37% calc(100% - 12px), 32% calc(100% - 1px), 27% calc(100% - 14px), 22% calc(100% - 3px), 18% calc(100% - 13px), 14% calc(100% - 1px), 10% calc(100% - 12px), 7% calc(100% - 2px), 4% calc(100% - 15px), 2% calc(100% - 3px), 0% calc(100% - 12px)
+      );
     }
-    .tarjeta-pergamino::before { top: -11px; }
-    .tarjeta-pergamino::after { bottom: -11px; }
 
     /* Marco Ornamental de Novios */
     .marco-novios-container {
@@ -187,7 +178,7 @@
       box-shadow: 0 14px 28px rgba(0,0,0,0.25);
     }
 
-    /* Lightbox con Zoom Fluido y Fondo Borroso */
+    /* Lightbox Borroso con Zoom Fluido */
     .lightbox-backdrop {
       position: fixed;
       inset: 0;
@@ -292,14 +283,8 @@
     }
   </script>
 
-  <div class="max-w-xl mx-auto tarjeta-pergamino p-8 md:p-14 text-center relative">
+  <div class="max-w-xl mx-auto tarjeta-pergamino-corte p-8 md:p-14 text-center relative my-4">
     
-    <div class="absolute top-4 right-4 z-20">
-      <button onclick="toggleAdminModal()" class="text-[10px] uppercase tracking-widest text-stone-500 hover:text-stone-900 transition font-sans border border-stone-300 px-3 py-1 rounded-full cursor-pointer bg-white/60 backdrop-blur-sm">
-        🔑 Admin
-      </button>
-    </div>
-
     <!-- Modal Admin centrado en pantalla -->
     <div id="adminModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div class="bg-white p-6 rounded-2xl max-w-sm w-full shadow-2xl text-center font-sans">
@@ -649,7 +634,7 @@
     </div>
 
     <script>
-      // Envío de RSVP por AJAX preservando la llamada HTTP tradicional del servidor
+      // Envío de RSVP por AJAX
       document.getElementById('rsvp-form').addEventListener('submit', async function(e) {
         e.preventDefault();
         const form = e.target;
@@ -686,8 +671,16 @@
 
   </div>
 
-  <footer class="mt-8 text-center text-xs text-stone-400 font-sans">
+  <!-- Pie de Página con Botón de Admin Monocromático -->
+  <footer class="mt-12 text-center text-xs text-stone-400 font-sans space-y-3 pb-6">
     <p>Nupcias © <%= new Date().getFullYear() %> Todos los derechos reservados</p>
+    
+    <!-- Botón Admin Monocromático -->
+    <div>
+      <button onclick="toggleAdminModal()" class="text-[10px] uppercase tracking-widest text-stone-400 hover:text-stone-700 transition font-sans border border-stone-300 px-4 py-1.5 rounded-full cursor-pointer bg-white/40">
+        Acceso Administrador
+      </button>
+    </div>
   </footer>
 
 </body>
