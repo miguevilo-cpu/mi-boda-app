@@ -36,34 +36,25 @@
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 -1px 2px rgba(255, 255, 255, 0.9);
     }
 
+    /* Reloj sincronizado adaptado a los colores de la invitación */
     .flip-card {
-      background: linear-gradient(180deg, #262626 0%, #171717 100%);
-      color: #ffffff;
+      background-color: <%= invitation.colorTexto %>;
+      color: <%= invitation.colorFondo %>;
       padding: 8px 12px;
       border-radius: 8px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
       position: relative;
       overflow: hidden;
       display: inline-block;
       min-width: 44px;
       text-align: center;
     }
-    .flip-card::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: rgba(0,0,0,0.6);
-      box-shadow: 0 1px 0 rgba(255,255,255,0.15);
-    }
     .flip-anim {
-      animation: flipDown 0.4s ease-in-out;
+      animation: flipDown 0.3s ease-in-out;
     }
     @keyframes flipDown {
-      0% { transform: rotateX(0deg); }
-      50% { transform: rotateX(-90deg); opacity: 0.7; }
+      0% { transform: rotateX(0deg); opacity: 1; }
+      50% { transform: rotateX(-90deg); opacity: 0.4; }
       100% { transform: rotateX(0deg); opacity: 1; }
     }
 
@@ -77,11 +68,12 @@
       z-index: 5 !important;
     }
 
+    /* Sello de cera con letras del color del fondo para contraste perfecto */
     .wax-seal {
       background: radial-gradient(circle at 30% 30%, #881337, #4c0519);
       box-shadow: 0 8px 16px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.3);
       border: 2px solid #701a75;
-      color: <%= invitation.colorTexto %>;
+      color: <%= invitation.colorFondo %>;
       text-shadow: 0 1px 2px rgba(0,0,0,0.5);
     }
   </style>
@@ -103,30 +95,26 @@
     let monograma = `${init1} & ${init2}`;
   %>
 
-  <!-- Pantalla del Sobre Opaca y Amplia sin Colisiones -->
+  <!-- Pantalla del Sobre con nombres más abajo y sin colisiones -->
   <div id="envelope-screen" class="fixed inset-0 z-50 bg-stone-950 flex items-center justify-center p-4 cursor-pointer envelope-wrapper" onclick="abrirInvitacion()">
-    <div class="relative w-[94vw] max-w-xl h-[460px] bg-stone-100 rounded-3xl shadow-2xl border border-stone-300 flex flex-col justify-between items-center p-8 text-center overflow-hidden" id="envelope">
+    <div class="relative w-[94vw] max-w-xl h-[480px] bg-stone-100 rounded-3xl shadow-2xl border border-stone-300 flex flex-col justify-between items-center p-8 text-center overflow-hidden" id="envelope">
       
-      <!-- Solapa del Sobre -->
       <div id="flap" class="absolute top-0 left-0 w-full h-56 bg-stone-200 border-b border-stone-300 z-30 envelope-flap shadow-lg" style="clip-path: polygon(0 0, 100% 0, 50% 100%);">
       </div>
 
-      <!-- Sello de Cera posicionado perfectamente en el vértice de la solapa -->
       <div id="seal" class="wax-seal absolute top-[190px] z-40 w-16 h-16 rounded-full flex items-center justify-center font-bold text-base tracking-tighter shadow-2xl">
         <%= monograma %>
       </div>
 
-      <!-- Espacio Superior (Libre de choques con la cera) -->
       <div class="pt-6 z-20">
         <span class="text-xs uppercase tracking-widest text-stone-400 font-sans font-semibold">NUESTRA BODA</span>
       </div>
 
-      <!-- Nombres de los Novios Centrados y Espaciados -->
-      <div class="z-20 my-auto px-4">
+      <!-- Nombres desplazados más abajo -->
+      <div class="z-20 my-auto px-4 pt-6">
         <h2 class="text-3xl md:text-5xl font-bold text-stone-900 leading-snug"><%= invitation.novios %></h2>
       </div>
 
-      <!-- Instrucción Inferior -->
       <div class="pb-2 z-20">
         <p class="text-xs text-stone-600 font-sans italic bg-white/90 px-5 py-2 rounded-full shadow-sm inline-block border border-stone-200">✉️ Toca el sello para abrir la invitación</p>
       </div>
@@ -274,7 +262,6 @@
 
     <div class="doblez-hoja"></div>
 
-    <!-- Dress Code con Siluetas Estéticas y Minimalistas -->
     <div class="space-y-4 font-sans">
       <h3 class="text-2xl font-bold tracking-wide">Código de Vestimenta</h3>
       <div class="inline-block bg-stone-900 text-white px-5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
@@ -285,7 +272,6 @@
         <p class="text-stone-500 italic">Reservamos los siguientes colores exclusivamente para los novios:</p>
         
         <div class="grid grid-cols-2 gap-4">
-          <!-- Mujeres (Silueta de Vestido Minimalista Estilizada) -->
           <div class="flex flex-col items-center bg-white p-3 rounded-xl border border-stone-100">
             <svg class="w-8 h-8 text-stone-700 mb-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a2 2 0 100 4 2 2 0 000-4zm-2.5 7L6 21h12l-3.5-12h-5z"/>
@@ -300,7 +286,6 @@
             </div>
           </div>
 
-          <!-- Hombres (Silueta de Traje/Smoking Minimalista Estilizada) -->
           <div class="flex flex-col items-center bg-white p-3 rounded-xl border border-stone-100">
             <svg class="w-8 h-8 text-stone-700 mb-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a2 2 0 100 4 2 2 0 000-4zm-3 6l3 4 3-4V21H9V8z"/>
@@ -320,8 +305,8 @@
 
     <div class="doblez-hoja"></div>
 
-    <!-- Mesa de Regalos con Logotipo Oficial Correcto de Binance -->
-    <% if (invitation.zelleEmail || invitation.binancePayId || invitation.binanceWalletUsdt) { %>
+    <!-- Mesa de Regalos con Zelle, Binance, Pago Móvil y Buzón Opcional -->
+    <% if (invitation.zelleEmail || invitation.binancePayId || invitation.binanceWalletUsdt || invitation.pagoMovilBanco || invitation.mostrarBuzonFisico) { %>
       <div class="space-y-4 font-sans">
         <h3 class="text-2xl font-bold tracking-wide">Mesa de Regalos</h3>
         <p class="text-xs text-stone-500 italic">Tu presencia es nuestro mejor regalo. Si deseas realizarnos un presente económico:</p>
@@ -348,7 +333,6 @@
             <div class="bg-amber-50/60 p-4 rounded-2xl border border-amber-200/80 relative flex flex-col justify-between">
               <div>
                 <div class="flex items-center gap-2 mb-2">
-                  <!-- Logotipo Geométrico Oficial Correcto de Binance -->
                   <svg class="w-6 h-6 text-amber-500" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M16.44 9.125L12 4.685 7.56 9.125 4.685 6.25 12 0l7.315 6.25-2.575 2.875zm-8.88 5.75L12 19.315l4.44-4.44 2.875 2.875L12 24l-7.315-6.25 2.575-2.875zM2.875 10.875L0 12l2.875 1.125L5.75 12 2.875 10.875zm18.25 0L18.25 12l2.875 1.125L24 12l-2.875-1.125zM12 7.75l4.25 4.25L12 16.25 7.75 12 12 7.75z"/>
                   </svg>
@@ -365,6 +349,29 @@
             </div>
           <% } %>
 
+          <% if (invitation.pagoMovilBanco) { %>
+            <div class="bg-blue-50/60 p-4 rounded-2xl border border-blue-200/80 relative flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-2 mb-2">
+                  <svg class="w-6 h-6 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm0 2v2h16V6H4zm0 4v8h16v-8H4z"/>
+                  </svg>
+                  <span class="font-bold text-xs text-blue-900 tracking-wider">PAGO MÓVIL</span>
+                </div>
+                <p class="text-xs font-semibold text-stone-800"><%= invitation.pagoMovilBanco %></p>
+                <p class="text-[11px] text-stone-500">C.I / RIF: <%= invitation.pagoMovilCedula %></p>
+              </div>
+              <button onclick="copiarTexto('<%= invitation.pagoMovilBanco %>')" class="mt-3 text-[10px] bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 py-1.5 rounded-lg transition self-start shadow-sm">Copiar Datos</button>
+            </div>
+          <% } %>
+
+          <% if (invitation.mostrarBuzonFisico) { %>
+            <div class="bg-stone-100 p-4 rounded-2xl border border-stone-200 flex flex-col justify-center items-center text-center">
+              <span class="text-xl mb-1">💌</span>
+              <p class="text-xs font-semibold text-stone-800">Tendremos buzón de regalos en el salón de festejos</p>
+            </div>
+          <% } %>
+
         </div>
       </div>
 
@@ -378,16 +385,16 @@
       <div class="doblez-hoja"></div>
     <% } %>
 
-    <!-- Menú / Alergias -->
+    <!-- Menú (Título limpio sin alergias) -->
     <% if (invitation.menu) { %>
       <div class="my-6 text-left bg-stone-50 p-6 rounded-2xl border border-stone-200/80 font-sans">
-        <h3 class="text-xl font-bold text-center mb-2">🍽️ Menú / Alergias</h3>
+        <h3 class="text-xl font-bold text-center mb-2">🍽️ Menú</h3>
         <p class="text-xs text-stone-600 whitespace-pre-line text-center leading-relaxed"><%= invitation.menu %></p>
       </div>
       <div class="doblez-hoja"></div>
     <% } %>
 
-    <!-- RSVP -->
+    <!-- RSVP con campo de Alergias -->
     <div id="rsvp" class="mt-8 text-left bg-stone-50/80 p-6 rounded-2xl border border-stone-200/80 font-sans">
       <h3 class="text-xl font-bold text-center mb-4">Confirma tu Asistencia</h3>
       <form action="/boda/<%= invitation.slug %>/rsvp" method="POST" class="space-y-4 text-xs">
@@ -413,7 +420,7 @@
         </div>
 
         <div>
-          <label class="block uppercase tracking-wider text-stone-500">Menú / Alergias</label>
+          <label class="block uppercase tracking-wider text-stone-500">Menú Elegido / Alergias</label>
           <input type="text" name="menuElegido" placeholder="Ej. Lomito / Alergia al maní" class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-xl">
         </div>
         
