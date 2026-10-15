@@ -2,97 +2,144 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Crear Invitación Avanzada</title>
+  <title>Diseñar Invitación de Boda</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-stone-50 py-12 px-4 font-sans">
-  <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-xl border border-stone-200">
-    <h2 class="text-3xl font-serif mb-6 text-center">Diseña tu Boda Perfecta</h2>
-    <form action="/crear" method="POST" class="space-y-6">
+<body class="bg-stone-100 py-12 px-4 font-sans text-stone-800">
+  <div class="max-w-3xl mx-auto bg-white p-8 md:p-10 rounded-3xl shadow-xl border border-stone-200">
+    <h2 class="text-3xl font-serif font-bold text-center mb-2">Diseña tu Invitación Digital</h2>
+    <p class="text-center text-xs text-stone-500 mb-8">Personaliza lugares, dress code, regalos, música y sobre sellado con cera.</p>
+    
+    <form action="/crear" method="POST" class="space-y-8">
       
-      <!-- Información General -->
+      <!-- 1. Datos Generales -->
       <div class="space-y-4">
-        <h3 class="text-lg font-semibold border-b pb-2 text-stone-700">1. Información y Cuenta Regresiva</h3>
-        <div>
-          <label class="block text-sm font-medium text-stone-700">Nombres de los Novios</label>
-          <input type="text" name="novios" required placeholder="Sofía & Alejandro" class="mt-1 w-full p-2.5 border rounded-lg">
+        <h3 class="text-lg font-semibold border-b pb-2 text-stone-700">1. Datos Generales & Administrador</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium uppercase tracking-wider text-stone-600">Nombres de los Novios</label>
+            <input type="text" name="novios" required placeholder="Sofía & Alejandro" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-medium uppercase tracking-wider text-stone-600">PIN Administrador (4 dígitos)</label>
+            <input type="password" name="pinAdmin" value="1234" maxlength="4" required class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-sm">
+          </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-stone-700">Fecha y Hora (Para Cuenta Regresiva)</label>
-            <input type="datetime-local" name="fecha" required class="mt-1 w-full p-2.5 border rounded-lg text-sm">
+            <label class="block text-xs font-medium uppercase tracking-wider text-stone-600">Fecha y Hora (Para Cuenta Regresiva)</label>
+            <input type="datetime-local" name="fecha" required class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-sm">
           </div>
           <div>
-            <label class="block text-sm font-medium text-stone-700">Texto Visible de la Fecha</label>
-            <input type="text" name="fechaTexto" placeholder="15 de Octubre, 2026 - 5:00 PM" class="mt-1 w-full p-2.5 border rounded-lg">
+            <label class="block text-xs font-medium uppercase tracking-wider text-stone-600">Texto Visible de la Fecha</label>
+            <input type="text" name="fechaTexto" placeholder="Sábado, 15 de Noviembre, 2026 - 5:00 PM" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-sm">
           </div>
         </div>
         <div>
-          <label class="block text-sm font-medium text-stone-700">Lugar del Evento</label>
-          <input type="text" name="lugar" required placeholder="Hacienda San José, Táchira" class="mt-1 w-full p-2.5 border rounded-lg">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-stone-700">Enlace o Código Iframe de Google Maps</label>
-          <input type="text" name="mapaUrl" placeholder="https://www.google.com/maps/embed?pb=..." class="mt-1 w-full p-2.5 border rounded-lg text-sm">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-stone-700">PIN de Administrador (4 dígitos)</label>
-          <input type="password" name="pinAdmin" value="1234" maxlength="4" required class="mt-1 w-full p-2.5 border rounded-lg text-sm">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-stone-700">Mensaje de Bienvenida</label>
-          <textarea name="mensaje" rows="3" class="mt-1 w-full p-2.5 border rounded-lg" placeholder="Nos emociona mucho compartir este gran día..."></textarea>
+          <label class="block text-xs font-medium uppercase tracking-wider text-stone-600">Mensaje de Bienvenida</label>
+          <textarea name="mensaje" rows="2" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-sm" placeholder="Con la bendición de Dios y nuestros padres..."></textarea>
         </div>
       </div>
 
-      <!-- Música y Estética -->
+      <!-- 2. Ubicaciones: Ceremonia y Recepción -->
       <div class="space-y-4">
-        <h3 class="text-lg font-semibold border-b pb-2 text-stone-700">2. Música de YouTube y Estilo Visual</h3>
-        <div>
-          <label class="block text-sm font-medium text-stone-700">Enlace de Canción de YouTube</label>
-          <input type="text" name="youtubeUrl" placeholder="https://www.youtube.com/watch?v=TuIDDeVideo" class="mt-1 w-full p-2.5 border rounded-lg text-sm">
+        <h3 class="text-lg font-semibold border-b pb-2 text-stone-700">2. Ubicación Ceremonia Eucarística y Recepción</h3>
+        
+        <div class="p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-3">
+          <h4 class="font-medium text-sm text-stone-800">⛪ Ceremonia Eucarística (Iglesia)</h4>
+          <input type="text" name="lugarCeremonia" required placeholder="Catedral de San Cristóbal" class="w-full p-2.5 border border-stone-300 rounded-xl text-sm bg-white">
+          <input type="text" name="mapaCeremoniaUrl" placeholder="Enlace o código iframe de Google Maps de la iglesia" class="w-full p-2.5 border border-stone-300 rounded-xl text-xs bg-white">
         </div>
-        <div>
-          <label class="block text-sm font-medium text-stone-700">URL de Imagen de Fondo (Opcional)</label>
-          <input type="text" name="imagenFondo" placeholder="https://ejemplo.com/fondo.jpg" class="mt-1 w-full p-2.5 border rounded-lg text-sm">
-        </div>
-        <div class="flex items-center gap-2">
-          <input type="checkbox" name="textura" id="textura" checked class="w-4 h-4 rounded text-stone-900">
-          <label for="textura" class="text-sm font-medium text-stone-700">Activar textura de cartulina de hilo</label>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-stone-700">Detalles del Menú</label>
-          <textarea name="menu" rows="2" class="mt-1 w-full p-2.5 border rounded-lg" placeholder="Entrada, plato fuerte..."></textarea>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-stone-700">Fotos de los Novios (URLs separadas por comas)</label>
-          <input type="text" name="fotos" placeholder="https://img1.jpg, https://img2.jpg" class="mt-1 w-full p-2.5 border rounded-lg text-sm">
+
+        <div class="p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-3">
+          <h4 class="font-medium text-sm text-stone-800">🥂 Recepción / Fiesta</h4>
+          <input type="text" name="lugarRecepcion" required placeholder="Hacienda San José" class="w-full p-2.5 border border-stone-300 rounded-xl text-sm bg-white">
+          <input type="text" name="mapaRecepcionUrl" placeholder="Enlace o código iframe de Google Maps de la recepción" class="w-full p-2.5 border border-stone-300 rounded-xl text-xs bg-white">
         </div>
       </div>
 
-      <!-- Personalización Colores y Fuentes -->
+      <!-- 3. Dress Code & Paletas de Colores Restringidos -->
       <div class="space-y-4">
-        <h3 class="text-lg font-semibold border-b pb-2 text-stone-700">3. Tipografía y Colores</h3>
+        <h3 class="text-lg font-semibold border-b pb-2 text-stone-700">3. Código de Vestimenta (Dress Code)</h3>
+        <div>
+          <label class="block text-xs font-medium uppercase tracking-wider text-stone-600">Formalidad</label>
+          <select name="dressCode" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-sm">
+            <option value="Rigurosa Etiqueta / Black Tie">Rigurosa Etiqueta / Black Tie</option>
+            <option value="Formal Elegante" selected>Formal Elegante</option>
+            <option value="Semi-Formal / Guayabera">Semi-Formal / Guayabera</option>
+            <option value="Casual Elegante">Casual Elegante</option>
+          </select>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium uppercase tracking-wider text-stone-600">3 Colores Prohibidos - Mujeres (Hex separadas por coma)</label>
+            <input type="text" name="coloresDamas" value="#ffffff, #f5f5dc, #e5e7eb" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs font-mono">
+            <span class="text-[10px] text-stone-400">Predeterminado: Blanco, Beige, Gris claro.</span>
+          </div>
+          <div>
+            <label class="block text-xs font-medium uppercase tracking-wider text-stone-600">3 Colores Prohibidos - Hombres (Hex separadas por coma)</label>
+            <input type="text" name="coloresCaballeros" value="#000000, #1f2937, #ffffff" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs font-mono">
+            <span class="text-[10px] text-stone-400">Predeterminado: Negro, Azul Marino, Blanco.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Regalos: Zelle & Binance -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold border-b pb-2 text-stone-700">4. Mesa de Regalos (Zelle y Binance)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-2">
+            <h4 class="font-medium text-xs uppercase tracking-wider text-stone-700">💳 Datos Zelle</h4>
+            <input type="email" name="zelleEmail" placeholder="Correo de Zelle" class="w-full p-2 border border-stone-300 rounded-lg text-xs bg-white">
+            <input type="text" name="zelleTitular" placeholder="Nombre del Titular" class="w-full p-2 border border-stone-300 rounded-lg text-xs bg-white">
+          </div>
+          <div class="p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-2">
+            <h4 class="font-medium text-xs uppercase tracking-wider text-stone-700">🟡 Datos Binance</h4>
+            <input type="text" name="binancePayId" placeholder="Binance Pay ID" class="w-full p-2 border border-stone-300 rounded-lg text-xs bg-white">
+            <input type="text" name="binanceWalletUsdt" placeholder="Dirección Wallet USDT" class="w-full p-2 border border-stone-300 rounded-lg text-xs bg-white font-mono">
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Estética y Música -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold border-b pb-2 text-stone-700">5. Estilo Visual y Música</h3>
+        <div>
+          <label class="block text-xs font-medium uppercase tracking-wider text-stone-600">Enlace Canción de YouTube</label>
+          <input type="text" name="youtubeUrl" placeholder="https://www.youtube.com/watch?v=TuVideo" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs">
+        </div>
+        <div>
+          <label class="block text-xs font-medium uppercase tracking-wider text-stone-600">Menú</label>
+          <textarea name="menu" rows="2" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs" placeholder="Entrada, Plato Fuerte, Postre..."></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-medium uppercase tracking-wider text-stone-600">Fotos (URLs separadas por comas)</label>
+          <input type="text" name="fotos" placeholder="https://img1.jpg, https://img2.jpg" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs">
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label class="block text-sm font-medium text-stone-700">Tipografía</label>
-            <select name="fuente" class="mt-1 w-full p-2.5 border rounded-lg text-sm">
-              <option value="font-serif">Clásica Elegante</option>
-              <option value="font-sans">Moderna Minimalista</option>
+            <label class="block text-xs font-medium uppercase tracking-wider text-stone-600">Tipografía</label>
+            <select name="fuente" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs">
+              <option value="font-serif">Clásica Serif Elegante</option>
+              <option value="font-sans">Moderna Sans-Serif</option>
             </select>
           </div>
           <div>
-            <label class="block text-sm font-medium text-stone-700">Color de Texto</label>
-            <input type="color" name="colorTexto" value="#1c1917" class="mt-1 w-full h-10 p-1 border rounded-lg cursor-pointer">
+            <label class="block text-xs font-medium uppercase tracking-wider text-stone-600">Color Texto</label>
+            <input type="color" name="colorTexto" value="#1c1917" class="mt-1 w-full h-10 p-1 border rounded-xl cursor-pointer">
           </div>
           <div>
-            <label class="block text-sm font-medium text-stone-700">Color de Fondo Base</label>
-            <input type="color" name="colorFondo" value="#fafaf9" class="mt-1 w-full h-10 p-1 border rounded-lg cursor-pointer">
+            <label class="block text-xs font-medium uppercase tracking-wider text-stone-600">Color Fondo</label>
+            <input type="color" name="colorFondo" value="#fafaf9" class="mt-1 w-full h-10 p-1 border rounded-xl cursor-pointer">
           </div>
+        </div>
+        <div class="flex items-center gap-2 pt-2">
+          <input type="checkbox" name="textura" id="textura" checked class="w-4 h-4 rounded text-stone-900">
+          <label for="textura" class="text-xs font-medium text-stone-700">Activar textura textil realista de cartulina de lino/hilo</label>
         </div>
       </div>
 
-      <button type="submit" class="w-full bg-stone-900 text-white py-3 rounded-xl hover:bg-stone-800 transition font-medium text-lg">Crear Invitación</button>
+      <button type="submit" class="w-full bg-stone-900 text-white py-3.5 rounded-2xl hover:bg-stone-800 transition font-medium text-base shadow-lg">Crear Invitación</button>
     </form>
   </div>
 </body>
