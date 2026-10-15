@@ -88,10 +88,9 @@ app.post('/crear', async (req, res) => {
     
     const slug = novios.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Date.now().toString().slice(-4);
     
-    // Procesar fotos (pueden venir como string separado por comas o array)
     let fotosArray = [];
     if (Array.isArray(fotos)) {
-      fotosArray = fotos.filter(f => f.trim().length > 0);
+      fotosArray = fotos.filter(f => f && f.trim().length > 0);
     } else if (typeof fotos === 'string') {
       fotosArray = fotos.split(',').map(f => f.trim()).filter(f => f.length > 0);
     }
