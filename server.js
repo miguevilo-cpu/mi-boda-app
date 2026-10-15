@@ -42,7 +42,7 @@ const invitationSchema = new mongoose.Schema({
   binancePayId: String,
   binanceWalletUsdt: String,
 
-  // Estilos y Fondo
+  // Estilos
   fuente: { type: String, default: 'font-serif' },
   colorTexto: { type: String, default: '#1c1917' },
   colorFondo: { type: String, default: '#fafaf9' },
@@ -87,7 +87,14 @@ app.post('/crear', async (req, res) => {
     } = req.body;
     
     const slug = novios.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Date.now().toString().slice(-4);
-    const fotosArray = fotos ? fotos.split(',').map(f => f.trim()).filter(f => f.length > 0) : [];
+    
+    // Procesar fotos (pueden venir como string separado por comas o array)
+    let fotosArray = [];
+    if (Array.isArray(fotos)) {
+      fotosArray = fotos.filter(f => f.trim().length > 0);
+    } else if (typeof fotos === 'string') {
+      fotosArray = fotos.split(',').map(f => f.trim()).filter(f => f.length > 0);
+    }
 
     const nuevaInvitacion = new Invitation({
       slug,
