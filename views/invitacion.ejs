@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Boda de <%= invitation.novios %></title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Todas las fuentes importadas para lectura pública -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@300;400;500;600&family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,600;1,400&family=Great+Vibes&family=Alex+Brush&family=Pinyon+Script&family=Italianno&display=swap" rel="stylesheet">
   <style>
     .font-serif { font-family: 'Playfair Display', serif; }
@@ -68,7 +67,7 @@
       100% { transform: rotateX(0deg); opacity: 1; }
     }
 
-    .envelope-wrapper { perspective: 1200px; }
+    .envelope-wrapper { perspective: 1400px; }
     .envelope-flap {
       transform-origin: top;
       transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -89,14 +88,6 @@
 </head>
 <body class="<%= invitation.fuente %> textura-cartulina-hilo min-h-screen py-8 px-4 select-none" style="color: <%= invitation.colorTexto %>;">
 
-  <!-- Header App Logo -->
-  <div class="max-w-xl mx-auto mb-4 text-center">
-    <div class="inline-flex items-center gap-2 bg-stone-900/90 text-white px-4 py-1.5 rounded-full shadow-md backdrop-blur-sm">
-      <span class="text-sm">💍</span>
-      <h1 class="text-[11px] font-serif tracking-widest uppercase font-bold">Invitación Digital Boda</h1>
-    </div>
-  </div>
-
   <% if (invitation.youtubeUrl) { 
      let ytId = invitation.youtubeUrl.includes('v=') ? invitation.youtubeUrl.split('v=')[1].substring(0,11) : invitation.youtubeUrl.slice(-11);
   %>
@@ -112,22 +103,34 @@
     let monograma = `${init1} & ${init2}`;
   %>
 
-  <!-- Pantalla del Sobre Opaca -->
+  <!-- Pantalla del Sobre Opaca y Amplia sin Colisiones -->
   <div id="envelope-screen" class="fixed inset-0 z-50 bg-stone-950 flex items-center justify-center p-4 cursor-pointer envelope-wrapper" onclick="abrirInvitacion()">
-    <div class="relative w-[92vw] max-w-xl h-[420px] bg-stone-100 rounded-3xl shadow-2xl border border-stone-300 flex flex-col items-center justify-center p-8 text-center overflow-hidden" id="envelope">
+    <div class="relative w-[94vw] max-w-xl h-[460px] bg-stone-100 rounded-3xl shadow-2xl border border-stone-300 flex flex-col justify-between items-center p-8 text-center overflow-hidden" id="envelope">
       
-      <div id="flap" class="absolute top-0 left-0 w-full h-52 bg-stone-200 border-b border-stone-300 z-30 envelope-flap shadow-lg flex items-end justify-center pb-2" style="clip-path: polygon(0 0, 100% 0, 50% 100%);">
+      <!-- Solapa del Sobre -->
+      <div id="flap" class="absolute top-0 left-0 w-full h-56 bg-stone-200 border-b border-stone-300 z-30 envelope-flap shadow-lg" style="clip-path: polygon(0 0, 100% 0, 50% 100%);">
       </div>
 
-      <div id="seal" class="wax-seal absolute top-[175px] z-40 w-16 h-16 rounded-full flex items-center justify-center font-bold text-base tracking-tighter shadow-2xl">
+      <!-- Sello de Cera posicionado perfectamente en el vértice de la solapa -->
+      <div id="seal" class="wax-seal absolute top-[190px] z-40 w-16 h-16 rounded-full flex items-center justify-center font-bold text-base tracking-tighter shadow-2xl">
         <%= monograma %>
       </div>
 
-      <div class="z-20 mt-20 space-y-3">
+      <!-- Espacio Superior (Libre de choques con la cera) -->
+      <div class="pt-6 z-20">
         <span class="text-xs uppercase tracking-widest text-stone-400 font-sans font-semibold">NUESTRA BODA</span>
-        <h2 class="text-3xl md:text-5xl font-bold text-stone-900 leading-tight"><%= invitation.novios %></h2>
-        <p class="text-xs text-stone-600 font-sans mt-6 italic bg-white/90 px-5 py-2 rounded-full shadow-sm inline-block border border-stone-200">✉️ Toca el sello para abrir la invitación</p>
       </div>
+
+      <!-- Nombres de los Novios Centrados y Espaciados -->
+      <div class="z-20 my-auto px-4">
+        <h2 class="text-3xl md:text-5xl font-bold text-stone-900 leading-snug"><%= invitation.novios %></h2>
+      </div>
+
+      <!-- Instrucción Inferior -->
+      <div class="pb-2 z-20">
+        <p class="text-xs text-stone-600 font-sans italic bg-white/90 px-5 py-2 rounded-full shadow-sm inline-block border border-stone-200">✉️ Toca el sello para abrir la invitación</p>
+      </div>
+
     </div>
   </div>
 
@@ -271,6 +274,7 @@
 
     <div class="doblez-hoja"></div>
 
+    <!-- Dress Code con Siluetas Estéticas y Minimalistas -->
     <div class="space-y-4 font-sans">
       <h3 class="text-2xl font-bold tracking-wide">Código de Vestimenta</h3>
       <div class="inline-block bg-stone-900 text-white px-5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
@@ -281,9 +285,10 @@
         <p class="text-stone-500 italic">Reservamos los siguientes colores exclusivamente para los novios:</p>
         
         <div class="grid grid-cols-2 gap-4">
+          <!-- Mujeres (Silueta de Vestido Minimalista Estilizada) -->
           <div class="flex flex-col items-center bg-white p-3 rounded-xl border border-stone-100">
-            <svg class="w-8 h-8 text-stone-700 mb-1" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zm-3 6l1.5 5H8l-2 9h12l-2-9h-2.5L15 8H9z"/>
+            <svg class="w-8 h-8 text-stone-700 mb-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a2 2 0 100 4 2 2 0 000-4zm-2.5 7L6 21h12l-3.5-12h-5z"/>
             </svg>
             <span class="font-semibold text-stone-700 mb-2 text-[11px]">Mujeres</span>
             <div class="flex gap-2">
@@ -295,9 +300,10 @@
             </div>
           </div>
 
+          <!-- Hombres (Silueta de Traje/Smoking Minimalista Estilizada) -->
           <div class="flex flex-col items-center bg-white p-3 rounded-xl border border-stone-100">
-            <svg class="w-8 h-8 text-stone-700 mb-1" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2a2.25 2.25 0 1 0 0 4.5A2.25 2.25 0 0 0 12 2zm-4.5 5L12 11l4.5-4H18l-3 15h-6L6 7h1.5Z"/>
+            <svg class="w-8 h-8 text-stone-700 mb-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a2 2 0 100 4 2 2 0 000-4zm-3 6l3 4 3-4V21H9V8z"/>
             </svg>
             <span class="font-semibold text-stone-700 mb-2 text-[11px]">Hombres</span>
             <div class="flex gap-2">
@@ -314,6 +320,7 @@
 
     <div class="doblez-hoja"></div>
 
+    <!-- Mesa de Regalos con Logotipo Oficial Correcto de Binance -->
     <% if (invitation.zelleEmail || invitation.binancePayId || invitation.binanceWalletUsdt) { %>
       <div class="space-y-4 font-sans">
         <h3 class="text-2xl font-bold tracking-wide">Mesa de Regalos</h3>
@@ -341,8 +348,9 @@
             <div class="bg-amber-50/60 p-4 rounded-2xl border border-amber-200/80 relative flex flex-col justify-between">
               <div>
                 <div class="flex items-center gap-2 mb-2">
+                  <!-- Logotipo Geométrico Oficial Correcto de Binance -->
                   <svg class="w-6 h-6 text-amber-500" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L8.5 5.5l2.12 2.12L12 6.24l1.38 1.38 2.12-2.12L12 2zm-6.5 6.5L2 12l3.5 3.5 2.12-2.12L6.24 12l1.38-1.38-2.12-2.12zm13 0l-2.12 2.12 1.38 1.38 1.38-1.38 3.5 3.5-3.5 3.5-2.12-2.12-1.38 1.38 3.5 3.5L22 12l-3.5-3.5zM12 17.76l-1.38-1.38-2.12 2.12L12 22l3.5-3.5-2.12-2.12L12 17.76zM12 9.5L9.5 12l2.5 2.5 2.5-2.5L12 9.5z"/>
+                    <path d="M16.44 9.125L12 4.685 7.56 9.125 4.685 6.25 12 0l7.315 6.25-2.575 2.875zm-8.88 5.75L12 19.315l4.44-4.44 2.875 2.875L12 24l-7.315-6.25 2.575-2.875zM2.875 10.875L0 12l2.875 1.125L5.75 12 2.875 10.875zm18.25 0L18.25 12l2.875 1.125L24 12l-2.875-1.125zM12 7.75l4.25 4.25L12 16.25 7.75 12 12 7.75z"/>
                   </svg>
                   <span class="font-bold text-xs text-amber-900 tracking-wider">BINANCE</span>
                 </div>
@@ -370,14 +378,16 @@
       <div class="doblez-hoja"></div>
     <% } %>
 
+    <!-- Menú / Alergias -->
     <% if (invitation.menu) { %>
       <div class="my-6 text-left bg-stone-50 p-6 rounded-2xl border border-stone-200/80 font-sans">
-        <h3 class="text-xl font-bold text-center mb-2">🍽️ Menú del Evento</h3>
+        <h3 class="text-xl font-bold text-center mb-2">🍽️ Menú / Alergias</h3>
         <p class="text-xs text-stone-600 whitespace-pre-line text-center leading-relaxed"><%= invitation.menu %></p>
       </div>
       <div class="doblez-hoja"></div>
     <% } %>
 
+    <!-- RSVP -->
     <div id="rsvp" class="mt-8 text-left bg-stone-50/80 p-6 rounded-2xl border border-stone-200/80 font-sans">
       <h3 class="text-xl font-bold text-center mb-4">Confirma tu Asistencia</h3>
       <form action="/boda/<%= invitation.slug %>/rsvp" method="POST" class="space-y-4 text-xs">
@@ -403,8 +413,8 @@
         </div>
 
         <div>
-          <label class="block uppercase tracking-wider text-stone-500">Opción de Menú</label>
-          <input type="text" name="menuElegido" placeholder="Ej. Lomito / Menú Vegetariano" class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-xl">
+          <label class="block uppercase tracking-wider text-stone-500">Menú / Alergias</label>
+          <input type="text" name="menuElegido" placeholder="Ej. Lomito / Alergia al maní" class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-xl">
         </div>
         
         <button type="submit" class="w-full bg-stone-900 text-white py-3 rounded-xl hover:bg-stone-800 transition font-medium text-sm shadow-md">Enviar Confirmación</button>
