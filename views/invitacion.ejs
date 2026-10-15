@@ -11,19 +11,20 @@
     .font-sans { font-family: 'Montserrat', sans-serif; }
     .font-monogram { font-family: 'Cinzel', serif; }
     
-    /* Textura de cartulina de lino/hilo */
+    /* Textura de cartulina de hilo e imagen de fondo personalizada */
     .textura-cartulina-hilo {
       background-color: <%= invitation.colorFondo %>;
-      <% if (invitation.imagenFondo) { %>
-        background-image: linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.92)), url('<%= invitation.imagenFondo %>');
+      <% if (invitation.imagenFondo && invitation.imagenFondo.length > 0) { %>
+        background-image: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), url('<%= invitation.imagenFondo %>');
         background-size: cover;
         background-position: center;
+        background-attachment: fixed;
       <% } else if (invitation.textura) { %>
-        background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h16v16H0z' fill='none'/%3E%3Cpath d='M0 2h16M0 6h16M0 10h16M0 14h16M2 0v16M6 0v16M10 0v16M14 0v16' stroke='%20000000' stroke-opacity='0.03' stroke-width='0.6'/%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h16v16H0z' fill='none'/%3E%3Cpath d='M0 2h16M0 6h16M0 10h16M0 14h16M2 0v16M6 0v16M10 0v16M14 0v16' stroke='%20000000' stroke-opacity='0.035' stroke-width='0.6'/%3E%3C/svg%3E");
       <% } %>
     }
 
-    /* Doblez de Hoja con relieve físico */
+    /* Separación Doblez de Hoja con relieve */
     .doblez-hoja {
       position: relative;
       margin: 2.5rem 0;
@@ -32,7 +33,7 @@
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 -1px 2px rgba(255, 255, 255, 0.9);
     }
 
-    /* Reloj Mecánico con Mosaicos Caídos (Flip Cards) */
+    /* Reloj Flip Cards con Mosaicos Caídos */
     .flip-card {
       background: linear-gradient(180deg, #262626 0%, #171717 100%);
       color: #ffffff;
@@ -64,7 +65,7 @@
       100% { transform: rotateX(0deg); opacity: 1; }
     }
 
-    /* Sobre 3D con Cera y Monograma */
+    /* Animación del Sobre 3D */
     .envelope-wrapper { perspective: 1000px; }
     .envelope-flap {
       transform-origin: top;
@@ -75,17 +76,27 @@
       z-index: 5 !important;
     }
 
-    /* Sello de Cera Rojo Borgoña */
+    /* Sello de Cera Borgoña Centrado */
     .wax-seal {
-      background: radial-gradient(circle at 30% 30%, #a81c1c, #630a0a);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 2px 3px rgba(255,255,255,0.3);
-      border: 3px solid #851212;
+      background: radial-gradient(circle at 30% 30%, #991b1b, #450a0a);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.4);
+      border: 2px solid #7f1d1d;
+      color: #fef3c7;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
     }
   </style>
 </head>
-<body class="<%= invitation.fuente %> textura-cartulina-hilo min-h-screen py-10 px-4 select-none" style="color: <%= invitation.colorTexto %>;">
+<body class="<%= invitation.fuente %> textura-cartulina-hilo min-h-screen py-8 px-4 select-none" style="color: <%= invitation.colorTexto %>;">
 
-  <!-- Reproductor de Audio YouTube -->
+  <!-- Header App Logo -->
+  <div class="max-w-xl mx-auto mb-4 text-center">
+    <div class="inline-flex items-center gap-2 bg-stone-900/90 text-white px-4 py-1.5 rounded-full shadow-md backdrop-blur-sm">
+      <span class="text-sm">💍</span>
+      <h1 class="text-[11px] font-serif tracking-widest uppercase font-bold">Invitación Digital Boda</h1>
+    </div>
+  </div>
+
+  <!-- Audio YouTube -->
   <% if (invitation.youtubeUrl) { 
      let ytId = invitation.youtubeUrl.includes('v=') ? invitation.youtubeUrl.split('v=')[1].substring(0,11) : invitation.youtubeUrl.slice(-11);
   %>
@@ -94,7 +105,7 @@
     </div>
   <% } %>
 
-  <!-- Iniciales para el Monograma del Sello de Cera -->
+  <!-- Monograma Dinámico -->
   <% 
     let nombres = invitation.novios.split(/[&yY]/);
     let init1 = nombres[0] ? nombres[0].trim().charAt(0).toUpperCase() : 'N';
@@ -104,20 +115,21 @@
 
   <!-- Sobre 3D de Bienvenida con Sello de Cera -->
   <div id="envelope-screen" class="fixed inset-0 z-50 bg-stone-900/90 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer envelope-wrapper" onclick="abrirInvitacion()">
-    <div class="relative w-80 md:w-96 h-60 bg-stone-50 rounded-2xl shadow-2xl border border-stone-300 flex flex-col items-center justify-center p-6 text-center overflow-hidden" id="envelope">
+    <div class="relative w-80 md:w-96 h-64 bg-stone-50 rounded-2xl shadow-2xl border border-stone-300 flex flex-col items-center justify-center p-6 text-center" id="envelope">
       
-      <!-- Solapa del sobre -->
+      <!-- Solapa del Sobre -->
       <div id="flap" class="absolute top-0 left-0 w-full h-32 bg-stone-200 border-b border-stone-300 z-30 envelope-flap shadow-md flex items-end justify-center pb-2" style="clip-path: polygon(0 0, 100% 0, 50% 100%);">
-        <!-- Sello de Cera -->
-        <div id="seal" class="wax-seal w-12 h-12 rounded-full flex items-center justify-center text-amber-200 font-monogram font-bold text-xs tracking-tighter transform translate-y-6 shadow-xl border">
-          <%= monograma %>
-        </div>
       </div>
 
-      <div class="z-20 mt-10 space-y-2">
+      <!-- Sello de Cera centrado exactamente sobre la solapa -->
+      <div id="seal" class="wax-seal absolute top-[100px] z-40 w-14 h-14 rounded-full flex items-center justify-center font-monogram font-bold text-sm tracking-tighter shadow-2xl">
+        <%= monograma %>
+      </div>
+
+      <div class="z-20 mt-12 space-y-2">
         <span class="text-[10px] uppercase tracking-widest text-stone-500 font-sans">NUESTRA BODA</span>
         <h2 class="text-2xl md:text-3xl font-serif font-bold text-stone-900"><%= invitation.novios %></h2>
-        <p class="text-[11px] text-stone-600 font-sans mt-4 italic bg-white/90 px-4 py-1.5 rounded-full shadow-sm inline-block border border-stone-200">✉️ Toca el sello para abrir la invitación</p>
+        <p class="text-[11px] text-stone-600 font-sans mt-4 italic bg-white/90 px-4 py-1.5 rounded-full shadow-sm inline-block border border-stone-200">✉️ Toca para abrir la invitación</p>
       </div>
     </div>
   </div>
@@ -142,7 +154,7 @@
     }
   </script>
 
-  <!-- Tarjeta Principal de Invitación -->
+  <!-- Tarjeta Principal de la Invitación -->
   <div class="max-w-xl mx-auto bg-white/95 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-2xl text-center border border-stone-200/90 relative">
     
     <!-- Botón Clave Admin -->
@@ -172,7 +184,6 @@
       }
     </script>
 
-    <!-- Nombres -->
     <span class="text-xs uppercase tracking-widest opacity-60">Nos Casamos</span>
     <h1 class="text-4xl md:text-6xl font-bold my-3"><%= invitation.novios %></h1>
     
@@ -236,7 +247,7 @@
     <!-- DOBLEZ DE HOJA -->
     <div class="doblez-hoja"></div>
 
-    <!-- Ubicaciones: Ceremonia & Recepción -->
+    <!-- Ubicaciones -->
     <div class="space-y-6">
       <h3 class="text-2xl font-serif font-bold tracking-wide">¿Dónde y Cuándo?</h3>
       <p class="text-sm font-semibold">📅 <%= invitation.fechaTexto %></p>
@@ -271,7 +282,7 @@
     <!-- DOBLEZ DE HOJA -->
     <div class="doblez-hoja"></div>
 
-    <!-- Dress Code & Paletas de Colores Restringidos -->
+    <!-- Dress Code & Siluetas vectoriales SVG -->
     <div class="space-y-4 font-sans">
       <h3 class="text-2xl font-serif font-bold tracking-wide">Código de Vestimenta</h3>
       <div class="inline-block bg-stone-900 text-white px-5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
@@ -282,25 +293,31 @@
         <p class="text-stone-500 italic">Reservamos los siguientes colores exclusivamente para los novios:</p>
         
         <div class="grid grid-cols-2 gap-4">
-          <!-- Mujeres -->
-          <div class="flex flex-col items-center">
-            <span class="font-semibold text-stone-700 mb-2">Mujeres (No usar)</span>
+          <!-- Mujeres (Silueta Vestido SVG) -->
+          <div class="flex flex-col items-center bg-white p-3 rounded-xl border border-stone-100">
+            <svg class="w-8 h-8 text-stone-700 mb-1" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2a2 2 0 0 1 2 2c0 .35-.09.68-.24.96l2.12 3.18c.28.42.16.98-.26 1.26-.14.09-.3.14-.47.14H8.65c-.5 0-.9-.4-.9-.9 0-.17.05-.33.14-.47l2.12-3.18C9.84 4.68 9.75 4.35 9.75 4a2 2 0 0 1 2.25-2zm-3.5 10h7l2.5 10H6l2.5-10z"/>
+            </svg>
+            <span class="font-semibold text-stone-700 mb-2 text-[11px]">Mujeres</span>
             <div class="flex gap-2">
               <% invitation.coloresProhibidosDamas.forEach(col => { %>
-                <div class="w-7 h-7 rounded-full border border-stone-300 shadow-sm relative group" style="background-color: <%= col %>;" title="<%= col %>">
-                  <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-[8px] w-3.5 h-3.5 flex items-center justify-center font-bold">✕</span>
+                <div class="w-6 h-6 rounded-full border border-stone-300 shadow-sm relative" style="background-color: <%= col %>;">
+                  <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-[8px] w-3 h-3 flex items-center justify-center font-bold">✕</span>
                 </div>
               <% }) %>
             </div>
           </div>
 
-          <!-- Hombres -->
-          <div class="flex flex-col items-center">
-            <span class="font-semibold text-stone-700 mb-2">Hombres (No usar)</span>
+          <!-- Hombres (Silueta Smoking SVG) -->
+          <div class="flex flex-col items-center bg-white p-3 rounded-xl border border-stone-100">
+            <svg class="w-8 h-8 text-stone-700 mb-1" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2l3 5h-2v5h3l1.5-6H19l-3 12H8L5 6h1.5L8 12h3V7H9l3-5zm0 2.5L10.8 6h2.4L12 4.5zM11 13h2v9h-2v-9z"/>
+            </svg>
+            <span class="font-semibold text-stone-700 mb-2 text-[11px]">Hombres</span>
             <div class="flex gap-2">
               <% invitation.coloresProhibidosCaballeros.forEach(col => { %>
-                <div class="w-7 h-7 rounded-full border border-stone-300 shadow-sm relative group" style="background-color: <%= col %>;" title="<%= col %>">
-                  <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-[8px] w-3.5 h-3.5 flex items-center justify-center font-bold">✕</span>
+                <div class="w-6 h-6 rounded-full border border-stone-300 shadow-sm relative" style="background-color: <%= col %>;">
+                  <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-[8px] w-3 h-3 flex items-center justify-center font-bold">✕</span>
                 </div>
               <% }) %>
             </div>
@@ -312,36 +329,52 @@
     <!-- DOBLEZ DE HOJA -->
     <div class="doblez-hoja"></div>
 
-    <!-- Mesa de Regalos (Zelle y Binance) -->
+    <!-- Mesa de Regalos con Logos Oficiales -->
     <% if (invitation.zelleEmail || invitation.binancePayId || invitation.binanceWalletUsdt) { %>
       <div class="space-y-4 font-sans">
         <h3 class="text-2xl font-serif font-bold tracking-wide">Mesa de Regalos</h3>
-        <p class="text-xs text-stone-500 italic">Tu presencia es nuestro mejor regalo. Si deseas realizarnos un presente económico, puedes hacerlo a través de:</p>
+        <p class="text-xs text-stone-500 italic">Tu presencia es nuestro mejor regalo. Si deseas realizarnos un presente económico:</p>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-left">
-          <!-- Zelle -->
+          
+          <!-- Zelle con Logo SVG -->
           <% if (invitation.zelleEmail) { %>
-            <div class="bg-stone-50/80 p-4 rounded-2xl border border-stone-200/80 relative">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-purple-700">💳 Zelle</span>
-              <p class="text-xs font-semibold text-stone-800 mt-1"><%= invitation.zelleEmail %></p>
-              <p class="text-[11px] text-stone-500"><%= invitation.zelleTitular %></p>
-              <button onclick="copiarTexto('<%= invitation.zelleEmail %>')" class="mt-2 text-[10px] bg-purple-100 hover:bg-purple-200 text-purple-800 font-medium px-3 py-1 rounded-lg transition">Copiar Correo</button>
+            <div class="bg-purple-50/50 p-4 rounded-2xl border border-purple-200/60 relative flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-1.5 mb-2">
+                  <svg class="w-5 h-5 text-purple-700" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M13.916 2.25h-3.832a.75.75 0 0 0-.75.75v3.136a.75.75 0 0 0 .75.75h3.832a.75.75 0 0 0 .75-.75V3a.75.75 0 0 0-.75-.75zM8.25 8.25H3a.75.75 0 0 0-.75.75v12a.75.75 0 0 0 .75.75h18a.75.75 0 0 0 .75-.75V9a.75.75 0 0 0-.75-.75h-5.25v2.25H18v9H6v-9h2.25V8.25z"/>
+                  </svg>
+                  <span class="font-bold text-xs text-purple-900 tracking-wider">ZELLE</span>
+                </div>
+                <p class="text-xs font-semibold text-stone-800"><%= invitation.zelleEmail %></p>
+                <p class="text-[11px] text-stone-500"><%= invitation.zelleTitular %></p>
+              </div>
+              <button onclick="copiarTexto('<%= invitation.zelleEmail %>')" class="mt-3 text-[10px] bg-purple-600 hover:bg-purple-700 text-white font-medium px-3 py-1.5 rounded-lg transition self-start shadow-sm">Copiar Correo</button>
             </div>
           <% } %>
 
-          <!-- Binance -->
+          <!-- Binance con Logo SVG -->
           <% if (invitation.binancePayId || invitation.binanceWalletUsdt) { %>
-            <div class="bg-stone-50/80 p-4 rounded-2xl border border-stone-200/80 relative">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-amber-600">🟡 Binance</span>
-              <% if (invitation.binancePayId) { %>
-                <p class="text-xs font-semibold text-stone-800 mt-1">ID: <%= invitation.binancePayId %></p>
-              <% } %>
-              <% if (invitation.binanceWalletUsdt) { %>
-                <p class="text-[10px] font-mono text-stone-500 truncate" title="<%= invitation.binanceWalletUsdt %>"><%= invitation.binanceWalletUsdt %></p>
-              <% } %>
-              <button onclick="copiarTexto('<%= invitation.binancePayId || invitation.binanceWalletUsdt %>')" class="mt-2 text-[10px] bg-amber-100 hover:bg-amber-200 text-amber-800 font-medium px-3 py-1 rounded-lg transition">Copiar ID/Wallet</button>
+            <div class="bg-amber-50/50 p-4 rounded-2xl border border-amber-200/60 relative flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-1.5 mb-2">
+                  <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L8.5 5.5l2.1 2.1L12 6.2l1.4 1.4 2.1-2.1L12 2zm-6.5 6.5L2 12l3.5 3.5 2.1-2.1L6.2 12l1.4-1.4-2.1-2.1zm13 0l-2.1 2.1 1.4 1.4 1.4-1.4 3.5 3.5-3.5 3.5-2.1-2.1-1.4 1.4 3.5 3.5L22 12l-3.5-3.5zM12 17.8l-1.4-1.4-2.1 2.1L12 22l3.5-3.5-2.1-2.1-1.4 1.4zM12 9.5L9.5 12l2.5 2.5 2.5-2.5L12 9.5z"/>
+                  </svg>
+                  <span class="font-bold text-xs text-amber-900 tracking-wider">BINANCE</span>
+                </div>
+                <% if (invitation.binancePayId) { %>
+                  <p class="text-xs font-semibold text-stone-800">Pay ID: <%= invitation.binancePayId %></p>
+                <% } %>
+                <% if (invitation.binanceWalletUsdt) { %>
+                  <p class="text-[10px] font-mono text-stone-500 truncate" title="<%= invitation.binanceWalletUsdt %>">Wallet: <%= invitation.binanceWalletUsdt %></p>
+                <% } %>
+              </div>
+              <button onclick="copiarTexto('<%= invitation.binancePayId || invitation.binanceWalletUsdt %>')" class="mt-3 text-[10px] bg-amber-500 hover:bg-amber-600 text-white font-medium px-3 py-1.5 rounded-lg transition self-start shadow-sm">Copiar ID / Wallet</button>
             </div>
           <% } %>
+
         </div>
       </div>
 
@@ -385,40 +418,28 @@
             <option value="No podré asistir">No podré asistir</option>
           </select>
         </div>
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block uppercase tracking-wider text-stone-500">Acompañantes / Pases</label>
-            <input type="number" name="personas" value="1" min="1" max="5" class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-xl">
-          </div>
-          <div>
-            <label class="block uppercase tracking-wider text-stone-500">Opción de Menú</label>
-            <input type="text" name="menuElegido" placeholder="Ej. Lomito" class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-xl">
-          </div>
+        
+        <!-- Casilla Acompañante -->
+        <div class="flex items-center gap-2 bg-white p-3 rounded-xl border border-stone-200">
+          <input type="checkbox" name="llevaAcompanante" id="llevaAcompanante" class="w-4 h-4 text-stone-900 rounded">
+          <label for="llevaAcompanante" class="text-xs font-medium text-stone-700">Llevo 1 Acompañante</label>
         </div>
+
+        <div>
+          <label class="block uppercase tracking-wider text-stone-500">Opción de Menú</label>
+          <input type="text" name="menuElegido" placeholder="Ej. Lomito / Menú Vegetariano" class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-xl">
+        </div>
+        
         <button type="submit" class="w-full bg-stone-900 text-white py-3 rounded-xl hover:bg-stone-800 transition font-medium text-sm shadow-md">Enviar Confirmación</button>
       </form>
     </div>
 
-    <!-- Buzón -->
-    <div id="buzon" class="mt-8 text-left bg-stone-50/80 p-6 rounded-2xl border border-stone-200/80 font-sans">
-      <h3 class="text-xl font-serif font-bold text-center mb-4">💌 Buzón de Deseos</h3>
-      <form action="/boda/<%= invitation.slug %>/buzon" method="POST" class="space-y-3 text-xs mb-6">
-        <input type="text" name="remitente" required placeholder="Tu nombre" class="w-full p-2.5 bg-white border border-stone-300 rounded-xl">
-        <textarea name="texto" rows="2" required placeholder="Escribe un mensaje para los novios..." class="w-full p-2.5 bg-white border border-stone-300 rounded-xl"></textarea>
-        <button type="submit" class="w-full bg-stone-800 text-white py-2 rounded-xl hover:bg-stone-700 transition">Enviar Mensaje</button>
-      </form>
-      <div class="space-y-3 max-h-48 overflow-y-auto">
-        <% if (invitation.mensajesBuzon && invitation.mensajesBuzon.length > 0) { %>
-          <% invitation.mensajesBuzon.forEach(msg => { %>
-            <div class="bg-white p-3 rounded-xl border border-stone-200 text-xs">
-              <strong class="text-stone-900"><%= msg.remitente %>:</strong>
-              <p class="text-stone-600 mt-1">"<%= msg.texto %>"</p>
-            </div>
-          <% }) %>
-        <% } %>
-      </div>
-    </div>
-
   </div>
+
+  <!-- Pie de Página / Autor -->
+  <footer class="mt-8 text-center text-xs text-stone-400 font-sans">
+    <p>Wlv software © <%= new Date().getFullYear() %> Todos los derechos reservados</p>
+  </footer>
+
 </body>
 </html>
