@@ -14,20 +14,22 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/bodas-app')
 .then(() => console.log('Conectado a MongoDB'))
 .catch(err => console.error('Error de conexión:', err));
 
-// Esquema ampliado de la Invitación
 const invitationSchema = new mongoose.Schema({
   slug: { type: String, required: true, unique: true },
   novios: String,
-  fecha: String,
+  fecha: String,          // Formato ISO o texto (ej: "2026-12-31T18:00:00" para la cuenta regresiva)
+  fechaTexto: String,     // Ej: "15 de Octubre, 2026 - 5:00 PM"
   lugar: String,
-  mapaUrl: String,          // URL o enlace del mapa de Google Maps
+  mapaUrl: String,        // URL embebida de Google Maps
   mensaje: String,
-  musicaUrl: String,        // Enlace de música de fondo (MP3 o YouTube stream)
-  menu: String,             // Detalles del menú
-  fuente: { type: String, default: 'font-serif' },       // Clase de tipografía
-  colorTexto: { type: String, default: '#1c1917' },     // Color de fuente principal
-  colorFondo: { type: String, default: '#fafaf9' },     // Color o estilo de fondo
-  fotos: [String],          // URLs de las fotos de los novios
+  youtubeUrl: String,     // Enlace de YouTube o ID de video
+  menu: String,
+  fuente: { type: String, default: 'font-serif' },
+  colorTexto: { type: String, default: '#1c1917' },
+  colorFondo: { type: String, default: '#fafaf9' },
+  imagenFondo: String,    // URL de imagen de fondo personalizada
+  textura: { type: Boolean, default: true }, // Textura cartulina de hilo
+  fotos: [String],
   rsvps: [{ 
     nombre: String, 
     correo: String,
@@ -45,41 +47,34 @@ const invitationSchema = new mongoose.Schema({
 
 const Invitation = mongoose.model('Invitation', invitationSchema);
 
-// --- RUTAS ---
+app.get('/', (req, res) => res.render('index'));
+app.get('/crear', (req, res) => res.render('crear'));
 
-app.get('/', (req, res) => {
-  res.render('index');
-});
-
-app.get('/crear', (req, res) => {
-  res.render('crear');
-});
-
-// Guardar invitación con todos los campos nuevos
 app.post('/crear', async (req, res) => {
   try {
     const { 
-      novios, fecha, lugar, mapaUrl, mensaje, 
-      musicaUrl, menu, fuente, colorTexto, colorFondo, fotos 
+      novios, fecha, fechaTexto, lugar, mapaUrl, mensaje, 
+      youtubeUrl, menu, fuente, colorTexto, colorFondo, imagenFondo, textura, fotos 
     } = req.body;
     
     const slug = novios.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Date.now().toString().slice(-4);
-    
-    // Convertir las fotos separadas por comas en un array si vienen así
     const fotosArray = fotos ? fotos.split(',').map(f => f.trim()) : [];
 
     const nuevaInvitacion = new Invitation({
       slug,
       novios,
-      fecha,
+      fecha,          // Útil para la cuenta regresiva (ej. "2026-12-15T17:00:00")
+      fechaTexto: fechaTexto || fecha,
       lugar,
       mapaUrl,
       mensaje,
-      musicaUrl,
+      youtubeUrl,
       menu,
       fuente: fuente || 'font-serif',
       colorTexto: colorTexto || '#1c1917',
       colorFondo: colorFondo || '#fafaf9',
+      imagenFondo,
+      textura: textura === 'on',
       fotos: fotosArray
     });
 
@@ -91,19 +86,16 @@ app.post('/crear', async (req, res) => {
   }
 });
 
-// Ver invitación virtual
 app.get('/boda/:slug', async (req, res) => {
   try {
     const invitation = await Invitation.findOne({ slug: req.params.slug });
     if (!invitation) return res.status(404).send('Invitación no encontrada');
-    
     res.render('invitacion', { invitation });
   } catch (error) {
     res.status(500).send('Error al cargar la invitación');
   }
 });
 
-// Procesar RSVP con Correo y Menú
 app.post('/boda/:slug/rsvp', async (req, res) => {
   try {
     const { nombre, correo, asistencia, personas, menuElegido } = req.body;
@@ -117,7 +109,6 @@ app.post('/boda/:slug/rsvp', async (req, res) => {
   }
 });
 
-// Procesar Buzón de Deseos
 app.post('/boda/:slug/buzon', async (req, res) => {
   try {
     const { remitente, texto } = req.body;
@@ -127,16 +118,15 @@ app.post('/boda/:slug/buzon', async (req, res) => {
     );
     res.redirect(`/boda/${req.params.slug}?buzon=true#buzon`);
   } catch (error) {
-    res.status(500).send('Error al enviar mensaje al buzón');
+    res.status(500).send('Error al enviar mensaje');
   }
 });
 
-// --- PANEL DE ADMINISTRADOR ---
+// Panel de Administrador
 app.get('/boda/:slug/admin', async (req, res) => {
   try {
     const invitation = await Invitation.findOne({ slug: req.params.slug });
     if (!invitation) return res.status(404).send('Invitación no encontrada');
-    
     res.render('admin', { invitation });
   } catch (error) {
     res.status(500).send('Error al cargar el panel de administración');
@@ -152,10 +142,8 @@ app.post('/boda/:slug/admin/mesa', async (req, res) => {
     );
     res.redirect(`/boda/${req.params.slug}/admin`);
   } catch (error) {
-    res.status(500).send('Error al asignar la mesa');
+    res.status(500).send('Error al asignar mesa');
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
