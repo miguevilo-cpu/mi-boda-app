@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalizar Invitación</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-stone-50 py-12 px-4">
+  <div class="max-w-lg mx-auto bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
+    <a href="/" class="text-xs text-stone-400 hover:text-stone-600 mb-4 inline-block">&larr; Volver a plantillas</a>
+    <h2 class="text-3xl font-serif mb-2 text-center">Detalles de la Boda</h2>
+    <p class="text-xs text-center uppercase tracking-widest text-stone-400 mb-6">Plantilla: <%= template %></p>
+    
+    <form action="/crear" method="POST" class="space-y-4">
+      <input type="hidden" name="template" value="<%= template %>">
+      <div>
+        <label class="block text-xs uppercase tracking-wider text-stone-600 font-semibold">Nombres de los Novios</label>
+        <input type="text" name="novios" required placeholder="Ej: Sofía & Alejandro" class="mt-1 w-full p-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:border-stone-400">
+      </div>
+      <div>
+        <label class="block text-xs uppercase tracking-wider text-stone-600 font-semibold">Fecha y Hora</label>
+        <input type="text" name="fecha" required placeholder="Ej: Sábado 15 de Octubre - 5:00 PM" class="mt-1 w-full p-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:border-stone-400">
+      </div>
+      <div>
+        <label class="block text-xs uppercase tracking-wider text-stone-600 font-semibold">Lugar o Salón</label>
+        <input type="text" name="lugar" required placeholder="Ej: Hacienda San José, Salón Los Cristales" class="mt-1 w-full p-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:border-stone-400">
+      </div>
+      <div>
+        <label class="block text-xs uppercase tracking-wider text-stone-600 font-semibold">Frase o Mensaje de Bienvenida</label>
+        <textarea name="mensaje" rows="3" required placeholder="Nos emociona mucho compartir este gran día con quienes más amamos..." class="mt-1 w-full p-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:border-stone-400"></textarea>
+      </div>
+      <button type="submit" class="w-full bg-stone-900 text-white py-3.5 rounded-xl hover:bg-stone-800 transition font-medium text-sm tracking-wide mt-2">Generar Invitación</button>
+    </form>
+  </div>
+</body>
+</html>
