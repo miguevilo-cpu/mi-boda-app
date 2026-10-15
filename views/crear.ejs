@@ -87,7 +87,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
           <div class="p-4 bg-stone-50 rounded-2xl border border-stone-200">
-            <label class="block text-xs font-semibold text-stone-700 mb-2">👠 3 Colores Prohibidos - Mujeres</label>
+            <label class="block text-xs font-semibold text-stone-700 mb-2">👠 Colores Prohibidos - Mujeres</label>
             <div class="flex items-center gap-3">
               <input type="color" name="colorDama1" value="#ffffff" class="w-12 h-10 p-1 border rounded-xl cursor-pointer">
               <input type="color" name="colorDama2" value="#f5f5dc" class="w-12 h-10 p-1 border rounded-xl cursor-pointer">
@@ -96,7 +96,7 @@
           </div>
 
           <div class="p-4 bg-stone-50 rounded-2xl border border-stone-200">
-            <label class="block text-xs font-semibold text-stone-700 mb-2">🎩 3 Colores Prohibidos - Hombres</label>
+            <label class="block text-xs font-semibold text-stone-700 mb-2">🎩 Colores Prohibidos - Hombres</label>
             <div class="flex items-center gap-3">
               <input type="color" name="colorCaballero1" value="#000000" class="w-12 h-10 p-1 border rounded-xl cursor-pointer">
               <input type="color" name="colorCaballero2" value="#1f2937" class="w-12 h-10 p-1 border rounded-xl cursor-pointer">
@@ -133,22 +133,22 @@
 
         <div class="flex items-center gap-2 pt-2 bg-stone-50 p-3 rounded-xl border border-stone-200">
           <input type="checkbox" name="mostrarBuzonFisico" id="mostrarBuzonFisico" class="w-4 h-4 rounded text-stone-900">
-          <label for="mostrarBuzonFisico" class="text-xs font-medium text-stone-700">Mostrar ficha: "Tendremos buzón de regalos en el salón de festejos"</label>
+          <label for="mostrarBuzonFisico" class="text-xs font-medium text-stone-700">Mostrar buzón de regalos en el salón de festejos</label>
         </div>
       </div>
 
       <div class="space-y-4">
         <h3 class="text-sm font-semibold uppercase tracking-wider border-b pb-2 text-stone-700">5. Galería de Fotos Dinámica</h3>
         <div class="flex gap-2">
-          <input type="text" id="fotoInput" placeholder="Pega el link de la foto aquí..." class="flex-1 p-2.5 border border-stone-300 rounded-xl text-xs">
-          <button type="button" onclick="agregarFoto()" class="bg-stone-900 text-white px-4 py-2.5 rounded-xl text-xs font-medium hover:bg-stone-800 transition"> + Agregar Link</button>
+          <input type="text" id="fotoInput" placeholder="Pega el link de la foto aquí..." class="flex-1 p-2.5 border border-stone-300 rounded-xl text-xs bg-white">
+          <button type="button" onclick="agregarFoto()" class="bg-stone-900 text-white px-4 py-2.5 rounded-xl text-xs font-medium hover:bg-stone-800 transition cursor-pointer"> + Agregar Link</button>
         </div>
         <div id="fotosContainer" class="grid grid-cols-1 gap-2 pt-2"></div>
         <div id="hiddenFotosInputs"></div>
       </div>
 
       <div class="space-y-4">
-        <h3 class="text-sm font-semibold uppercase tracking-wider border-b pb-2 text-stone-700">6. Selección de Tipografía con Combinación Automática</h3>
+        <h3 class="text-sm font-semibold uppercase tracking-wider border-b pb-2 text-stone-700">6. Selección de Tipografía</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="fontSelectorContainer">
           
           <label class="font-option-card cursor-pointer border-2 rounded-2xl p-4 flex flex-col justify-between transition border-stone-900 bg-white shadow-md">
@@ -229,7 +229,7 @@
           <input type="text" name="menuFotoUrl" placeholder="https://ejemplo.com/menu.jpg" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs">
         </div>
         <div>
-          <label class="block text-xs font-medium text-stone-600">Enlace a Google Drive (Álbum con fotos de la boda - Opcional)</label>
+          <label class="block text-xs font-medium text-stone-600">Enlace a Google Drive (Álbum de fotos de la boda)</label>
           <input type="text" name="driveFotosUrl" placeholder="https://drive.google.com/drive/folders/ejemplo" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs">
         </div>
         <div>
@@ -247,7 +247,7 @@
           </div>
           <div>
             <label class="block text-xs font-medium text-stone-600">Color de Fondo Base</label>
-            <input type="color" name="colorFondo" value="#fafaf9" class="mt-1 w-full h-10 p-1 border rounded-xl cursor-pointer">
+            <input type="color" name="colorFondo" value="#fdfbf7" class="mt-1 w-full h-10 p-1 border rounded-xl cursor-pointer">
           </div>
         </div>
         <div class="flex items-center gap-2 pt-2">
@@ -266,6 +266,7 @@
 
   <script>
     const fotosList = [];
+
     function agregarFoto() {
       const input = document.getElementById('fotoInput');
       const url = input.value.trim();
@@ -275,15 +276,18 @@
         renderFotos();
       }
     }
+
     function eliminarFoto(index) {
       fotosList.splice(index, 1);
       renderFotos();
     }
+
     function renderFotos() {
       const container = document.getElementById('fotosContainer');
       const hiddenContainer = document.getElementById('hiddenFotosInputs');
       container.innerHTML = '';
       hiddenContainer.innerHTML = '';
+
       fotosList.forEach((url, index) => {
         const badge = document.createElement('div');
         badge.className = 'flex items-center justify-between p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs shadow-sm';
@@ -292,9 +296,10 @@
             <span class="text-stone-400 font-mono">#${index + 1}</span>
             <span class="truncate text-stone-700 font-mono">${url}</span>
           </div>
-          <button type="button" onclick="eliminarFoto(${index})" class="text-rose-600 hover:text-rose-800 font-bold px-2 py-1 rounded-lg hover:bg-rose-50 transition">✕</button>
+          <button type="button" onclick="eliminarFoto(${index})" class="text-rose-600 hover:text-rose-800 font-bold px-2 py-1 rounded-lg hover:bg-rose-50 transition cursor-pointer">✕</button>
         `;
         container.appendChild(badge);
+
         const hiddenInput = document.createElement('input');
         hiddenInput.type = 'hidden';
         hiddenInput.name = 'fotos';
@@ -307,7 +312,7 @@
     cards.forEach(card => {
       card.addEventListener('click', () => {
         cards.forEach(c => {
-          c.classList.0 && c.classList.remove('border-stone-900', 'bg-white', 'shadow-md');
+          c.classList.remove('border-stone-900', 'bg-white', 'shadow-md');
           c.classList.add('border-stone-200', 'bg-stone-50');
         });
         card.classList.remove('border-stone-200', 'bg-stone-50');
