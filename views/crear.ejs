@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <title>Invitación Digital Boda - Crear</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Montserrat:wght@400;500;600&family=Cinzel:wght@600&family=Cormorant+Garamond:ital,wght@0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
   <style>
     .font-serif { font-family: 'Playfair Display', serif; }
     .font-sans { font-family: 'Montserrat', sans-serif; }
+    .font-cinzel { font-family: 'Cinzel', serif; }
+    .font-cormorant { font-family: 'Cormorant Garamond', serif; }
+    .font-cursive { font-family: 'Great Vibes', cursive; }
   </style>
 </head>
 <body class="bg-stone-100 py-10 px-4 font-sans text-stone-800">
@@ -22,9 +25,9 @@
 
   <div class="max-w-3xl mx-auto bg-white p-6 md:p-10 rounded-3xl shadow-xl border border-stone-200">
     <h2 class="text-2xl md:text-3xl font-serif font-bold text-center mb-2">Diseñador de Invitaciones</h2>
-    <p class="text-center text-xs text-stone-500 mb-8">Personaliza datos generales, mapa, dress code, regalos y fondos.</p>
+    <p class="text-center text-xs text-stone-500 mb-8">Personaliza datos generales, mapa, dress code, regalos y fuentes.</p>
     
-    <form action="/crear" method="POST" class="space-y-8">
+    <form action="/crear" method="POST" id="crearForm" class="space-y-8">
       
       <!-- 1. Datos Generales -->
       <div class="space-y-4">
@@ -125,11 +128,77 @@
         </div>
       </div>
 
-      <!-- 5. Fondo & Estética -->
+      <!-- 5. Gestor de Fotos Enmarcadas -->
       <div class="space-y-4">
-        <h3 class="text-sm font-semibold uppercase tracking-wider border-b pb-2 text-stone-700">5. Fondo, Música y Menú</h3>
+        <h3 class="text-sm font-semibold uppercase tracking-wider border-b pb-2 text-stone-700">5. Fotos de la Galería</h3>
+        <p class="text-xs text-stone-500">Agrega links de fotos. Cada enlace se enmarcará individualmente:</p>
+        
+        <div class="flex gap-2">
+          <input type="text" id="fotoInput" placeholder="Pega el link de la foto aquí..." class="flex-1 p-2.5 border border-stone-300 rounded-xl text-xs">
+          <button type="button" onclick="agregarFoto()" class="bg-stone-900 text-white px-4 py-2.5 rounded-xl text-xs font-medium hover:bg-stone-800 transition"> + Agregar Link</button>
+        </div>
+
+        <div id="fotosContainer" class="grid grid-cols-1 gap-2 pt-2">
+          <!-- Aquí se renderizan los recuadros enmarcados de fotos -->
+        </div>
+        <div id="hiddenFotosInputs"></div>
+      </div>
+
+      <!-- 6. Tipografías con Previsualización Live -->
+      <div class="space-y-4">
+        <h3 class="text-sm font-semibold uppercase tracking-wider border-b pb-2 text-stone-700">6. Selección de Tipografía (Con Vista Previa)</h3>
+        <p class="text-xs text-stone-500 mb-3">Elige la fuente principal para nombres y títulos:</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          
+          <label class="cursor-pointer border-2 rounded-2xl p-4 flex flex-col justify-between transition hover:border-stone-900 border-stone-200 bg-stone-50 has-[:checked]:border-stone-900 has-[:checked]:bg-white">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-semibold text-stone-600">Playfair Display</span>
+              <input type="radio" name="fuente" value="font-serif" checked class="w-4 h-4 accent-stone-900">
+            </div>
+            <p class="text-xl font-serif text-stone-900">María & Miguel</p>
+          </label>
+
+          <label class="cursor-pointer border-2 rounded-2xl p-4 flex flex-col justify-between transition hover:border-stone-900 border-stone-200 bg-stone-50 has-[:checked]:border-stone-900 has-[:checked]:bg-white">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-semibold text-stone-600">Cinzel Roman</span>
+              <input type="radio" name="fuente" value="font-cinzel" class="w-4 h-4 accent-stone-900">
+            </div>
+            <p class="text-xl font-cinzel text-stone-900">MARÍA & MIGUEL</p>
+          </label>
+
+          <label class="cursor-pointer border-2 rounded-2xl p-4 flex flex-col justify-between transition hover:border-stone-900 border-stone-200 bg-stone-50 has-[:checked]:border-stone-900 has-[:checked]:bg-white">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-semibold text-stone-600">Cormorant Garamond</span>
+              <input type="radio" name="fuente" value="font-cormorant" class="w-4 h-4 accent-stone-900">
+            </div>
+            <p class="text-2xl font-cormorant italic text-stone-900">María & Miguel</p>
+          </label>
+
+          <label class="cursor-pointer border-2 rounded-2xl p-4 flex flex-col justify-between transition hover:border-stone-900 border-stone-200 bg-stone-50 has-[:checked]:border-stone-900 has-[:checked]:bg-white">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-semibold text-stone-600">Great Vibes (Cursiva)</span>
+              <input type="radio" name="fuente" value="font-cursive" class="w-4 h-4 accent-stone-900">
+            </div>
+            <p class="text-3xl font-cursive text-stone-900">María & Miguel</p>
+          </label>
+
+          <label class="cursor-pointer border-2 rounded-2xl p-4 flex flex-col justify-between transition hover:border-stone-900 border-stone-200 bg-stone-50 has-[:checked]:border-stone-900 has-[:checked]:bg-white md:col-span-2">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-semibold text-stone-600">Montserrat (Moderna Minimalista)</span>
+              <input type="radio" name="fuente" value="font-sans" class="w-4 h-4 accent-stone-900">
+            </div>
+            <p class="text-lg font-sans uppercase tracking-widest text-stone-900 font-semibold">María & Miguel</p>
+          </label>
+
+        </div>
+      </div>
+
+      <!-- 7. Fondo, Música y Menú -->
+      <div class="space-y-4">
+        <h3 class="text-sm font-semibold uppercase tracking-wider border-b pb-2 text-stone-700">7. Estilo y Fondo de Pantalla</h3>
         <div>
-          <label class="block text-xs font-medium text-stone-600">URL Imagen de Fondo de la Página (Opcional)</label>
+          <label class="block text-xs font-medium text-stone-600">URL Imagen de Fondo (Opcional)</label>
           <input type="text" name="imagenFondo" placeholder="https://ejemplo.com/fondo-boda.jpg" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs">
         </div>
         <div>
@@ -140,30 +209,19 @@
           <label class="block text-xs font-medium text-stone-600">Opciones de Menú</label>
           <textarea name="menu" rows="2" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs" placeholder="Entrada, plato fuerte..."></textarea>
         </div>
-        <div>
-          <label class="block text-xs font-medium text-stone-600">Fotos Galería (URLs separadas por comas)</label>
-          <input type="text" name="fotos" placeholder="https://img1.jpg, https://img2.jpg" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs">
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-medium text-stone-600">Tipografía</label>
-            <select name="fuente" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs">
-              <option value="font-serif">Clásica Serif Elegante</option>
-              <option value="font-sans">Moderna Sans-Serif</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-stone-600">Color Texto</label>
+            <label class="block text-xs font-medium text-stone-600">Color de Texto Principal</label>
             <input type="color" name="colorTexto" value="#1c1917" class="mt-1 w-full h-10 p-1 border rounded-xl cursor-pointer">
           </div>
           <div>
-            <label class="block text-xs font-medium text-stone-600">Color Fondo Base</label>
+            <label class="block text-xs font-medium text-stone-600">Color de Fondo Base</label>
             <input type="color" name="colorFondo" value="#fafaf9" class="mt-1 w-full h-10 p-1 border rounded-xl cursor-pointer">
           </div>
         </div>
         <div class="flex items-center gap-2 pt-2">
           <input type="checkbox" name="textura" id="textura" checked class="w-4 h-4 rounded text-stone-900">
-          <label for="textura" class="text-xs font-medium text-stone-700">Activar textura textil de cartulina de lino/hilo</label>
+          <label for="textura" class="text-xs font-medium text-stone-700">Activar textura de cartulina de lino/hilo</label>
         </div>
       </div>
 
@@ -175,5 +233,53 @@
       Wlv software © <%= new Date().getFullYear() %> Todos los derechos reservados
     </div>
   </div>
+
+  <script>
+    const fotosList = [];
+
+    function agregarFoto() {
+      const input = document.getElementById('fotoInput');
+      const url = input.value.trim();
+      if (url) {
+        fotosList.push(url);
+        input.value = '';
+        renderFotos();
+      }
+    }
+
+    function eliminarFoto(index) {
+      fotosList.splice(index, 1);
+      renderFotos();
+    }
+
+    function renderFotos() {
+      const container = document.getElementById('fotosContainer');
+      const hiddenContainer = document.getElementById('hiddenFotosInputs');
+      container.innerHTML = '';
+      hiddenContainer.innerHTML = '';
+
+      fotosList.forEach((url, index) => {
+        // Renderizar recuadro enmarcado
+        const badge = document.createElement('div');
+        badge.className = 'flex items-center justify-between p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs shadow-sm';
+        badge.innerHTML = `
+          <div class="flex items-center gap-2 truncate pr-2">
+            <span class="text-stone-400 font-mono">#${index + 1}</span>
+            <span class="truncate text-stone-700 font-mono">${url}</span>
+          </div>
+          <button type="button" onclick="eliminarFoto(${index})" class="text-rose-600 hover:text-rose-800 font-bold px-2 py-1 rounded-lg hover:bg-rose-50 transition">✕</button>
+        `;
+        container.appendChild(badge);
+
+        // Input oculto para enviar al backend
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'fotos';
+        hiddenInput.value = url;
+        hiddenContainer.appendChild(hiddenInput);
+      });
+    }
+  </script>
+
 </body>
 </html>
