@@ -17,18 +17,19 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/bodas-app')
 const invitationSchema = new mongoose.Schema({
   slug: { type: String, required: true, unique: true },
   novios: String,
-  fecha: String,          // Formato ISO o texto (ej: "2026-12-31T18:00:00" para la cuenta regresiva)
-  fechaTexto: String,     // Ej: "15 de Octubre, 2026 - 5:00 PM"
+  fecha: String,
+  fechaTexto: String,
   lugar: String,
-  mapaUrl: String,        // URL embebida de Google Maps
+  mapaUrl: String,
   mensaje: String,
-  youtubeUrl: String,     // Enlace de YouTube o ID de video
+  youtubeUrl: String,
   menu: String,
+  pinAdmin: { type: String, default: '1234' }, // PIN para entrar al admin
   fuente: { type: String, default: 'font-serif' },
   colorTexto: { type: String, default: '#1c1917' },
   colorFondo: { type: String, default: '#fafaf9' },
-  imagenFondo: String,    // URL de imagen de fondo personalizada
-  textura: { type: Boolean, default: true }, // Textura cartulina de hilo
+  imagenFondo: String,
+  textura: { type: Boolean, default: true },
   fotos: [String],
   rsvps: [{ 
     nombre: String, 
@@ -54,7 +55,7 @@ app.post('/crear', async (req, res) => {
   try {
     const { 
       novios, fecha, fechaTexto, lugar, mapaUrl, mensaje, 
-      youtubeUrl, menu, fuente, colorTexto, colorFondo, imagenFondo, textura, fotos 
+      youtubeUrl, menu, pinAdmin, fuente, colorTexto, colorFondo, imagenFondo, textura, fotos 
     } = req.body;
     
     const slug = novios.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Date.now().toString().slice(-4);
@@ -63,13 +64,14 @@ app.post('/crear', async (req, res) => {
     const nuevaInvitacion = new Invitation({
       slug,
       novios,
-      fecha,          // Útil para la cuenta regresiva (ej. "2026-12-15T17:00:00")
+      fecha,
       fechaTexto: fechaTexto || fecha,
       lugar,
       mapaUrl,
       mensaje,
       youtubeUrl,
       menu,
+      pinAdmin: pinAdmin || '1234',
       fuente: fuente || 'font-serif',
       colorTexto: colorTexto || '#1c1917',
       colorFondo: colorFondo || '#fafaf9',
@@ -122,9 +124,29 @@ app.post('/boda/:slug/buzon', async (req, res) => {
   }
 });
 
-// Panel de Administrador
+// Verificación de PIN para entrar al Panel de Administrador
+app.post('/boda/:slug/admin-login', async (req, res) => {
+  try {
+    const { pin } = req.body;
+    const invitation = await Invitation.findOne({ slug: req.params.slug });
+    if (!invitation) return res.status(404).send('Invitación no encontrada');
+
+    if (pin === invitation.pinAdmin) {
+      res.redirect(`/boda/${req.params.slug}/admin?auth=ok`);
+    } else {
+      res.redirect(`/boda/${req.params.slug}?error=pin`);
+    }
+  } catch (error) {
+    res.status(500).send('Error de autenticación');
+  }
+});
+
+// Panel de Administrador (Protegido por query auth=ok o sesión simple)
 app.get('/boda/:slug/admin', async (req, res) => {
   try {
+    if (req.query.auth !== 'ok') {
+      return res.redirect(`/boda/${req.params.slug}?error=unauthorized`);
+    }
     const invitation = await Invitation.findOne({ slug: req.params.slug });
     if (!invitation) return res.status(404).send('Invitación no encontrada');
     res.render('admin', { invitation });
@@ -140,7 +162,7 @@ app.post('/boda/:slug/admin/mesa', async (req, res) => {
       { slug: req.params.slug, "rsvps._id": rsvpId },
       { $set: { "rsvps.$.mesa": mesa } }
     );
-    res.redirect(`/boda/${req.params.slug}/admin`);
+    res.redirect(`/boda/${req.params.slug}/admin?auth=ok`);
   } catch (error) {
     res.status(500).send('Error al asignar mesa');
   }
