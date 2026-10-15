@@ -80,48 +80,48 @@
       text-shadow: 0 1px 2px rgba(0,0,0,0.5);
     }
 
-    /* Abanico de fotos fluido y suave */
-    .fan-gallery {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 240px;
-      perspective: 1000px;
-      padding: 20px 0;
+    /* Galería en Mosaico / Cuadrícula Interactiva (Fluida y sin tirones) */
+    .mosaic-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 10px 0;
     }
-    .fan-card {
-      width: 130px;
-      height: 180px;
+
+    @media (min-width: 480px) {
+      .mosaic-gallery {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .mosaic-card {
+      width: 100%;
+      height: 160px;
       object-fit: cover;
-      border-radius: 14px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
-      position: absolute;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
       cursor: pointer;
-      border: 3px solid #ffffff;
-      will-change: transform;
+      border: 2px solid #ffffff;
+      filter: brightness(0.95);
     }
-    .fan-card:nth-child(1) { transform: translateX(-55px) rotate(-10deg); z-index: 1; }
-    .fan-card:nth-child(2) { transform: translateX(-18px) rotate(-3deg); z-index: 2; }
-    .fan-card:nth-child(3) { transform: translateX(18px) rotate(3deg); z-index: 3; }
-    .fan-card:nth-child(4) { transform: translateX(55px) rotate(10deg); z-index: 4; }
 
-    .fan-gallery:hover .fan-card:nth-child(1) { transform: translateX(-95px) rotate(-14deg) scale(0.98); }
-    .fan-gallery:hover .fan-card:nth-child(2) { transform: translateX(-32px) rotate(-4deg) scale(1); }
-    .fan-gallery:hover .fan-card:nth-child(3) { transform: translateX(32px) rotate(4deg) scale(1); }
-    .fan-gallery:hover .fan-card:nth-child(4) { transform: translateX(95px) rotate(14deg) scale(0.98); }
+    .mosaic-gallery:hover .mosaic-card {
+      filter: brightness(0.85);
+    }
 
-    .fan-card:hover {
-      transform: translateY(-12px) scale(1.15) rotate(0deg) !important;
-      z-index: 50 !important;
-      box-shadow: 0 16px 30px rgba(0,0,0,0.3);
+    .mosaic-card:hover {
+      transform: translateY(-6px) scale(1.06);
+      filter: brightness(1) !important;
+      z-index: 20;
+      box-shadow: 0 14px 28px rgba(0,0,0,0.22);
     }
   </style>
 </head>
 <body class="<%= invitation.fuenteSecundaria %> textura-cartulina-hilo min-h-screen py-10 px-4 select-none" style="color: <%= invitation.colorTexto %>;" data-wedding-date="<%= invitation.fecha %>">
 
   <% if (invitation.youtubeUrl) { 
-     let ytId = invitation.youtubeUrl.includes('v=') ? invitation.youtubeUrl.split('v=')[1].substring(0,11) : invitation.youtubeUrl.slice(-11);
+      let ytId = invitation.youtubeUrl.includes('v=') ? invitation.youtubeUrl.split('v=')[1].substring(0,11) : invitation.youtubeUrl.slice(-11);
   %>
     <div style="display:none;">
       <iframe id="youtube-audio" width="0" height="0" src="" data-src="https://www.youtube.com/embed/<%= ytId %>?autoplay=1&loop=1&playlist=<%= ytId %>" allow="autoplay"></iframe>
@@ -272,9 +272,9 @@
     <% if (invitation.fotos && invitation.fotos.length > 0) { %>
       <div class="my-8">
         <h3 class="text-xs uppercase tracking-widest text-stone-400 font-semibold mb-4">Galería de Momentos</h3>
-        <div class="fan-gallery">
+        <div class="mosaic-gallery">
           <% invitation.fotos.forEach((foto, index) => { %>
-            <img src="<%= foto.trim() %>" alt="Foto novios" class="fan-card" onclick="abrirLightbox('<%= foto.trim() %>')">
+            <img src="<%= foto.trim() %>" alt="Foto novios" class="mosaic-card" onclick="abrirLightbox('<%= foto.trim() %>')">
           <% }) %>
         </div>
       </div>
@@ -288,7 +288,6 @@
         function abrirLightbox(url) {
           const lb = document.getElementById('lightbox');
           const img = document.getElementById('lightbox-img');
-          // Posicionar exactamente a la altura actual de la pantalla del usuario
           lb.style.top = window.pageYOffset + 'px';
           lb.style.height = window.innerHeight + 'px';
           img.src = url;
@@ -461,27 +460,32 @@
       <div class="doblez-hoja"></div>
     <% } %>
 
-    <% if (invitation.menu || invitation.driveFotosUrl) { %>
+    <!-- SECCIÓN DE MENÚ (Independiente) -->
+    <% if (invitation.menu) { %>
       <div class="my-6 text-left bg-stone-50 p-6 rounded-2xl border border-stone-200/80 font-sans space-y-4">
-        <% if (invitation.menu) { %>
-          <div>
-            <h3 class="text-xl font-bold text-center mb-2">🍽️ Menú</h3>
-            <p class="text-xs text-stone-600 whitespace-pre-line text-center leading-relaxed mb-3"><%= invitation.menu %></p>
-            <% if (invitation.menuFotoUrl) { %>
-              <div class="rounded-xl overflow-hidden shadow-sm border border-stone-200">
-                <img src="<%= invitation.menuFotoUrl %>" alt="Menú del evento" class="w-full h-auto object-cover">
-              </div>
-            <% } %>
-          </div>
-        <% } %>
+        <div>
+          <h3 class="text-xl font-bold text-center mb-2">🍽️ Menú</h3>
+          <p class="text-xs text-stone-600 whitespace-pre-line text-center leading-relaxed mb-3"><%= invitation.menu %></p>
+          <% if (invitation.menuFotoUrl) { %>
+            <div class="rounded-xl overflow-hidden shadow-sm border border-stone-200">
+              <img src="<%= invitation.menuFotoUrl %>" alt="Menú del evento" class="w-full h-auto object-cover">
+            </div>
+          <% } %>
+        </div>
+      </div>
+      <div class="doblez-hoja"></div>
+    <% } %>
 
-        <% if (invitation.driveFotosUrl) { %>
-          <div class="pt-3 border-t text-center">
-            <a href="<%= invitation.driveFotosUrl %>" target="_blank" class="inline-flex items-center gap-2 bg-stone-900 text-white px-5 py-2.5 rounded-xl text-xs font-medium hover:bg-stone-800 transition shadow-md cursor-pointer">
-              📁 Agrega fotos que tengas con los novios o que tomes en la fiesta
-            </a>
-          </div>
-        <% } %>
+    <!-- SECCIÓN APARTADA DE SUBIDA DE FOTOS / DRIVE (Independiente) -->
+    <% if (invitation.driveFotosUrl) { %>
+      <div class="my-6 text-center bg-stone-50 p-6 rounded-2xl border border-stone-200/80 font-sans space-y-3">
+        <h3 class="text-lg font-bold">📸 Comparte tus recuerdos</h3>
+        <p class="text-xs text-stone-600 leading-relaxed">¿Tienes fotos con los novios o tomaste imágenes increíbles durante la fiesta? Súbelas aquí para que todos podamos disfrutarlas.</p>
+        <div>
+          <a href="<%= invitation.driveFotosUrl %>" target="_blank" class="inline-flex items-center gap-2 bg-stone-900 text-white px-5 py-2.5 rounded-xl text-xs font-medium hover:bg-stone-800 transition shadow-md cursor-pointer">
+            📁 Agrega tus fotos a la carpeta compartida
+          </a>
+        </div>
       </div>
       <div class="doblez-hoja"></div>
     <% } %>
