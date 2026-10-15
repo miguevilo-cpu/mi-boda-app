@@ -38,6 +38,12 @@ const invitationSchema = new mongoose.Schema({
   zelleTitular: String,
   binancePayId: String,
   binanceWalletUsdt: String,
+  
+  // Pago Móvil y Buzón físico
+  pagoMovilBanco: String,
+  pagoMovilTelefono: String,
+  pagoMovilCedula: String,
+  mostrarBuzonFisico: { type: Boolean, default: false },
 
   fuente: { type: String, default: 'font-serif' },
   colorTexto: { type: String, default: '#1c1917' },
@@ -67,18 +73,28 @@ function cleanMapUrl(rawInput) {
   return rawInput.trim();
 }
 
+// Función auxiliar para convertir "2026-11-15T17:00" en texto legible automático
+function formatearFechaTexto(fechaIso) {
+  if (!fechaIso) return '';
+  const date = new Date(fechaIso);
+  const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
+  let texto = date.toLocaleDateString('es-ES', opciones);
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
+
 app.get('/', (req, res) => res.render('index'));
 app.get('/crear', (req, res) => res.render('crear'));
 
 app.post('/crear', async (req, res) => {
   try {
     const { 
-      novios, fecha, fechaTexto, lugarCeremonia, mapaCeremoniaUrl,
+      novios, fecha, lugarCeremonia, mapaCeremoniaUrl,
       lugarRecepcion, mapaRecepcionUrl, mensaje, youtubeUrl, menu, 
       pinAdmin, dressCode, 
       colorDama1, colorDama2, colorDama3,
       colorCaballero1, colorCaballero2, colorCaballero3,
       zelleEmail, zelleTitular, binancePayId, binanceWalletUsdt,
+      pagoMovilBanco, pagoMovilTelefono, pagoMovilCedula, mostrarBuzonFisico,
       fuente, colorTexto, colorFondo, imagenFondo, textura, fotos 
     } = req.body;
     
@@ -95,7 +111,7 @@ app.post('/crear', async (req, res) => {
       slug,
       novios,
       fecha,
-      fechaTexto: fechaTexto || fecha,
+      fechaTexto: formatearFechaTexto(fecha),
       lugarCeremonia,
       mapaCeremoniaUrl: cleanMapUrl(mapaCeremoniaUrl),
       lugarRecepcion,
@@ -111,6 +127,10 @@ app.post('/crear', async (req, res) => {
       zelleTitular,
       binancePayId,
       binanceWalletUsdt,
+      pagoMovilBanco,
+      pagoMovilTelefono,
+      pagoMovilCedula,
+      mostrarBuzonFisico: mostrarBuzonFisico === 'on',
       fuente: fuente || 'font-serif',
       colorTexto: colorTexto || '#1c1917',
       colorFondo: colorFondo || '#fafaf9',
