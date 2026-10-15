@@ -4,50 +4,62 @@
   <meta charset="UTF-8">
   <title>Crear Invitación Avanzada</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@300;400;500&family=Great+Vibes&display=swap" rel="stylesheet">
 </head>
-<body class="bg-stone-50 py-12 px-4">
+<body class="bg-stone-50 py-12 px-4 font-sans">
   <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-xl border border-stone-200">
     <h2 class="text-3xl font-serif mb-6 text-center">Diseña tu Boda Perfecta</h2>
     <form action="/crear" method="POST" class="space-y-6">
       
-      <!-- Datos Principales -->
+      <!-- Información General -->
       <div class="space-y-4">
-        <h3 class="text-lg font-semibold border-b pb-2 text-stone-700">1. Información General</h3>
+        <h3 class="text-lg font-semibold border-b pb-2 text-stone-700">1. Información y Cuenta Regresiva</h3>
         <div>
           <label class="block text-sm font-medium text-stone-700">Nombres de los Novios</label>
           <input type="text" name="novios" required placeholder="Sofía & Alejandro" class="mt-1 w-full p-2.5 border rounded-lg">
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-stone-700">Fecha y Hora</label>
-            <input type="text" name="fecha" required placeholder="15 de Octubre, 2026 - 5:00 PM" class="mt-1 w-full p-2.5 border rounded-lg">
+            <label class="block text-sm font-medium text-stone-700">Fecha y Hora (Formato para Cuenta Regresiva)</label>
+            <input type="datetime-local" name="fecha" required class="mt-1 w-full p-2.5 border rounded-lg text-sm">
           </div>
           <div>
-            <label class="block text-sm font-medium text-stone-700">Lugar del Evento</label>
-            <input type="text" name="lugar" required placeholder="Hacienda San José, Táchira" class="mt-1 w-full p-2.5 border rounded-lg">
+            <label class="block text-sm font-medium text-stone-700">Texto Visible de la Fecha</label>
+            <input type="text" name="fechaTexto" placeholder="15 de Octubre, 2026 - 5:00 PM" class="mt-1 w-full p-2.5 border rounded-lg">
           </div>
         </div>
         <div>
-          <label class="block text-sm font-medium text-stone-700">Enlace o Código Iframe de Google Maps</label>
-          <input type="text" name="mapaUrl" placeholder="https://maps.google.com/..." class="mt-1 w-full p-2.5 border rounded-lg text-sm">
+          <label class="block text-sm font-medium text-stone-700">Lugar del Evento</label>
+          <input type="text" name="lugar" required placeholder="Hacienda San José, Táchira" class="mt-1 w-full p-2.5 border rounded-lg">
         </div>
         <div>
-          <label class="block text-sm font-medium text-stone-700">Mensaje de Bienvenida / Historia</label>
+          <label class="block text-sm font-medium text-stone-700">Enlace Insertar Mapa Google Maps (URL del iframe src)</label>
+          <input type="text" name="mapaUrl" placeholder="https://www.google.com/maps/embed?pb=..." class="mt-1 w-full p-2.5 border rounded-lg text-sm">
+          <p class="text-xs text-stone-400 mt-1">En Google Maps, ve a Compartir -> Insertar mapa y copia solo el link del atributo src.</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-stone-700">Mensaje de Bienvenida</label>
           <textarea name="mensaje" rows="3" class="mt-1 w-full p-2.5 border rounded-lg" placeholder="Nos emociona mucho compartir este gran día..."></textarea>
         </div>
       </div>
 
-      <!-- Multimedia y Extras -->
+      <!-- Música y Estética -->
       <div class="space-y-4">
-        <h3 class="text-lg font-semibold border-b pb-2 text-stone-700">2. Multimedia y Detalles</h3>
+        <h3 class="text-lg font-semibold border-b pb-2 text-stone-700">2. Música de YouTube y Estilo Visual</h3>
         <div>
-          <label class="block text-sm font-medium text-stone-700">Enlace de Música de Fondo (URL de audio MP3)</label>
-          <input type="text" name="musicaUrl" placeholder="https://ejemplo.com/cancion.mp3" class="mt-1 w-full p-2.5 border rounded-lg text-sm">
+          <label class="block text-sm font-medium text-stone-700">Enlace de Canción de YouTube (URL completa o ID)</label>
+          <input type="text" name="youtubeUrl" placeholder="https://www.youtube.com/watch?v=TuIDDeVideo" class="mt-1 w-full p-2.5 border rounded-lg text-sm">
         </div>
         <div>
-          <label class="block text-sm font-medium text-stone-700">Detalles del Menú (Opciones de comida)</label>
-          <textarea name="menu" rows="2" class="mt-1 w-full p-2.5 border rounded-lg" placeholder="Entrada: Crema de zapallo | Plato fuerte: Lomito en reducción de vino o Pollo en salsa cítrica"></textarea>
+          <label class="block text-sm font-medium text-stone-700">URL de Imagen de Fondo Personalizada (Opcional)</label>
+          <input type="text" name="imagenFondo" placeholder="https://ejemplo.com/fondo.jpg" class="mt-1 w-full p-2.5 border rounded-lg text-sm">
+        </div>
+        <div class="flex items-center gap-2">
+          <input type="checkbox" name="textura" id="textura" checked class="w-4 h-4 rounded text-stone-900">
+          <label for="textura" class="text-sm font-medium text-stone-700">Activar textura de cartulina de hilo</label>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-stone-700">Detalles del Menú</label>
+          <textarea name="menu" rows="2" class="mt-1 w-full p-2.5 border rounded-lg" placeholder="Entrada, plato fuerte..."></textarea>
         </div>
         <div>
           <label class="block text-sm font-medium text-stone-700">Fotos de los Novios (URLs separadas por comas)</label>
@@ -55,16 +67,15 @@
         </div>
       </div>
 
-      <!-- Personalización Visual -->
+      <!-- Personalización Colores y Fuentes -->
       <div class="space-y-4">
-        <h3 class="text-lg font-semibold border-b pb-2 text-stone-700">3. Estilo y Tipografía</h3>
+        <h3 class="text-lg font-semibold border-b pb-2 text-stone-700">3. Tipografía y Colores</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label class="block text-sm font-medium text-stone-700">Tipografía recomendada</label>
+            <label class="block text-sm font-medium text-stone-700">Tipografía</label>
             <select name="fuente" class="mt-1 w-full p-2.5 border rounded-lg text-sm">
-              <option value="font-serif">Clásica Elegante (Playfair)</option>
-              <option value="font-sans">Moderna Minimalista (Montserrat)</option>
-              <option value="font-cursive">Romántica (Cursive)</option>
+              <option value="font-serif">Clásica Elegante</option>
+              <option value="font-sans">Moderna Minimalista</option>
             </select>
           </div>
           <div>
@@ -72,13 +83,13 @@
             <input type="color" name="colorTexto" value="#1c1917" class="mt-1 w-full h-10 p-1 border rounded-lg cursor-pointer">
           </div>
           <div>
-            <label class="block text-sm font-medium text-stone-700">Color de Fondo</label>
+            <label class="block text-sm font-medium text-stone-700">Color de Fondo Base</label>
             <input type="color" name="colorFondo" value="#fafaf9" class="mt-1 w-full h-10 p-1 border rounded-lg cursor-pointer">
           </div>
         </div>
       </div>
 
-      <button type="submit" class="w-full bg-stone-900 text-white py-3 rounded-xl hover:bg-stone-800 transition font-medium text-lg">Crear Invitación Interactiva</button>
+      <button type="submit" class="w-full bg-stone-900 text-white py-3 rounded-xl hover:bg-stone-800 transition font-medium text-lg">Crear Invitación</button>
     </form>
   </div>
 </body>
