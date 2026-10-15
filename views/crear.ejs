@@ -19,7 +19,7 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-stone-700">Fecha y Hora (Formato para Cuenta Regresiva)</label>
+            <label class="block text-sm font-medium text-stone-700">Fecha y Hora (Para Cuenta Regresiva)</label>
             <input type="datetime-local" name="fecha" required class="mt-1 w-full p-2.5 border rounded-lg text-sm">
           </div>
           <div>
@@ -32,9 +32,12 @@
           <input type="text" name="lugar" required placeholder="Hacienda San José, Táchira" class="mt-1 w-full p-2.5 border rounded-lg">
         </div>
         <div>
-          <label class="block text-sm font-medium text-stone-700">Enlace Insertar Mapa Google Maps (URL del iframe src)</label>
+          <label class="block text-sm font-medium text-stone-700">Enlace o Código Iframe de Google Maps</label>
           <input type="text" name="mapaUrl" placeholder="https://www.google.com/maps/embed?pb=..." class="mt-1 w-full p-2.5 border rounded-lg text-sm">
-          <p class="text-xs text-stone-400 mt-1">En Google Maps, ve a Compartir -> Insertar mapa y copia solo el link del atributo src.</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-stone-700">PIN de Administrador (4 dígitos)</label>
+          <input type="password" name="pinAdmin" value="1234" maxlength="4" required class="mt-1 w-full p-2.5 border rounded-lg text-sm">
         </div>
         <div>
           <label class="block text-sm font-medium text-stone-700">Mensaje de Bienvenida</label>
@@ -46,11 +49,11 @@
       <div class="space-y-4">
         <h3 class="text-lg font-semibold border-b pb-2 text-stone-700">2. Música de YouTube y Estilo Visual</h3>
         <div>
-          <label class="block text-sm font-medium text-stone-700">Enlace de Canción de YouTube (URL completa o ID)</label>
+          <label class="block text-sm font-medium text-stone-700">Enlace de Canción de YouTube</label>
           <input type="text" name="youtubeUrl" placeholder="https://www.youtube.com/watch?v=TuIDDeVideo" class="mt-1 w-full p-2.5 border rounded-lg text-sm">
         </div>
         <div>
-          <label class="block text-sm font-medium text-stone-700">URL de Imagen de Fondo Personalizada (Opcional)</label>
+          <label class="block text-sm font-medium text-stone-700">URL de Imagen de Fondo (Opcional)</label>
           <input type="text" name="imagenFondo" placeholder="https://ejemplo.com/fondo.jpg" class="mt-1 w-full p-2.5 border rounded-lg text-sm">
         </div>
         <div class="flex items-center gap-2">
