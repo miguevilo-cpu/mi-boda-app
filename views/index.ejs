@@ -19,8 +19,57 @@
       <span class="text-xl">💍</span>
       <span class="font-cinzel tracking-[0.25em] text-xs font-bold uppercase text-stone-200">Nupcias</span>
     </div>
-    <a href="/crear" class="bg-stone-100 text-stone-950 px-6 py-2.5 rounded-full text-xs font-semibold tracking-wider uppercase hover:bg-stone-300 transition shadow-lg cursor-pointer">Crear Invitación</a>
+    <div class="flex items-center gap-4">
+      <button onclick="toggleHomeAdminModal()" class="text-xs uppercase tracking-widest text-stone-400 hover:text-white transition font-sans border border-stone-800 px-4 py-2 rounded-full cursor-pointer">
+        🔑 Admin
+      </button>
+      <a href="/crear" class="bg-stone-100 text-stone-950 px-6 py-2.5 rounded-full text-xs font-semibold tracking-wider uppercase hover:bg-stone-300 transition shadow-lg cursor-pointer">Crear Invitación</a>
+    </div>
   </header>
+
+  <!-- Modal Admin Inicio -->
+  <div id="homeAdminModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-stone-900 border border-stone-800 p-8 rounded-3xl max-w-sm w-full shadow-2xl text-center font-sans">
+      <h3 class="text-lg font-serif font-bold mb-2 text-white">Panel de Administración</h3>
+      <p class="text-xs text-stone-400 mb-6">Ingresa el enlace o slug de tu boda y tu PIN de seguridad:</p>
+      <form onsubmit="irAAdmin(event)" class="space-y-4 text-left">
+        <div>
+          <label class="block text-[10px] uppercase tracking-wider text-stone-400 mb-1">Enlace / Slug de la Boda</label>
+          <input type="text" id="adminSlug" required placeholder="ej. maria-miguel-1234" class="w-full p-3 bg-stone-950 border border-stone-800 rounded-xl text-xs text-white">
+        </div>
+        <div>
+          <label class="block text-[10px] uppercase tracking-wider text-stone-400 mb-1">PIN de Seguridad</label>
+          <input type="password" id="adminPin" maxlength="4" required placeholder="PIN (ej. 1234)" class="w-full p-3 bg-stone-950 border border-stone-800 rounded-xl text-xs text-white text-center tracking-widest">
+        </div>
+        <div class="flex gap-2 pt-2">
+          <button type="submit" class="w-full bg-stone-100 text-stone-950 py-3 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer hover:bg-white transition">Entrar</button>
+          <button type="button" onclick="toggleHomeAdminModal()" class="w-full bg-stone-800 text-stone-300 py-3 rounded-xl text-xs cursor-pointer hover:bg-stone-700 transition">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function toggleHomeAdminModal() {
+      document.getElementById('homeAdminModal').classList.toggle('hidden');
+    }
+    function irAAdmin(e) {
+      e.preventDefault();
+      const slug = document.getElementById('adminSlug').value.trim();
+      const pin = document.getElementById('adminPin').value.trim();
+      // Redirigir enviando el pin por POST o usando login directo
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = `/boda/${slug}/admin-login`;
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'pin';
+      input.value = pin;
+      form.appendChild(input);
+      document.body.appendChild(form);
+      form.submit();
+    }
+  </script>
 
   <main class="max-w-5xl mx-auto px-6 py-20 text-center space-y-12">
     <div class="space-y-5 max-w-2xl mx-auto">
@@ -28,7 +77,6 @@
       <h1 class="text-4xl md:text-6xl font-serif font-bold tracking-tight leading-tight">Tu boda, tu estilo</h1>
       <p class="text-stone-400 text-sm md:text-base font-light leading-relaxed">Crea invitaciones interactivas memorables con sobres animados, doble tipografía elegante, galería dinámica en abanico, mesa de regalos internacional y control de asistencia.</p>
       <div class="pt-4">
-        <!-- Enlace corregido para asegurar redirección inmediata al formulario -->
         <a href="/crear" class="inline-block bg-stone-100 text-stone-950 px-8 py-4 rounded-2xl font-semibold text-xs uppercase tracking-widest hover:bg-white transition shadow-2xl cursor-pointer">Diseñar Mi Invitación Ahora</a>
       </div>
     </div>
