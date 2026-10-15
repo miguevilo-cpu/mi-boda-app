@@ -34,22 +34,72 @@
       <% } %>
     }
 
-    /* Pergamino con Borde Rasgado Artesanal (Deckle Edge / Paper Cutout) */
-    .tarjeta-pergamino-corte {
-      background-color: #fcf8f2;
-      background-image: radial-gradient(#e8dec9 1px, transparent 0), url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E");
-      border-left: 1px solid #e0d0b5;
-      border-right: 1px solid #e0d0b5;
-      box-shadow: 0 20px 50px rgba(70, 50, 30, 0.12), inset 0 0 70px rgba(180, 150, 110, 0.15);
+    /* Pergamino Hiperrealista con Rollos Ondulados */
+    .pergamino-realista {
+      background-color: #fbf6ec;
+      background-image: 
+        linear-gradient(to bottom, rgba(160, 130, 95, 0.15), transparent 40px, transparent calc(100% - 40px), rgba(160, 130, 95, 0.15)),
+        radial-gradient(#e5d8bf 1px, transparent 0),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+      border-left: 1px solid #dfcfb2;
+      border-right: 1px solid #dfcfb2;
+      box-shadow: 
+        0 25px 60px rgba(50, 35, 20, 0.18), 
+        inset 0 0 90px rgba(180, 145, 100, 0.22);
       position: relative;
+      margin-top: 25px;
+      margin-bottom: 25px;
+      border-radius: 4px;
     }
 
-    /* Recorte superior e inferior del pergamino */
-    .tarjeta-pergamino-corte {
-      clip-path: polygon(
-        0% 12px, 2% 3px, 4% 15px, 7% 2px, 10% 12px, 14% 1px, 18% 13px, 22% 3px, 27% 14px, 32% 1px, 37% 12px, 42% 2px, 47% 15px, 52% 3px, 58% 13px, 63% 1px, 68% 14px, 73% 2px, 78% 12px, 83% 3px, 88% 15px, 93% 2px, 97% 12px, 100% 1px,
-        100% calc(100% - 1px), 97% calc(100% - 12px), 93% calc(100% - 2px), 88% calc(100% - 15px), 83% calc(100% - 3px), 78% calc(100% - 12px), 73% calc(100% - 2px), 68% calc(100% - 14px), 63% calc(100% - 1px), 58% calc(100% - 13px), 52% calc(100% - 3px), 47% calc(100% - 15px), 42% calc(100% - 2px), 37% calc(100% - 12px), 32% calc(100% - 1px), 27% calc(100% - 14px), 22% calc(100% - 3px), 18% calc(100% - 13px), 14% calc(100% - 1px), 10% calc(100% - 12px), 7% calc(100% - 2px), 4% calc(100% - 15px), 2% calc(100% - 3px), 0% calc(100% - 12px)
+    /* Rollo Ondulado Superior 3D */
+    .pergamino-realista::before {
+      content: '';
+      position: absolute;
+      top: -22px;
+      left: -16px;
+      right: -16px;
+      height: 28px;
+      background: linear-gradient(
+        180deg, 
+        #9e8765 0%, 
+        #d8c5a5 22%, 
+        #fbf6ec 45%, 
+        #eddcc2 75%, 
+        #8a7353 100%
       );
+      border-radius: 14px 14px 12px 12px;
+      box-shadow: 
+        0 8px 18px rgba(40, 25, 10, 0.35),
+        inset 0 2px 4px rgba(255, 255, 255, 0.7),
+        inset 0 -3px 6px rgba(60, 45, 25, 0.4);
+      border: 1px solid #a38d6b;
+      z-index: 20;
+    }
+
+    /* Rollo Ondulado Inferior 3D */
+    .pergamino-realista::after {
+      content: '';
+      position: absolute;
+      bottom: -22px;
+      left: -16px;
+      right: -16px;
+      height: 28px;
+      background: linear-gradient(
+        0deg, 
+        #9e8765 0%, 
+        #d8c5a5 22%, 
+        #fbf6ec 45%, 
+        #eddcc2 75%, 
+        #8a7353 100%
+      );
+      border-radius: 12px 12px 14px 14px;
+      box-shadow: 
+        0 -8px 18px rgba(40, 25, 10, 0.35),
+        inset 0 -2px 4px rgba(255, 255, 255, 0.7),
+        inset 0 3px 6px rgba(60, 45, 25, 0.4);
+      border: 1px solid #a38d6b;
+      z-index: 20;
     }
 
     /* Marco Ornamental de Novios */
@@ -283,7 +333,7 @@
     }
   </script>
 
-  <div class="max-w-xl mx-auto tarjeta-pergamino-corte p-8 md:p-14 text-center relative my-4">
+  <div class="max-w-xl mx-auto pergamino-realista p-8 md:p-14 text-center relative">
     
     <!-- Modal Admin centrado en pantalla -->
     <div id="adminModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -675,7 +725,6 @@
   <footer class="mt-12 text-center text-xs text-stone-400 font-sans space-y-3 pb-6">
     <p>Nupcias © <%= new Date().getFullYear() %> Todos los derechos reservados</p>
     
-    <!-- Botón Admin Monocromático -->
     <div>
       <button onclick="toggleAdminModal()" class="text-[10px] uppercase tracking-widest text-stone-400 hover:text-stone-700 transition font-sans border border-stone-300 px-4 py-1.5 rounded-full cursor-pointer bg-white/40">
         Acceso Administrador
