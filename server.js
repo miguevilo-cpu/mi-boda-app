@@ -31,18 +31,18 @@ const invitationSchema = new mongoose.Schema({
   menu: String,
   pinAdmin: { type: String, default: '1234' },
 
-  // Dress Code y Colores (3 colores por género)
+  // Dress Code
   dressCode: { type: String, default: 'Formal Elegante' },
   coloresProhibidosDamas: [String],
   coloresProhibidosCaballeros: [String],
 
-  // Mesa de Regalos
+  // Regalos
   zelleEmail: String,
   zelleTitular: String,
   binancePayId: String,
   binanceWalletUsdt: String,
 
-  // Estilos
+  // Estilos y Fondo
   fuente: { type: String, default: 'font-serif' },
   colorTexto: { type: String, default: '#1c1917' },
   colorFondo: { type: String, default: '#fafaf9' },
@@ -54,20 +54,14 @@ const invitationSchema = new mongoose.Schema({
     nombre: String, 
     correo: String,
     asistencia: String, 
-    personas: Number,
+    llevaAcompanante: Boolean,
     menuElegido: String,
     mesa: { type: String, default: 'Sin asignar' } 
-  }],
-  mensajesBuzon: [{
-    remitente: String,
-    texto: String,
-    fecha: { type: Date, default: Date.now }
   }]
 });
 
 const Invitation = mongoose.model('Invitation', invitationSchema);
 
-// Limpieza para asegurar la extracción correcta de la URL del mapa de Google Maps
 function cleanMapUrl(rawInput) {
   if (!rawInput) return '';
   if (rawInput.includes('<iframe')) {
@@ -85,17 +79,15 @@ app.post('/crear', async (req, res) => {
     const { 
       novios, fecha, fechaTexto, lugarCeremonia, mapaCeremoniaUrl,
       lugarRecepcion, mapaRecepcionUrl, mensaje, youtubeUrl, menu, 
-      pinAdmin, dressCode, coloresDamas, coloresCaballeros,
+      pinAdmin, dressCode, 
+      colorDama1, colorDama2, colorDama3,
+      colorCaballero1, colorCaballero2, colorCaballero3,
       zelleEmail, zelleTitular, binancePayId, binanceWalletUsdt,
       fuente, colorTexto, colorFondo, imagenFondo, textura, fotos 
     } = req.body;
     
     const slug = novios.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Date.now().toString().slice(-4);
-    const fotosArray = fotos ? fotos.split(',').map(f => f.trim()) : [];
-    
-    // Paletas por defecto si vienen vacías
-    const damasCols = coloresDamas ? coloresDamas.split(',').map(c => c.trim()) : ['#ffffff', '#f5f5dc', '#e5e7eb'];
-    const cabCols = coloresCaballeros ? coloresCaballeros.split(',').map(c => c.trim()) : ['#000000', '#1f2937', '#ffffff'];
+    const fotosArray = fotos ? fotos.split(',').map(f => f.trim()).filter(f => f.length > 0) : [];
 
     const nuevaInvitacion = new Invitation({
       slug,
@@ -111,8 +103,8 @@ app.post('/crear', async (req, res) => {
       menu,
       pinAdmin: pinAdmin || '1234',
       dressCode: dressCode || 'Formal Elegante',
-      coloresProhibidosDamas: damasCols,
-      coloresProhibidosCaballeros: cabCols,
+      coloresProhibidosDamas: [colorDama1, colorDama2, colorDama3].filter(Boolean),
+      coloresProhibidosCaballeros: [colorCaballero1, colorCaballero2, colorCaballero3].filter(Boolean),
       zelleEmail,
       zelleTitular,
       binancePayId,
@@ -120,7 +112,7 @@ app.post('/crear', async (req, res) => {
       fuente: fuente || 'font-serif',
       colorTexto: colorTexto || '#1c1917',
       colorFondo: colorFondo || '#fafaf9',
-      imagenFondo,
+      imagenFondo: imagenFondo ? imagenFondo.trim() : '',
       textura: textura === 'on',
       fotos: fotosArray
     });
@@ -145,27 +137,22 @@ app.get('/boda/:slug', async (req, res) => {
 
 app.post('/boda/:slug/rsvp', async (req, res) => {
   try {
-    const { nombre, correo, asistencia, personas, menuElegido } = req.body;
+    const { nombre, correo, asistencia, llevaAcompanante, menuElegido } = req.body;
     await Invitation.updateOne(
       { slug: req.params.slug },
-      { $push: { rsvps: { nombre, correo, asistencia, personas, menuElegido, mesa: 'Sin asignar' } } }
+      { $push: { rsvps: { 
+          nombre, 
+          correo, 
+          asistencia, 
+          llevaAcompanante: llevaAcompanante === 'on', 
+          menuElegido, 
+          mesa: 'Sin asignar' 
+        } 
+      } }
     );
     res.redirect(`/boda/${req.params.slug}?enviado=true#rsvp`);
   } catch (error) {
     res.status(500).send('Error al enviar RSVP');
-  }
-});
-
-app.post('/boda/:slug/buzon', async (req, res) => {
-  try {
-    const { remitente, texto } = req.body;
-    await Invitation.updateOne(
-      { slug: req.params.slug },
-      { $push: { mensajesBuzon: { remitente, texto } } }
-    );
-    res.redirect(`/boda/${req.params.slug}?buzon=true#buzon`);
-  } catch (error) {
-    res.status(500).send('Error al enviar mensaje');
   }
 });
 
