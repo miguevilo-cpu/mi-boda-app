@@ -2,58 +2,320 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nupcias - Tu boda, tu estilo</title>
+  <title>Nupcias - Diseñador de Invitaciones</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@300;400;500;600&family=Cinzel:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,600;1,400&family=Great+Vibes&family=Alex+Brush&family=Pinyon+Script&family=Italianno&family=Bodoni+Moda:ital,wght@0,500;1,400&family=Montserrat:wght@300;400;500;600&family=Lato:wght@300;400;700&family=Raleway:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
   <style>
-    .font-serif { font-family: 'Playfair Display', serif; }
-    .font-sans { font-family: 'Montserrat', sans-serif; }
+    .font-playfair { font-family: 'Playfair Display', serif; }
     .font-cinzel { font-family: 'Cinzel', serif; }
+    .font-cormorant { font-family: 'Cormorant Garamond', serif; }
+    .font-great-vibes { font-family: 'Great Vibes', cursive; }
+    .font-alex-brush { font-family: 'Alex Brush', cursive; }
+    .font-pinyon { font-family: 'Pinyon Script', cursive; }
+    .font-italianno { font-family: 'Italianno', cursive; }
+    .font-bodoni { font-family: 'Bodoni Moda', serif; }
+    .font-montserrat { font-family: 'Montserrat', sans-serif; }
+    .font-lato { font-family: 'Lato', sans-serif; }
+    .font-raleway { font-family: 'Raleway', sans-serif; }
+    .font-lora { font-family: 'Lora', serif; }
   </style>
 </head>
-<body class="bg-stone-950 text-stone-100 font-sans min-h-screen flex flex-col justify-between selection:bg-stone-800 selection:text-white">
-
-  <header class="w-full py-6 px-8 flex justify-between items-center border-b border-stone-800/80 backdrop-blur-md">
-    <div class="flex items-center gap-3">
-      <span class="text-xl">💍</span>
-      <span class="font-cinzel tracking-[0.25em] text-xs font-bold uppercase text-stone-200">Nupcias</span>
+<body class="bg-stone-100 py-10 px-4 font-sans text-stone-800">
+  
+  <div class="max-w-3xl mx-auto mb-6 text-center">
+    <div class="inline-flex items-center gap-2 bg-stone-900 text-white px-5 py-2 rounded-full shadow-lg">
+      <span class="text-base">💍</span>
+      <h1 class="text-sm font-serif tracking-widest uppercase font-bold">Nupcias - Diseñador</h1>
     </div>
-    <a href="/crear" class="bg-stone-100 text-stone-950 px-6 py-2.5 rounded-full text-xs font-semibold tracking-wider uppercase hover:bg-stone-300 transition shadow-lg">Crear Invitación</a>
-  </header>
+  </div>
 
-  <main class="max-w-5xl mx-auto px-6 py-20 text-center space-y-12">
-    <div class="space-y-5 max-w-2xl mx-auto">
-      <span class="text-[11px] uppercase tracking-[0.35em] text-stone-400 font-medium">Plataforma de Invitaciones Digitales de Lujo</span>
-      <h1 class="text-4xl md:text-6xl font-serif font-bold tracking-tight leading-tight">Tu boda, tu estilo</h1>
-      <p class="text-stone-400 text-sm md:text-base font-light leading-relaxed">Crea invitaciones interactivas memorables con sobres animados, doble tipografía elegante, galería dinámica en abanico, mesa de regalos internacional y control de asistencia.</p>
-      <div class="pt-4">
-        <a href="/crear" class="inline-block bg-stone-100 text-stone-950 px-8 py-4 rounded-2xl font-semibold text-xs uppercase tracking-widest hover:bg-white transition shadow-2xl">Diseñar Mi Invitación Ahora</a>
+  <div class="max-w-3xl mx-auto bg-white p-6 md:p-10 rounded-3xl shadow-xl border border-stone-200">
+    <h2 class="text-2xl md:text-3xl font-serif font-bold text-center mb-2">Crear Invitación de Boda</h2>
+    <p class="text-center text-xs text-stone-500 mb-8">Personaliza tu evento con doble tipografía, galería en abanico y mesa de regalos.</p>
+    
+    <form action="/crear" method="POST" class="space-y-8">
+      
+      <div class="space-y-4">
+        <h3 class="text-sm font-semibold uppercase tracking-wider border-b pb-2 text-stone-700">1. Novios & Seguridad</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-stone-600">Nombres de los Novios</label>
+            <input type="text" name="novios" required placeholder="María & Miguel" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-stone-600">PIN Administrador (4 dígitos)</label>
+            <input type="password" name="pinAdmin" value="1234" maxlength="4" required class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-sm">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-stone-600">Fecha y Hora del Evento</label>
+          <input type="datetime-local" name="fecha" required class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-stone-600">Mensaje de Bienvenida</label>
+          <textarea name="mensaje" rows="2" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-sm" placeholder="Nos emociona compartir este día tan especial..."></textarea>
+        </div>
       </div>
+
+      <div class="space-y-4">
+        <h3 class="text-sm font-semibold uppercase tracking-wider border-b pb-2 text-stone-700">2. Ceremonia & Recepción</h3>
+        
+        <div class="p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-3">
+          <h4 class="font-medium text-xs text-stone-800 uppercase tracking-wider">⛪ Ceremonia Eucarística</h4>
+          <input type="text" name="lugarCeremonia" required placeholder="Iglesia Catedral San José" class="w-full p-2.5 border border-stone-300 rounded-xl text-sm bg-white">
+          <input type="text" name="mapaCeremoniaUrl" placeholder="Enlace o Iframe de Google Maps para la iglesia" class="w-full p-2.5 border border-stone-300 rounded-xl text-xs bg-white">
+        </div>
+
+        <div class="p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-3">
+          <h4 class="font-medium text-xs text-stone-800 uppercase tracking-wider">🥂 Recepción / Fiesta</h4>
+          <input type="text" name="lugarRecepcion" required placeholder="Hacienda San José" class="w-full p-2.5 border border-stone-300 rounded-xl text-sm bg-white">
+          <input type="text" name="mapaRecepcionUrl" placeholder="Enlace o Iframe de Google Maps para la recepción" class="w-full p-2.5 border border-stone-300 rounded-xl text-xs bg-white">
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="text-sm font-semibold uppercase tracking-wider border-b pb-2 text-stone-700">3. Código de Vestimenta</h3>
+        <div>
+          <label class="block text-xs font-medium text-stone-600">Nivel de Vestimenta</label>
+          <select name="dressCode" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-sm">
+            <option value="Rigurosa Etiqueta / Black Tie">Rigurosa Etiqueta / Black Tie</option>
+            <option value="Formal Elegante" selected>Formal Elegante</option>
+            <option value="Semi-Formal / Guayabera">Semi-Formal / Guayabera</option>
+            <option value="Casual Elegante">Casual Elegante</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          <div class="p-4 bg-stone-50 rounded-2xl border border-stone-200">
+            <label class="block text-xs font-semibold text-stone-700 mb-2">👠 3 Colores Prohibidos - Mujeres</label>
+            <div class="flex items-center gap-3">
+              <input type="color" name="colorDama1" value="#ffffff" class="w-12 h-10 p-1 border rounded-xl cursor-pointer">
+              <input type="color" name="colorDama2" value="#f5f5dc" class="w-12 h-10 p-1 border rounded-xl cursor-pointer">
+              <input type="color" name="colorDama3" value="#e5e7eb" class="w-12 h-10 p-1 border rounded-xl cursor-pointer">
+            </div>
+          </div>
+
+          <div class="p-4 bg-stone-50 rounded-2xl border border-stone-200">
+            <label class="block text-xs font-semibold text-stone-700 mb-2">🎩 3 Colores Prohibidos - Hombres</label>
+            <div class="flex items-center gap-3">
+              <input type="color" name="colorCaballero1" value="#000000" class="w-12 h-10 p-1 border rounded-xl cursor-pointer">
+              <input type="color" name="colorCaballero2" value="#1f2937" class="w-12 h-10 p-1 border rounded-xl cursor-pointer">
+              <input type="color" name="colorCaballero3" value="#ffffff" class="w-12 h-10 p-1 border rounded-xl cursor-pointer">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="text-sm font-semibold uppercase tracking-wider border-b pb-2 text-stone-700">4. Mesa de Regalos</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          
+          <div class="p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-2">
+            <h4 class="font-medium text-xs text-purple-800 uppercase font-bold">Zelle</h4>
+            <input type="email" name="zelleEmail" placeholder="Correo Zelle" class="w-full p-2 border border-stone-300 rounded-lg text-xs bg-white">
+            <input type="text" name="zelleTitular" placeholder="Titular" class="w-full p-2 border border-stone-300 rounded-lg text-xs bg-white">
+          </div>
+
+          <div class="p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-2">
+            <h4 class="font-medium text-xs text-amber-700 uppercase font-bold">Binance</h4>
+            <input type="text" name="binancePayId" placeholder="Binance Pay ID" class="w-full p-2 border border-stone-300 rounded-lg text-xs bg-white">
+            <input type="text" name="binanceWalletUsdt" placeholder="Wallet USDT" class="w-full p-2 border border-stone-300 rounded-lg text-xs bg-white font-mono">
+          </div>
+
+          <div class="p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-2">
+            <h4 class="font-medium text-xs text-blue-700 uppercase font-bold">Pago Móvil</h4>
+            <input type="text" name="pagoMovilBanco" placeholder="Banco" class="w-full p-2 border border-stone-300 rounded-lg text-xs bg-white">
+            <input type="text" name="pagoMovilTelefono" placeholder="Teléfono" class="w-full p-2 border border-stone-300 rounded-lg text-xs bg-white">
+            <input type="text" name="pagoMovilCedula" placeholder="Cédula / RIF" class="w-full p-2 border border-stone-300 rounded-lg text-xs bg-white">
+          </div>
+
+        </div>
+
+        <div class="flex items-center gap-2 pt-2 bg-stone-50 p-3 rounded-xl border border-stone-200">
+          <input type="checkbox" name="mostrarBuzonFisico" id="mostrarBuzonFisico" class="w-4 h-4 rounded text-stone-900">
+          <label for="mostrarBuzonFisico" class="text-xs font-medium text-stone-700">Mostrar ficha: "Tendremos buzón de regalos en el salón de festejos"</label>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="text-sm font-semibold uppercase tracking-wider border-b pb-2 text-stone-700">5. Galería de Fotos Dinámica</h3>
+        <div class="flex gap-2">
+          <input type="text" id="fotoInput" placeholder="Pega el link de la foto aquí..." class="flex-1 p-2.5 border border-stone-300 rounded-xl text-xs">
+          <button type="button" onclick="agregarFoto()" class="bg-stone-900 text-white px-4 py-2.5 rounded-xl text-xs font-medium hover:bg-stone-800 transition"> + Agregar Link</button>
+        </div>
+        <div id="fotosContainer" class="grid grid-cols-1 gap-2 pt-2"></div>
+        <div id="hiddenFotosInputs"></div>
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="text-sm font-semibold uppercase tracking-wider border-b pb-2 text-stone-700">6. Selección de Tipografía con Combinación Automática</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="fontSelectorContainer">
+          
+          <label class="font-option-card cursor-pointer border-2 rounded-2xl p-4 flex flex-col justify-between transition border-stone-900 bg-white shadow-md">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-semibold text-stone-600">Playfair Display (Clásica Nupcial)</span>
+              <input type="radio" name="fuentePrimaria" value="font-playfair" checked class="w-4 h-4 accent-stone-900 font-radio">
+            </div>
+            <p class="text-xl font-playfair text-stone-900">María & Miguel</p>
+          </label>
+
+          <label class="font-option-card cursor-pointer border-2 rounded-2xl p-4 flex flex-col justify-between transition border-stone-200 bg-stone-50 shadow-sm">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-semibold text-stone-600">Cinzel Roman (Imperial)</span>
+              <input type="radio" name="fuentePrimaria" value="font-cinzel" class="w-4 h-4 accent-stone-900 font-radio">
+            </div>
+            <p class="text-lg font-cinzel text-stone-900">MARÍA & MIGUEL</p>
+          </label>
+
+          <label class="font-option-card cursor-pointer border-2 rounded-2xl p-4 flex flex-col justify-between transition border-stone-200 bg-stone-50 shadow-sm">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-semibold text-stone-600">Cormorant Garamond (Elegancia)</span>
+              <input type="radio" name="fuentePrimaria" value="font-cormorant" class="w-4 h-4 accent-stone-900 font-radio">
+            </div>
+            <p class="text-2xl font-cormorant italic text-stone-900">María & Miguel</p>
+          </label>
+
+          <label class="font-option-card cursor-pointer border-2 rounded-2xl p-4 flex flex-col justify-between transition border-stone-200 bg-stone-50 shadow-sm">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-semibold text-stone-600">Great Vibes (Cursiva Romántica)</span>
+              <input type="radio" name="fuentePrimaria" value="font-great-vibes" class="w-4 h-4 accent-stone-900 font-radio">
+            </div>
+            <p class="text-3xl font-great-vibes text-stone-900">María & Miguel</p>
+          </label>
+
+          <label class="font-option-card cursor-pointer border-2 rounded-2xl p-4 flex flex-col justify-between transition border-stone-200 bg-stone-50 shadow-sm">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-semibold text-stone-600">Alex Brush (Caligrafía)</span>
+              <input type="radio" name="fuentePrimaria" value="font-alex-brush" class="w-4 h-4 accent-stone-900 font-radio">
+            </div>
+            <p class="text-3xl font-alex-brush text-stone-900">María & Miguel</p>
+          </label>
+
+          <label class="font-option-card cursor-pointer border-2 rounded-2xl p-4 flex flex-col justify-between transition border-stone-200 bg-stone-50 shadow-sm">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-semibold text-stone-600">Pinyon Script (Cursiva Imperial)</span>
+              <input type="radio" name="fuentePrimaria" value="font-pinyon" class="w-4 h-4 accent-stone-900 font-radio">
+            </div>
+            <p class="text-3xl font-pinyon text-stone-900">María & Miguel</p>
+          </label>
+
+          <label class="font-option-card cursor-pointer border-2 rounded-2xl p-4 flex flex-col justify-between transition border-stone-200 bg-stone-50 shadow-sm">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-semibold text-stone-600">Italianno (Línea Delicada)</span>
+              <input type="radio" name="fuentePrimaria" value="font-italianno" class="w-4 h-4 accent-stone-900 font-radio">
+            </div>
+            <p class="text-3xl font-italianno text-stone-900">María & Miguel</p>
+          </label>
+
+          <label class="font-option-card cursor-pointer border-2 rounded-2xl p-4 flex flex-col justify-between transition border-stone-200 bg-stone-50 shadow-sm">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-semibold text-stone-600">Bodoni Moda (Alta Costura)</span>
+              <input type="radio" name="fuentePrimaria" value="font-bodoni" class="w-4 h-4 accent-stone-900 font-radio">
+            </div>
+            <p class="text-2xl font-bodoni text-stone-900">María & Miguel</p>
+          </label>
+
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="text-sm font-semibold uppercase tracking-wider border-b pb-2 text-stone-700">7. Menú, Google Drive y Estilo Visual</h3>
+        <div>
+          <label class="block text-xs font-medium text-stone-600">Descripción del Menú</label>
+          <textarea name="menu" rows="2" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs" placeholder="Entrada, plato fuerte..."></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-stone-600">URL Foto opcional del Menú</label>
+          <input type="text" name="menuFotoUrl" placeholder="https://ejemplo.com/menu.jpg" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-stone-600">Enlace a Google Drive (Álbum con fotos de la boda - Opcional)</label>
+          <input type="text" name="driveFotosUrl" placeholder="https://drive.google.com/drive/folders/ejemplo" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-stone-600">URL Imagen de Fondo (Opcional)</label>
+          <input type="text" name="imagenFondo" placeholder="https://ejemplo.com/fondo-boda.jpg" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-stone-600">Enlace Canción de YouTube</label>
+          <input type="text" name="youtubeUrl" placeholder="https://www.youtube.com/watch?v=Ejemplo" class="mt-1 w-full p-2.5 border border-stone-300 rounded-xl text-xs">
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-stone-600">Color de Texto Principal</label>
+            <input type="color" name="colorTexto" value="#1c1917" class="mt-1 w-full h-10 p-1 border rounded-xl cursor-pointer">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-stone-600">Color de Fondo Base</label>
+            <input type="color" name="colorFondo" value="#fafaf9" class="mt-1 w-full h-10 p-1 border rounded-xl cursor-pointer">
+          </div>
+        </div>
+        <div class="flex items-center gap-2 pt-2">
+          <input type="checkbox" name="textura" id="textura" checked class="w-4 h-4 rounded text-stone-900">
+          <label for="textura" class="text-xs font-medium text-stone-700">Activar textura de cartulina de lino/hilo</label>
+        </div>
+      </div>
+
+      <button type="submit" class="w-full bg-stone-900 text-white py-4 rounded-2xl hover:bg-stone-800 transition font-medium text-base shadow-lg cursor-pointer">Generar Invitación</button>
+    </form>
+    
+    <div class="mt-8 pt-4 border-t text-center text-[11px] text-stone-400">
+      Nupcias © <%= new Date().getFullYear() %> Todos los derechos reservados
     </div>
+  </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 text-left">
-      <div class="bg-stone-900/60 p-6 rounded-3xl border border-stone-800/80 backdrop-blur-md space-y-3 shadow-xl">
-        <span class="text-2xl">🌿</span>
-        <h3 class="font-serif text-lg font-bold">Minimalismo Orgánico</h3>
-        <p class="text-xs text-stone-400 leading-relaxed">Estética pulida y natural, ideal para ceremonias íntimas y celebraciones al aire libre.</p>
-      </div>
-      <div class="bg-stone-900/60 p-6 rounded-3xl border border-stone-800/80 backdrop-blur-md space-y-3 shadow-xl">
-        <span class="text-2xl">⚜️</span>
-        <h3 class="font-serif text-lg font-bold">Elegancia Imperial</h3>
-        <p class="text-xs text-stone-400 leading-relaxed">Detalles en relieve, sellos de cera personalizados y fuentes de alta costura nupcial.</p>
-      </div>
-      <div class="bg-stone-900/60 p-6 rounded-3xl border border-stone-800/80 backdrop-blur-md space-y-3 shadow-xl">
-        <span class="text-2xl">✨</span>
-        <h3 class="font-serif text-lg font-bold">Vanguardia Interactiva</h3>
-        <p class="text-xs text-stone-400 leading-relaxed">Galerías inmersivas en abanico, música de fondo y pasarela de regalos digitales.</p>
-      </div>
-    </div>
-  </main>
+  <script>
+    const fotosList = [];
+    function agregarFoto() {
+      const input = document.getElementById('fotoInput');
+      const url = input.value.trim();
+      if (url) {
+        fotosList.push(url);
+        input.value = '';
+        renderFotos();
+      }
+    }
+    function eliminarFoto(index) {
+      fotosList.splice(index, 1);
+      renderFotos();
+    }
+    function renderFotos() {
+      const container = document.getElementById('fotosContainer');
+      const hiddenContainer = document.getElementById('hiddenFotosInputs');
+      container.innerHTML = '';
+      hiddenContainer.innerHTML = '';
+      fotosList.forEach((url, index) => {
+        const badge = document.createElement('div');
+        badge.className = 'flex items-center justify-between p-2.5 bg-stone-50 rounded-xl border border-stone-200 text-xs shadow-sm';
+        badge.innerHTML = `
+          <div class="flex items-center gap-2 truncate pr-2">
+            <span class="text-stone-400 font-mono">#${index + 1}</span>
+            <span class="truncate text-stone-700 font-mono">${url}</span>
+          </div>
+          <button type="button" onclick="eliminarFoto(${index})" class="text-rose-600 hover:text-rose-800 font-bold px-2 py-1 rounded-lg hover:bg-rose-50 transition">✕</button>
+        `;
+        container.appendChild(badge);
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'fotos';
+        hiddenInput.value = url;
+        hiddenContainer.appendChild(hiddenInput);
+      });
+    }
 
-  <footer class="py-6 border-t border-stone-900 text-center text-xs text-stone-500">
-    <p>Nupcias © <%= new Date().getFullYear() %> Todos los derechos reservados</p>
-  </footer>
-
+    const cards = document.querySelectorAll('.font-option-card');
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        cards.forEach(c => {
+          c.classList.0 && c.classList.remove('border-stone-900', 'bg-white', 'shadow-md');
+          c.classList.add('border-stone-200', 'bg-stone-50');
+        });
+        card.classList.remove('border-stone-200', 'bg-stone-50');
+        card.classList.add('border-stone-900', 'bg-white', 'shadow-md');
+        const radio = card.querySelector('input[type="radio"]');
+        if (radio) radio.checked = true;
+      });
+    });
+  </script>
 </body>
 </html>
