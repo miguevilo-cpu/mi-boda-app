@@ -20,6 +20,7 @@
     .font-raleway { font-family: 'Raleway', sans-serif; }
     .font-lora { font-family: 'Lora', serif; }
 
+    /* Patrón de Cartulina de Hilo Real */
     .textura-cartulina-hilo {
       background-color: <%= invitation.colorFondo %>;
       <% if (invitation.imagenFondo && invitation.imagenFondo.length > 0) { %>
@@ -28,7 +29,8 @@
         background-position: center;
         background-attachment: fixed;
       <% } else if (invitation.textura) { %>
-        background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h16v16H0z' fill='none'/%3E%3Cpath d='M0 2h16M0 6h16M0 10h16M0 14h16M2 0v16M6 0v16M10 0v16M14 0v16' stroke='%20000000' stroke-opacity='0.035' stroke-width='0.6'/%3E%3C/svg%3E");
+        background-image: radial-gradient(rgba(0,0,0,0.05) 1px, transparent 0), url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M0 2h24M0 6h24M0 10h24M0 14h24M0 18h24M0 22h24M2 0v24M6 0v24M10 0v24M14 0v24M18 0v24M22 0v24' stroke='%23000000' stroke-opacity='0.04' stroke-width='0.7'/%3E%3C/svg%3E");
+        background-size: 24px 24px;
       <% } %>
     }
 
@@ -115,7 +117,7 @@
     }
   </style>
 </head>
-<body class="<%= invitation.fuenteSecundaria %> textura-cartulina-hilo min-h-screen py-8 px-4 select-none" style="color: <%= invitation.colorTexto %>;" data-wedding-date="<%= invitation.fecha %>">
+<body class="<%= invitation.fuenteSecundaria %> textura-cartulina-hilo min-h-screen py-10 px-4 select-none" style="color: <%= invitation.colorTexto %>;" data-wedding-date="<%= invitation.fecha %>">
 
   <% if (invitation.youtubeUrl) { 
      let ytId = invitation.youtubeUrl.includes('v=') ? invitation.youtubeUrl.split('v=')[1].substring(0,11) : invitation.youtubeUrl.slice(-11);
@@ -177,10 +179,11 @@
     }
   </script>
 
-  <div class="max-w-xl mx-auto bg-white/95 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-2xl text-center border border-stone-200/90 relative">
+  <!-- Tarjeta con Estética de Carta Real (Sombra pronunciada y bordes elegantes estilo papel de hilo) -->
+  <div class="max-w-xl mx-auto bg-white/95 backdrop-blur-md p-8 md:p-14 rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] text-center border border-stone-300/80 relative">
     
     <div class="absolute top-4 right-4">
-      <button onclick="toggleAdminModal()" class="text-[10px] uppercase tracking-widest text-stone-400 hover:text-stone-800 transition font-sans border border-stone-200 px-3 py-1 rounded-full">
+      <button onclick="toggleAdminModal()" class="text-[10px] uppercase tracking-widest text-stone-400 hover:text-stone-800 transition font-sans border border-stone-200 px-3 py-1 rounded-full cursor-pointer">
         🔑 Admin
       </button>
     </div>
@@ -192,8 +195,8 @@
         <form action="/boda/<%= invitation.slug %>/admin-login" method="POST" class="space-y-3">
           <input type="password" name="pin" maxlength="4" required placeholder="PIN (ej. 1234)" class="w-full p-2.5 border border-stone-300 rounded-xl text-center text-lg tracking-widest">
           <div class="flex gap-2">
-            <button type="submit" class="w-full bg-stone-900 text-white py-2 rounded-xl text-xs font-medium">Ingresar</button>
-            <button type="button" onclick="toggleAdminModal()" class="w-full bg-stone-100 text-stone-700 py-2 rounded-xl text-xs">Cancelar</button>
+            <button type="submit" class="w-full bg-stone-900 text-white py-2 rounded-xl text-xs font-medium cursor-pointer">Ingresar</button>
+            <button type="button" onclick="toggleAdminModal()" class="w-full bg-stone-100 text-stone-700 py-2 rounded-xl text-xs cursor-pointer">Cancelar</button>
           </div>
         </form>
       </div>
@@ -320,14 +323,15 @@
 
     <div class="doblez-hoja"></div>
 
+    <!-- Código de Vestimenta con énfasis en Formal y leyenda "No uses estos colores" -->
     <div class="space-y-4 font-sans">
       <h3 class="text-2xl font-bold tracking-wide">Código de Vestimenta</h3>
-      <div class="inline-block bg-stone-900 text-white px-5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
+      <div class="inline-block bg-stone-900 text-white px-6 py-2 rounded-full text-sm font-bold uppercase tracking-widest shadow-md">
         <%= invitation.dressCode %>
       </div>
 
       <div class="bg-stone-50/80 p-5 rounded-2xl border border-stone-200/80 mt-4 text-xs space-y-4">
-        <p class="text-stone-500 italic">Reservamos los siguientes colores exclusivamente para los novios:</p>
+        <p class="text-stone-700 font-semibold italic text-sm">Por favor, no uses estos colores</p>
         
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col items-center bg-white p-3 rounded-xl border border-stone-100">
@@ -359,6 +363,7 @@
 
     <div class="doblez-hoja"></div>
 
+    <!-- Mesa de Regalos con Logotipo Oficial Correcto de Binance y Buzón Unificado -->
     <% if (invitation.zelleEmail || invitation.binancePayId || invitation.binanceWalletUsdt || invitation.pagoMovilBanco || invitation.mostrarBuzonFisico) { %>
       <div class="space-y-4 font-sans">
         <h3 class="text-2xl font-bold tracking-wide">Mesa de Regalos</h3>
@@ -386,8 +391,9 @@
             <div class="bg-amber-50/60 p-4 rounded-2xl border border-amber-200/80 relative flex flex-col justify-between">
               <div>
                 <div class="flex items-center gap-2 mb-2">
+                  <!-- Logotipo Geométrico Oficial Correcto de Binance -->
                   <svg class="w-6 h-6 text-amber-500" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M16.44 9.125L12 4.685 7.56 9.125 4.685 6.25 12 0l7.315 6.25-2.575 2.875zm-8.88 5.75L12 19.315l4.44-4.44 2.875 2.875L12 24l-7.315-6.25 2.575-2.875Z"/>
+                    <path d="M16.44 9.125L12 4.685 7.56 9.125 4.685 6.25 12 0l7.315 6.25-2.575 2.875zm-8.88 5.75L12 19.315l4.44-4.44 2.875 2.875L12 24l-7.315-6.25 2.575-2.875zM2.875 10.875L0 12l2.875 1.125L5.75 12 2.875 10.875zm18.25 0L18.25 12l2.875 1.125L24 12l-2.875-1.125zM12 7.75l4.25 4.25L12 16.25 7.75 12 12 7.75z"/>
                   </svg>
                   <span class="font-bold text-xs text-amber-900 tracking-wider">BINANCE</span>
                 </div>
@@ -420,9 +426,15 @@
           <% } %>
 
           <% if (invitation.mostrarBuzonFisico) { %>
-            <div class="bg-stone-50/80 p-4 rounded-2xl border border-stone-200/80 flex flex-col justify-center items-center text-center">
-              <span class="text-2xl mb-1">💌</span>
-              <p class="text-xs font-semibold text-stone-800">Tendremos buzón de regalos en el salón de festejos</p>
+            <div class="bg-stone-50/80 p-4 rounded-2xl border border-stone-200/80 relative flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-2xl">💌</span>
+                  <span class="font-bold text-xs text-stone-900 tracking-wider">BUZÓN DE REGALOS</span>
+                </div>
+                <p class="text-xs font-semibold text-stone-800">Tendremos buzón de regalos</p>
+                <p class="text-[11px] text-stone-500">Disponible en el salón de festejos</p>
+              </div>
             </div>
           <% } %>
 
@@ -455,8 +467,8 @@
 
         <% if (invitation.driveFotosUrl) { %>
           <div class="pt-3 border-t text-center">
-            <a href="<%= invitation.driveFotosUrl %>" target="_blank" class="inline-flex items-center gap-2 bg-stone-900 text-white px-5 py-2.5 rounded-xl text-xs font-medium hover:bg-stone-800 transition shadow-md">
-              📁 Ver / Subir Fotos al Álbum de Google Drive
+            <a href="<%= invitation.driveFotosUrl %>" target="_blank" class="inline-flex items-center gap-2 bg-stone-900 text-white px-5 py-2.5 rounded-xl text-xs font-medium hover:bg-stone-800 transition shadow-md cursor-pointer">
+              📁 Agrega fotos que tengas con los novios o que tomes en la fiesta
             </a>
           </div>
         <% } %>
