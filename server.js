@@ -19,18 +19,37 @@ const invitationSchema = new mongoose.Schema({
   novios: String,
   fecha: String,
   fechaTexto: String,
-  lugar: String,
-  mapaUrl: String,
+  
+  // Ubicaciones
+  lugarCeremonia: String,
+  mapaCeremoniaUrl: String,
+  lugarRecepcion: String,
+  mapaRecepcionUrl: String,
+
   mensaje: String,
   youtubeUrl: String,
   menu: String,
-  pinAdmin: { type: String, default: '1234' }, // PIN para entrar al admin
+  pinAdmin: { type: String, default: '1234' },
+
+  // Dress Code y Colores (3 colores por género)
+  dressCode: { type: String, default: 'Formal Elegante' },
+  coloresProhibidosDamas: [String],
+  coloresProhibidosCaballeros: [String],
+
+  // Mesa de Regalos
+  zelleEmail: String,
+  zelleTitular: String,
+  binancePayId: String,
+  binanceWalletUsdt: String,
+
+  // Estilos
   fuente: { type: String, default: 'font-serif' },
   colorTexto: { type: String, default: '#1c1917' },
   colorFondo: { type: String, default: '#fafaf9' },
   imagenFondo: String,
   textura: { type: Boolean, default: true },
   fotos: [String],
+
   rsvps: [{ 
     nombre: String, 
     correo: String,
@@ -48,30 +67,56 @@ const invitationSchema = new mongoose.Schema({
 
 const Invitation = mongoose.model('Invitation', invitationSchema);
 
+// Limpieza para asegurar la extracción correcta de la URL del mapa de Google Maps
+function cleanMapUrl(rawInput) {
+  if (!rawInput) return '';
+  if (rawInput.includes('<iframe')) {
+    const match = rawInput.match(/src=["']([^"']+)["']/);
+    return match ? match[1] : rawInput;
+  }
+  return rawInput.trim();
+}
+
 app.get('/', (req, res) => res.render('index'));
 app.get('/crear', (req, res) => res.render('crear'));
 
 app.post('/crear', async (req, res) => {
   try {
     const { 
-      novios, fecha, fechaTexto, lugar, mapaUrl, mensaje, 
-      youtubeUrl, menu, pinAdmin, fuente, colorTexto, colorFondo, imagenFondo, textura, fotos 
+      novios, fecha, fechaTexto, lugarCeremonia, mapaCeremoniaUrl,
+      lugarRecepcion, mapaRecepcionUrl, mensaje, youtubeUrl, menu, 
+      pinAdmin, dressCode, coloresDamas, coloresCaballeros,
+      zelleEmail, zelleTitular, binancePayId, binanceWalletUsdt,
+      fuente, colorTexto, colorFondo, imagenFondo, textura, fotos 
     } = req.body;
     
     const slug = novios.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Date.now().toString().slice(-4);
     const fotosArray = fotos ? fotos.split(',').map(f => f.trim()) : [];
+    
+    // Paletas por defecto si vienen vacías
+    const damasCols = coloresDamas ? coloresDamas.split(',').map(c => c.trim()) : ['#ffffff', '#f5f5dc', '#e5e7eb'];
+    const cabCols = coloresCaballeros ? coloresCaballeros.split(',').map(c => c.trim()) : ['#000000', '#1f2937', '#ffffff'];
 
     const nuevaInvitacion = new Invitation({
       slug,
       novios,
       fecha,
       fechaTexto: fechaTexto || fecha,
-      lugar,
-      mapaUrl,
+      lugarCeremonia,
+      mapaCeremoniaUrl: cleanMapUrl(mapaCeremoniaUrl),
+      lugarRecepcion,
+      mapaRecepcionUrl: cleanMapUrl(mapaRecepcionUrl),
       mensaje,
       youtubeUrl,
       menu,
       pinAdmin: pinAdmin || '1234',
+      dressCode: dressCode || 'Formal Elegante',
+      coloresProhibidosDamas: damasCols,
+      coloresProhibidosCaballeros: cabCols,
+      zelleEmail,
+      zelleTitular,
+      binancePayId,
+      binanceWalletUsdt,
       fuente: fuente || 'font-serif',
       colorTexto: colorTexto || '#1c1917',
       colorFondo: colorFondo || '#fafaf9',
@@ -124,7 +169,6 @@ app.post('/boda/:slug/buzon', async (req, res) => {
   }
 });
 
-// Verificación de PIN para entrar al Panel de Administrador
 app.post('/boda/:slug/admin-login', async (req, res) => {
   try {
     const { pin } = req.body;
@@ -141,7 +185,6 @@ app.post('/boda/:slug/admin-login', async (req, res) => {
   }
 });
 
-// Panel de Administrador (Protegido por query auth=ok o sesión simple)
 app.get('/boda/:slug/admin', async (req, res) => {
   try {
     if (req.query.auth !== 'ok') {
