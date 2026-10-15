@@ -28,6 +28,7 @@ const invitationSchema = new mongoose.Schema({
   mensaje: String,
   youtubeUrl: String,
   menu: String,
+  menuFotoUrl: String, // Foto opcional para el menú
   pinAdmin: { type: String, default: '1234' },
 
   dressCode: { type: String, default: 'Formal Elegante' },
@@ -39,13 +40,16 @@ const invitationSchema = new mongoose.Schema({
   binancePayId: String,
   binanceWalletUsdt: String,
   
-  // Pago Móvil y Buzón físico
+  // Pago Móvil Desglosado en 3 campos
   pagoMovilBanco: String,
   pagoMovilTelefono: String,
   pagoMovilCedula: String,
   mostrarBuzonFisico: { type: Boolean, default: false },
 
-  fuente: { type: String, default: 'font-serif' },
+  // Doble fuente combinada
+  fuentePrimaria: { type: String, default: 'font-serif' },
+  fuenteSecundaria: { type: String, default: 'font-sans' },
+
   colorTexto: { type: String, default: '#1c1917' },
   colorFondo: { type: String, default: '#fafaf9' },
   imagenFondo: String,
@@ -73,13 +77,35 @@ function cleanMapUrl(rawInput) {
   return rawInput.trim();
 }
 
-// Función auxiliar para convertir "2026-11-15T17:00" en texto legible automático
 function formatearFechaTexto(fechaIso) {
   if (!fechaIso) return '';
   const date = new Date(fechaIso);
   const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
   let texto = date.toLocaleDateString('es-ES', opciones);
   return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
+
+// Mapeo automático de fuentes secundarias combinables
+function obtenerFuenteSecundaria(primaria) {
+  const combinaciones = {
+    'font-playfair': 'font-montserrat',
+    'font-cinzel': 'font-lato',
+    'font-cormorant': 'font-raleway',
+    'font-great-vibes': 'font-montserrat',
+    'font-alex-brush': 'font-cormorant',
+    'font-pinyon': 'font-lora',
+    'font-italianno': 'font-playfair',
+    'font-bodoni': 'font-sans',
+    'font-montserrat': 'font-playfair',
+    'font-lato': 'font-cinzel',
+    'font-raleway': 'font-cormorant',
+    'font-lora': 'font-great-vibes',
+    'font-parisienne': 'font-montserrat',
+    'font-sacramento': 'font-raleway',
+    'font-allura': 'font-lato',
+    'font-libre': 'font-montserrat'
+  };
+  return combinaciones[primaria] || 'font-montserrat';
 }
 
 app.get('/', (req, res) => res.render('index'));
@@ -89,13 +115,13 @@ app.post('/crear', async (req, res) => {
   try {
     const { 
       novios, fecha, lugarCeremonia, mapaCeremoniaUrl,
-      lugarRecepcion, mapaRecepcionUrl, mensaje, youtubeUrl, menu, 
+      lugarRecepcion, mapaRecepcionUrl, mensaje, youtubeUrl, menu, menuFotoUrl,
       pinAdmin, dressCode, 
       colorDama1, colorDama2, colorDama3,
       colorCaballero1, colorCaballero2, colorCaballero3,
       zelleEmail, zelleTitular, binancePayId, binanceWalletUsdt,
       pagoMovilBanco, pagoMovilTelefono, pagoMovilCedula, mostrarBuzonFisico,
-      fuente, colorTexto, colorFondo, imagenFondo, textura, fotos 
+      fuentePrimaria, colorTexto, colorFondo, imagenFondo, textura, fotos 
     } = req.body;
     
     const slug = novios.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Date.now().toString().slice(-4);
@@ -106,6 +132,9 @@ app.post('/crear', async (req, res) => {
     } else if (typeof fotos === 'string') {
       fotosArray = fotos.split(',').map(f => f.trim()).filter(f => f.length > 0);
     }
+
+    const fuentePri = fuentePrimaria || 'font-playfair';
+    const fuenteSec = obtenerFuenteSecundaria(fuentePri);
 
     const nuevaInvitacion = new Invitation({
       slug,
@@ -119,6 +148,7 @@ app.post('/crear', async (req, res) => {
       mensaje,
       youtubeUrl,
       menu,
+      menuFotoUrl: menuFotoUrl ? menuFotoUrl.trim() : '',
       pinAdmin: pinAdmin || '1234',
       dressCode: dressCode || 'Formal Elegante',
       coloresProhibidosDamas: [colorDama1, colorDama2, colorDama3].filter(Boolean),
@@ -131,7 +161,8 @@ app.post('/crear', async (req, res) => {
       pagoMovilTelefono,
       pagoMovilCedula,
       mostrarBuzonFisico: mostrarBuzonFisico === 'on',
-      fuente: fuente || 'font-serif',
+      fuentePrimaria: fuentePri,
+      fuenteSecundaria: fuenteSec,
       colorTexto: colorTexto || '#1c1917',
       colorFondo: colorFondo || '#fafaf9',
       imagenFondo: imagenFondo ? imagenFondo.trim() : '',
