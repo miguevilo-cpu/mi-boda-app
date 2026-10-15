@@ -12,10 +12,9 @@
         <span class="text-xs uppercase tracking-widest text-stone-400">Panel de Control</span>
         <h1 class="text-3xl font-serif font-bold">Invitados & Mesas: <%= invitation.novios %></h1>
       </div>
-      <a href="/boda/<%= invitation.slug %>" target="_blank" class="text-sm bg-stone-100 hover:bg-stone-200 text-stone-800 px-4 py-2 rounded-lg transition">Ver Invitación ↗</a>
+      <a href="/boda/<%= invitation.slug %>" target="_blank" class="text-sm bg-stone-100 hover:bg-stone-200 text-stone-800 px-4 py-2 rounded-lg transition">Ver Invitación Pública ↗</a>
     </div>
 
-    <!-- Estadísticas -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 text-center">
         <p class="text-xs uppercase text-stone-500">Total Confirmados</p>
@@ -31,7 +30,7 @@
       </div>
     </div>
 
-    <h2 class="text-xl font-serif font-semibold mb-4">Lista de Confirmaciones y Asignación de Mesas</h2>
+    <h2 class="text-xl font-serif font-semibold mb-4">Lista de Confirmaciones</h2>
     
     <div class="overflow-x-auto">
       <table class="w-full text-left border-collapse">
@@ -41,7 +40,7 @@
             <th class="p-3">Correo</th>
             <th class="p-3">Estado</th>
             <th class="p-3">Pases</th>
-            <th class="p-3">Menú Elegido</th>
+            <th class="p-3">Menú</th>
             <th class="p-3">Mesa Asignada</th>
             <th class="p-3 text-right">Acción</th>
           </tr>
@@ -62,7 +61,7 @@
                   </span>
                 </td>
                 <td class="p-3"><%= rsvp.personas %></td>
-                <td class="p-3 text-xs italic"><%= rsvp.menuElegido || 'No especificado' %></td>
+                <td class="p-3 text-xs italic"><%= rsvp.menuElegido || 'N/A' %></td>
                 <form action="/boda/<%= invitation.slug %>/admin/mesa" method="POST">
                   <input type="hidden" name="rsvpId" value="<%= rsvp._id %>">
                   <td class="p-3">
