@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crea tu Boda Virtual</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-stone-50 text-stone-800">
+  <div class="max-w-4xl mx-auto py-16 px-4 text-center">
+    <h1 class="text-4xl md:text-5xl font-serif mb-4">Crea tu invitación de boda digital</h1>
+    <p class="text-stone-600 mb-12 text-lg">Elige una plantilla, personaliza los detalles y compártela de inmediato.</p>
+    
+    <div class="grid md:grid-cols-2 gap-8 text-left">
+      <!-- Plantilla Clásica -->
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 flex flex-col justify-between">
+        <div>
+          <div class="h-48 bg-stone-100 rounded-xl mb-4 flex items-center justify-center font-serif text-xl tracking-wide text-stone-700">Clásica & Elegante</div>
+          <h3 class="text-2xl font-semibold mb-2 font-serif">Estilo Clásico</h3>
+          <p class="text-sm text-stone-500 mb-6">Diseño minimalista con tipografía fina y tonos neutrales, perfecto para bodas sofisticadas.</p>
+        </div>
+        <a href="/crear?template=clasica" class="block text-center bg-stone-900 text-white py-3 rounded-xl hover:bg-stone-800 transition font-medium">Usar esta plantilla</a>
+      </div>
+
+      <!-- Plantilla Rústica -->
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 flex flex-col justify-between">
+        <div>
+          <div class="h-48 bg-amber-50 rounded-xl mb-4 flex items-center justify-center font-serif text-xl tracking-wide text-amber-800">Rústica & Botánica</div>
+          <h3 class="text-2xl font-semibold mb-2 font-serif">Estilo Botánico</h3>
+          <p class="text-sm text-stone-500 mb-6">Ambiente cálido y natural, ideal para celebraciones al aire libre y campestres.</p>
+        </div>
+        <a href="/crear?template=rustica" class="block text-center bg-amber-900 text-white py-3 rounded-xl hover:bg-amber-800 transition font-medium">Usar esta plantilla</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
