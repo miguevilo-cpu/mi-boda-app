@@ -16,34 +16,34 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/bodas-app')
 
 const invitationSchema = new mongoose.Schema({
   slug: { type: String, required: true, unique: true },
-  novios: String,
-  fecha: String,
-  fechaTexto: String,
+  novios: { type: String, default: 'Novios' },
+  fecha: { type: String, default: '' },
+  fechaTexto: { type: String, default: '' },
   
-  lugarCeremonia: String,
-  mapaCeremoniaUrl: String,
-  lugarRecepcion: String,
-  mapaRecepcionUrl: String,
+  lugarCeremonia: { type: String, default: '' },
+  mapaCeremoniaUrl: { type: String, default: '' },
+  lugarRecepcion: { type: String, default: '' },
+  mapaRecepcionUrl: { type: String, default: '' },
 
-  mensaje: String,
-  youtubeUrl: String,
-  menu: String,
-  menuFotoUrl: String,
-  driveFotosUrl: String,
+  mensaje: { type: String, default: '' },
+  youtubeUrl: { type: String, default: '' },
+  menu: { type: String, default: '' },
+  menuFotoUrl: { type: String, default: '' },
+  driveFotosUrl: { type: String, default: '' },
   pinAdmin: { type: String, default: '1234' },
 
   dressCode: { type: String, default: 'Formal Elegante' },
   coloresProhibidosDamas: [String],
   coloresProhibidosCaballeros: [String],
 
-  zelleEmail: String,
-  zelleTitular: String,
-  binancePayId: String,
-  binanceWalletUsdt: String,
+  zelleEmail: { type: String, default: '' },
+  zelleTitular: { type: String, default: '' },
+  binancePayId: { type: String, default: '' },
+  binanceWalletUsdt: { type: String, default: '' },
   
-  pagoMovilBanco: String,
-  pagoMovilTelefono: String,
-  pagoMovilCedula: String,
+  pagoMovilBanco: { type: String, default: '' },
+  pagoMovilTelefono: { type: String, default: '' },
+  pagoMovilCedula: { type: String, default: '' },
   mostrarBuzonFisico: { type: Boolean, default: false },
 
   fuentePrimaria: { type: String, default: 'font-playfair' },
@@ -51,7 +51,7 @@ const invitationSchema = new mongoose.Schema({
 
   colorTexto: { type: String, default: '#1c1917' },
   colorFondo: { type: String, default: '#fdfbf7' },
-  imagenFondo: String,
+  imagenFondo: { type: String, default: '' },
   textura: { type: Boolean, default: true },
   fotos: [String],
 
@@ -77,11 +77,16 @@ function cleanMapUrl(rawInput) {
 }
 
 function formatearFechaTexto(fechaIso) {
-  if (!fechaIso) return '';
-  const date = new Date(fechaIso);
-  const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
-  let texto = date.toLocaleDateString('es-ES', opciones);
-  return texto.charAt(0).toUpperCase() + texto.slice(1);
+  if (!fechaIso) return 'Fecha por definir';
+  try {
+    const date = new Date(fechaIso);
+    if (isNaN(date.getTime())) return fechaIso;
+    const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
+    let texto = date.toLocaleDateString('es-ES', opciones);
+    return texto.charAt(0).toUpperCase() + texto.slice(1);
+  } catch (e) {
+    return fechaIso;
+  }
 }
 
 function obtenerFuenteSecundaria(primaria) {
@@ -114,11 +119,9 @@ app.post('/crear', async (req, res) => {
       fuentePrimaria, colorTexto, colorFondo, imagenFondo, textura, fotos 
     } = req.body;
     
-    // Generar slug único y seguro
-    const baseSlug = novios ? novios.toLowerCase().replace(/[^a-z0-9]/g, '-') : 'boda';
-    const slug = baseSlug + '-' + Date.now().toString().slice(-4);
+    const baseSlug = novios ? novios.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, '-') : 'boda';
+    const slug = baseSlug.replace(/-+/g, '-').replace(/^-|-$/g, '') + '-' + Date.now().toString().slice(-4);
     
-    // Procesamiento seguro del array de fotos
     let fotosArray = [];
     if (fotos) {
       if (Array.isArray(fotos)) {
@@ -133,29 +136,29 @@ app.post('/crear', async (req, res) => {
 
     const nuevaInvitacion = new Invitation({
       slug,
-      novios: novios || 'Nuestros Novios',
-      fecha: fecha || new Date().toISOString(),
+      novios: novios ? novios.trim() : 'Nuestros Novios',
+      fecha: fecha || '',
       fechaTexto: formatearFechaTexto(fecha),
-      lugarCeremonia: lugarCeremonia || '',
+      lugarCeremonia: lugarCeremonia ? lugarCeremonia.trim() : '',
       mapaCeremoniaUrl: cleanMapUrl(mapaCeremoniaUrl),
-      lugarRecepcion: lugarRecepcion || '',
+      lugarRecepcion: lugarRecepcion ? lugarRecepcion.trim() : '',
       mapaRecepcionUrl: cleanMapUrl(mapaRecepcionUrl),
-      mensaje: mensaje || '',
-      youtubeUrl: youtubeUrl || '',
-      menu: menu || '',
+      mensaje: mensaje ? mensaje.trim() : '',
+      youtubeUrl: youtubeUrl ? youtubeUrl.trim() : '',
+      menu: menu ? menu.trim() : '',
       menuFotoUrl: menuFotoUrl ? menuFotoUrl.trim() : '',
       driveFotosUrl: driveFotosUrl ? driveFotosUrl.trim() : '',
-      pinAdmin: pinAdmin || '1234',
-      dressCode: dressCode || 'Formal Elegante',
+      pinAdmin: pinAdmin ? pinAdmin.trim() : '1234',
+      dressCode: dressCode ? dressCode.trim() : 'Formal Elegante',
       coloresProhibidosDamas: [colorDama1, colorDama2, colorDama3].filter(Boolean),
       coloresProhibidosCaballeros: [colorCaballero1, colorCaballero2, colorCaballero3].filter(Boolean),
-      zelleEmail: zelleEmail || '',
-      zelleTitular: zelleTitular || '',
-      binancePayId: binancePayId || '',
-      binanceWalletUsdt: binanceWalletUsdt || '',
-      pagoMovilBanco: pagoMovilBanco || '',
-      pagoMovilTelefono: pagoMovilTelefono || '',
-      pagoMovilCedula: pagoMovilCedula || '',
+      zelleEmail: zelleEmail ? zelleEmail.trim() : '',
+      zelleTitular: zelleTitular ? zelleTitular.trim() : '',
+      binancePayId: binancePayId ? binancePayId.trim() : '',
+      binanceWalletUsdt: binanceWalletUsdt ? binanceWalletUsdt.trim() : '',
+      pagoMovilBanco: pagoMovilBanco ? pagoMovilBanco.trim() : '',
+      pagoMovilTelefono: pagoMovilTelefono ? pagoMovilTelefono.trim() : '',
+      pagoMovilCedula: pagoMovilCedula ? pagoMovilCedula.trim() : '',
       mostrarBuzonFisico: mostrarBuzonFisico === 'on',
       fuentePrimaria: fuentePri,
       fuenteSecundaria: fuenteSec,
@@ -170,7 +173,7 @@ app.post('/crear', async (req, res) => {
     res.redirect(`/boda/${slug}`);
   } catch (error) {
     console.error('Error detallado al crear invitación:', error);
-    res.status(500).send('Error interno al crear la invitación. Por favor verifique los datos ingresados.');
+    res.status(500).send(`Error interno al crear la invitación: ${error.message}`);
   }
 });
 
