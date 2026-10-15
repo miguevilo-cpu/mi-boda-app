@@ -28,7 +28,8 @@ const invitationSchema = new mongoose.Schema({
   mensaje: String,
   youtubeUrl: String,
   menu: String,
-  menuFotoUrl: String, // Foto opcional para el menú
+  menuFotoUrl: String,
+  driveFotosUrl: String, // Enlace opcional a Google Drive para fotos de la boda
   pinAdmin: { type: String, default: '1234' },
 
   dressCode: { type: String, default: 'Formal Elegante' },
@@ -40,15 +41,13 @@ const invitationSchema = new mongoose.Schema({
   binancePayId: String,
   binanceWalletUsdt: String,
   
-  // Pago Móvil Desglosado en 3 campos
   pagoMovilBanco: String,
   pagoMovilTelefono: String,
   pagoMovilCedula: String,
   mostrarBuzonFisico: { type: Boolean, default: false },
 
-  // Doble fuente combinada
-  fuentePrimaria: { type: String, default: 'font-serif' },
-  fuenteSecundaria: { type: String, default: 'font-sans' },
+  fuentePrimaria: { type: String, default: 'font-playfair' },
+  fuenteSecundaria: { type: String, default: 'font-montserrat' },
 
   colorTexto: { type: String, default: '#1c1917' },
   colorFondo: { type: String, default: '#fafaf9' },
@@ -85,7 +84,6 @@ function formatearFechaTexto(fechaIso) {
   return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
-// Mapeo automático de fuentes secundarias combinables
 function obtenerFuenteSecundaria(primaria) {
   const combinaciones = {
     'font-playfair': 'font-montserrat',
@@ -95,15 +93,7 @@ function obtenerFuenteSecundaria(primaria) {
     'font-alex-brush': 'font-cormorant',
     'font-pinyon': 'font-lora',
     'font-italianno': 'font-playfair',
-    'font-bodoni': 'font-sans',
-    'font-montserrat': 'font-playfair',
-    'font-lato': 'font-cinzel',
-    'font-raleway': 'font-cormorant',
-    'font-lora': 'font-great-vibes',
-    'font-parisienne': 'font-montserrat',
-    'font-sacramento': 'font-raleway',
-    'font-allura': 'font-lato',
-    'font-libre': 'font-montserrat'
+    'font-bodoni': 'font-sans'
   };
   return combinaciones[primaria] || 'font-montserrat';
 }
@@ -115,7 +105,7 @@ app.post('/crear', async (req, res) => {
   try {
     const { 
       novios, fecha, lugarCeremonia, mapaCeremoniaUrl,
-      lugarRecepcion, mapaRecepcionUrl, mensaje, youtubeUrl, menu, menuFotoUrl,
+      lugarRecepcion, mapaRecepcionUrl, mensaje, youtubeUrl, menu, menuFotoUrl, driveFotosUrl,
       pinAdmin, dressCode, 
       colorDama1, colorDama2, colorDama3,
       colorCaballero1, colorCaballero2, colorCaballero3,
@@ -149,6 +139,7 @@ app.post('/crear', async (req, res) => {
       youtubeUrl,
       menu,
       menuFotoUrl: menuFotoUrl ? menuFotoUrl.trim() : '',
+      driveFotosUrl: driveFotosUrl ? driveFotosUrl.trim() : '',
       pinAdmin: pinAdmin || '1234',
       dressCode: dressCode || 'Formal Elegante',
       coloresProhibidosDamas: [colorDama1, colorDama2, colorDama3].filter(Boolean),
