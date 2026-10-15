@@ -29,7 +29,7 @@ const invitationSchema = new mongoose.Schema({
   youtubeUrl: String,
   menu: String,
   menuFotoUrl: String,
-  driveFotosUrl: String, // Enlace opcional a Google Drive para fotos de la boda
+  driveFotosUrl: String,
   pinAdmin: { type: String, default: '1234' },
 
   dressCode: { type: String, default: 'Formal Elegante' },
@@ -50,7 +50,7 @@ const invitationSchema = new mongoose.Schema({
   fuenteSecundaria: { type: String, default: 'font-montserrat' },
 
   colorTexto: { type: String, default: '#1c1917' },
-  colorFondo: { type: String, default: '#fafaf9' },
+  colorFondo: { type: String, default: '#fdfbf7' },
   imagenFondo: String,
   textura: { type: Boolean, default: true },
   fotos: [String],
@@ -155,7 +155,7 @@ app.post('/crear', async (req, res) => {
       fuentePrimaria: fuentePri,
       fuenteSecundaria: fuenteSec,
       colorTexto: colorTexto || '#1c1917',
-      colorFondo: colorFondo || '#fafaf9',
+      colorFondo: colorFondo || '#fdfbf7',
       imagenFondo: imagenFondo ? imagenFondo.trim() : '',
       textura: textura === 'on',
       fotos: fotosArray
