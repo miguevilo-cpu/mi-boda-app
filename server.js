@@ -114,13 +114,18 @@ app.post('/crear', async (req, res) => {
       fuentePrimaria, colorTexto, colorFondo, imagenFondo, textura, fotos 
     } = req.body;
     
-    const slug = novios.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Date.now().toString().slice(-4);
+    // Generar slug único y seguro
+    const baseSlug = novios ? novios.toLowerCase().replace(/[^a-z0-9]/g, '-') : 'boda';
+    const slug = baseSlug + '-' + Date.now().toString().slice(-4);
     
+    // Procesamiento seguro del array de fotos
     let fotosArray = [];
-    if (Array.isArray(fotos)) {
-      fotosArray = fotos.filter(f => f && f.trim().length > 0);
-    } else if (typeof fotos === 'string') {
-      fotosArray = fotos.split(',').map(f => f.trim()).filter(f => f.length > 0);
+    if (fotos) {
+      if (Array.isArray(fotos)) {
+        fotosArray = fotos.filter(f => f && typeof f === 'string' && f.trim().length > 0);
+      } else if (typeof fotos === 'string') {
+        fotosArray = fotos.split(',').map(f => f.trim()).filter(f => f.length > 0);
+      }
     }
 
     const fuentePri = fuentePrimaria || 'font-playfair';
@@ -128,29 +133,29 @@ app.post('/crear', async (req, res) => {
 
     const nuevaInvitacion = new Invitation({
       slug,
-      novios,
-      fecha,
+      novios: novios || 'Nuestros Novios',
+      fecha: fecha || new Date().toISOString(),
       fechaTexto: formatearFechaTexto(fecha),
-      lugarCeremonia,
+      lugarCeremonia: lugarCeremonia || '',
       mapaCeremoniaUrl: cleanMapUrl(mapaCeremoniaUrl),
-      lugarRecepcion,
+      lugarRecepcion: lugarRecepcion || '',
       mapaRecepcionUrl: cleanMapUrl(mapaRecepcionUrl),
-      mensaje,
-      youtubeUrl,
-      menu,
+      mensaje: mensaje || '',
+      youtubeUrl: youtubeUrl || '',
+      menu: menu || '',
       menuFotoUrl: menuFotoUrl ? menuFotoUrl.trim() : '',
       driveFotosUrl: driveFotosUrl ? driveFotosUrl.trim() : '',
       pinAdmin: pinAdmin || '1234',
       dressCode: dressCode || 'Formal Elegante',
       coloresProhibidosDamas: [colorDama1, colorDama2, colorDama3].filter(Boolean),
       coloresProhibidosCaballeros: [colorCaballero1, colorCaballero2, colorCaballero3].filter(Boolean),
-      zelleEmail,
-      zelleTitular,
-      binancePayId,
-      binanceWalletUsdt,
-      pagoMovilBanco,
-      pagoMovilTelefono,
-      pagoMovilCedula,
+      zelleEmail: zelleEmail || '',
+      zelleTitular: zelleTitular || '',
+      binancePayId: binancePayId || '',
+      binanceWalletUsdt: binanceWalletUsdt || '',
+      pagoMovilBanco: pagoMovilBanco || '',
+      pagoMovilTelefono: pagoMovilTelefono || '',
+      pagoMovilCedula: pagoMovilCedula || '',
       mostrarBuzonFisico: mostrarBuzonFisico === 'on',
       fuentePrimaria: fuentePri,
       fuenteSecundaria: fuenteSec,
@@ -164,8 +169,8 @@ app.post('/crear', async (req, res) => {
     await nuevaInvitacion.save();
     res.redirect(`/boda/${slug}`);
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Error al crear la invitación');
+    console.error('Error detallado al crear invitación:', error);
+    res.status(500).send('Error interno al crear la invitación. Por favor verifique los datos ingresados.');
   }
 });
 
