@@ -20,7 +20,7 @@
     .font-raleway { font-family: 'Raleway', sans-serif; }
     .font-lora { font-family: 'Lora', serif; }
 
-    /* Textura general de fondo del sitio */
+    /* Fondo general */
     .textura-cartulina-hilo {
       background-color: <%= invitation.colorFondo %>;
       <% if (invitation.imagenFondo && invitation.imagenFondo.length > 0) { %>
@@ -34,54 +34,63 @@
       <% } %>
     }
 
-    /* Tarjeta principal translúcida con granulado fino y bordes de pergamino enrollado */
+    /* Estilo Pergamino Auténtico */
     .tarjeta-pergamino {
-      background-color: rgba(255, 255, 255, 0.90);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+      background-color: #fcf8f2;
+      background-image: radial-gradient(#e8dec9 1px, transparent 0), url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E");
+      border: 1px solid #e2d3b7;
+      box-shadow: 0 20px 50px rgba(70, 50, 30, 0.15), inset 0 0 80px rgba(180, 150, 110, 0.18);
       position: relative;
+      border-radius: 12px;
     }
 
-    /* Efecto pergamino enrollado en los bordes superior e inferior */
+    /* Rollos / Bordes de pergamino en los extremos */
     .tarjeta-pergamino::before, .tarjeta-pergamino::after {
       content: '';
       position: absolute;
-      left: 10px;
-      right: 10px;
-      height: 12px;
-      background: linear-gradient(to bottom, rgba(210, 195, 170, 0.6), rgba(245, 240, 230, 0.9), rgba(200, 185, 160, 0.5));
-      border-radius: 6px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      z-index: 10;
+      left: -12px;
+      right: -12px;
+      height: 22px;
+      background: linear-gradient(to right, #bca888, #eadecc 15%, #f5eee2 50%, #eadecc 85%, #bca888);
+      border: 1px solid #ad9773;
+      border-radius: 11px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+      z-index: 15;
       pointer-events: none;
     }
-    .tarjeta-pergamino::before { top: -6px; border-bottom: 1px solid rgba(139, 115, 85, 0.3); }
-    .tarjeta-pergamino::after { bottom: -6px; border-top: 1px solid rgba(139, 115, 85, 0.3); }
+    .tarjeta-pergamino::before { top: -11px; }
+    .tarjeta-pergamino::after { bottom: -11px; }
 
-    /* Cinta de tela para los novios */
-    .cinta-tela {
-      background: linear-gradient(135deg, rgba(245, 240, 230, 0.95), rgba(230, 220, 205, 0.98));
-      border-top: 1px dashed rgba(139, 115, 85, 0.4);
-      border-bottom: 1px dashed rgba(139, 115, 85, 0.4);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.06), inset 0 0 10px rgba(255,255,255,0.6);
+    /* Cinta de Tela Aesthetic */
+    .cinta-tela-aesthetic {
       position: relative;
-      padding: 1.5rem 1rem;
-      margin: 1.5rem 0;
-      border-radius: 4px;
+      background: linear-gradient(135deg, rgba(245, 238, 225, 0.95), rgba(235, 222, 202, 0.98));
+      border-top: 2px dashed rgba(160, 130, 95, 0.35);
+      border-bottom: 2px dashed rgba(160, 130, 95, 0.35);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06), inset 0 0 15px rgba(255,255,255,0.7);
+      padding: 1.8rem 1rem;
+      margin: 2rem -1rem;
     }
-    .cinta-tela::before, .cinta-tela::after {
+    .cinta-tela-aesthetic::before, .cinta-tela-aesthetic::after {
       content: '';
       position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 12px;
-      background: rgba(200, 185, 160, 0.4);
+      top: -2px;
+      bottom: -2px;
+      width: 20px;
+      background: inherit;
+      border-top: 2px dashed rgba(160, 130, 95, 0.35);
+      border-bottom: 2px dashed rgba(160, 130, 95, 0.35);
     }
-    .cinta-tela::before { left: -6px; transform: skewY(10deg); }
-    .cinta-tela::after { right: -6px; transform: skewY(-10deg); }
+    .cinta-tela-aesthetic::before {
+      left: -15px;
+      clip-path: polygon(100% 0, 0 50%, 100% 100%);
+    }
+    .cinta-tela-aesthetic::after {
+      right: -15px;
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+    }
 
-    /* Emojis estilizados claros */
+    /* Emojis claros */
     .custom-emoji {
       opacity: 0.85;
       filter: saturate(0.7) brightness(1.1);
@@ -92,11 +101,11 @@
       position: relative;
       margin: 2.5rem 0;
       height: 1px;
-      background: rgba(0, 0, 0, 0.08);
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 -1px 2px rgba(255, 255, 255, 0.9);
+      background: rgba(139, 115, 85, 0.15);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 -1px 2px rgba(255, 255, 255, 0.9);
     }
 
-    /* Temporizador tipo Tile con línea central divisoria */
+    /* Tile del temporizador */
     .flip-card {
       background-color: <%= invitation.colorTexto %>;
       color: <%= invitation.colorFondo %>;
@@ -108,7 +117,6 @@
       display: inline-block;
       min-width: 48px;
       text-align: center;
-      /* Línea divisoria central de tile */
       border-top: 1px solid rgba(255,255,255,0.3);
       border-bottom: 1px solid rgba(0,0,0,0.3);
     }
@@ -119,12 +127,10 @@
       left: 0;
       right: 0;
       height: 1px;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.35);
     }
 
-    .flip-anim {
-      animation: flipDown 0.3s ease-in-out;
-    }
+    .flip-anim { animation: flipDown 0.3s ease-in-out; }
     @keyframes flipDown {
       0% { transform: rotateX(0deg); opacity: 1; }
       50% { transform: rotateX(-90deg); opacity: 0.4; }
@@ -149,52 +155,51 @@
       text-shadow: 0 1px 2px rgba(0,0,0,0.2);
     }
 
-    /* Galería: Abanico que al hacer hover se despliega como biblioteca de libros */
-    .library-gallery {
+    /* Galería Mosaico / Biblioteca Ampliada & Ultra Suave */
+    .wide-library-gallery {
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 220px;
+      min-height: 230px;
       position: relative;
-      padding: 20px 0;
-      transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      padding: 25px 0;
     }
 
-    .library-gallery img {
+    .wide-library-gallery img {
       width: 110px;
       height: 160px;
       object-fit: cover;
-      border-radius: 10px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
       position: absolute;
       cursor: pointer;
       border: 3px solid #ffffff;
-      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      /* Transición ultrasuave */
+      transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1), z-index 0s;
+      will-change: transform;
     }
 
-    /* Posiciones iniciales plegadas como cartas en abanico */
-    .library-gallery img:nth-child(1) { transform: translateX(-40px) rotate(-8deg); z-index: 1; }
-    .library-gallery img:nth-child(2) { transform: translateX(-12px) rotate(-3deg); z-index: 2; }
-    .library-gallery img:nth-child(3) { transform: translateX(12px) rotate(3deg); z-index: 3; }
-    .library-gallery img:nth-child(4) { transform: translateX(40px) rotate(8deg); z-index: 4; }
+    /* Posición inicial abanico plegado */
+    .wide-library-gallery img:nth-child(1) { transform: translateX(-40px) rotate(-8deg); z-index: 1; }
+    .wide-library-gallery img:nth-child(2) { transform: translateX(-12px) rotate(-3deg); z-index: 2; }
+    .wide-library-gallery img:nth-child(3) { transform: translateX(12px) rotate(3deg); z-index: 3; }
+    .wide-library-gallery img:nth-child(4) { transform: translateX(40px) rotate(8deg); z-index: 4; }
 
-    /* Al pasar el cursor, se despliegan separadas como lomos de libros en una biblioteca */
-    .library-gallery:hover {
-      min-height: 190px;
-    }
-    .library-gallery:hover img:nth-child(1) { transform: translateX(-120px) rotate(0deg) scale(1.03); z-index: 10; }
-    .library-gallery:hover img:nth-child(2) { transform: translateX(-40px) rotate(0deg) scale(1.03); z-index: 10; }
-    .library-gallery:hover img:nth-child(3) { transform: translateX(40px) rotate(0deg) scale(1.03); z-index: 10; }
-    .library-gallery:hover img:nth-child(4) { transform: translateX(120px) rotate(0deg) scale(1.03); z-index: 10; }
+    /* Despliegue amplio en mosaico/biblioteca al pasar el cursor */
+    .wide-library-gallery:hover img:nth-child(1) { transform: translateX(-160px) rotate(0deg) scale(1.02); z-index: 10; }
+    .wide-library-gallery:hover img:nth-child(2) { transform: translateX(-52px) rotate(0deg) scale(1.02); z-index: 10; }
+    .wide-library-gallery:hover img:nth-child(3) { transform: translateX(52px) rotate(0deg) scale(1.02); z-index: 10; }
+    .wide-library-gallery:hover img:nth-child(4) { transform: translateX(160px) rotate(0deg) scale(1.02); z-index: 10; }
 
-    .library-gallery img:hover {
-      transform: translateY(-10px) scale(1.1) rotate(0deg) !important;
+    /* Zoom muy suave al pasar sobre cada foto individual */
+    .wide-library-gallery img:hover {
+      transform: translateY(-12px) scale(1.15) rotate(0deg) !important;
       z-index: 50 !important;
-      box-shadow: 0 16px 30px rgba(0,0,0,0.25);
+      box-shadow: 0 20px 35px rgba(0,0,0,0.28);
     }
   </style>
 </head>
-<body class="<%= invitation.fuenteSecundaria %> textura-cartulina-hilo min-h-screen py-10 px-4 select-none" style="color: <%= invitation.colorTexto %>;" data-wedding-date="<%= invitation.fecha %>">
+<body class="<%= invitation.fuenteSecundaria %> textura-cartulina-hilo min-h-screen py-12 px-4 select-none" style="color: <%= invitation.colorTexto %>;" data-wedding-date="<%= invitation.fecha %>">
 
   <% if (invitation.youtubeUrl) { 
       let ytId = invitation.youtubeUrl.includes('v=') ? invitation.youtubeUrl.split('v=')[1].substring(0,11) : invitation.youtubeUrl.slice(-11);
@@ -262,14 +267,15 @@
     }
   </script>
 
-  <div class="max-w-xl mx-auto tarjeta-pergamino p-8 md:p-14 rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] text-center border border-stone-300/80 relative">
+  <div class="max-w-xl mx-auto tarjeta-pergamino p-8 md:p-14 text-center relative">
     
     <div class="absolute top-4 right-4 z-20">
-      <button onclick="toggleAdminModal()" class="text-[10px] uppercase tracking-widest text-stone-400 hover:text-stone-800 transition font-sans border border-stone-200 px-3 py-1 rounded-full cursor-pointer">
+      <button onclick="toggleAdminModal()" class="text-[10px] uppercase tracking-widest text-stone-500 hover:text-stone-900 transition font-sans border border-stone-300 px-3 py-1 rounded-full cursor-pointer bg-white/60 backdrop-blur-sm">
         🔑 Admin
       </button>
     </div>
 
+    <!-- Modal Admin centrado en la vista fija del usuario -->
     <div id="adminModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div class="bg-white p-6 rounded-2xl max-w-sm w-full shadow-2xl text-center font-sans">
         <h3 class="text-lg font-serif font-bold mb-2 text-stone-900">Acceso Administrador</h3>
@@ -289,9 +295,9 @@
       }
     </script>
 
-    <!-- Cinta de tela con el título y nombre de los novios -->
-    <div class="cinta-tela mt-4">
-      <span class="text-xs md:text-sm uppercase tracking-[0.3em] font-semibold opacity-70 block mb-2">Nos Casamos</span>
+    <!-- Cinta de Tela Aesthetic -->
+    <div class="cinta-tela-aesthetic">
+      <span class="text-xs md:text-sm uppercase tracking-[0.3em] font-semibold opacity-75 block mb-1">Nos Casamos</span>
       <h1 class="text-3xl md:text-5xl font-bold my-1 <%= invitation.fuentePrimaria %>"><%= invitation.novios %></h1>
     </div>
     
@@ -354,14 +360,14 @@
     <% if (invitation.fotos && invitation.fotos.length > 0) { %>
       <div class="my-8">
         <h3 class="text-xs uppercase tracking-widest text-stone-400 font-semibold mb-4">Galería de Momentos</h3>
-        <div class="library-gallery">
+        <div class="wide-library-gallery">
           <% invitation.fotos.forEach((foto, index) => { %>
             <img src="<%= foto.trim() %>" alt="Foto novios" onclick="abrirLightbox('<%= foto.trim() %>')">
           <% }) %>
         </div>
       </div>
 
-      <!-- Lightbox posicionado exactamente en el scroll actual de la pantalla -->
+      <!-- Lightbox posicionado dinámicamente en el viewport -->
       <div id="lightbox" class="hidden absolute left-0 right-0 z-50 bg-stone-950/90 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer" onclick="cerrarLightbox()">
         <img id="lightbox-img" src="" class="max-w-[92vw] max-h-[85vh] rounded-2xl shadow-2xl object-contain border-4 border-white transition-transform duration-300">
       </div>
@@ -558,7 +564,7 @@
       <div class="doblez-hoja"></div>
     <% } %>
 
-    <!-- SECCIÓN APARTADA DE SUBIDA DE FOTOS / DRIVE (Independiente) -->
+    <!-- SECCIÓN SUBIDA DE FOTOS / DRIVE (Independiente) -->
     <% if (invitation.driveFotosUrl) { %>
       <div class="my-6 text-center bg-stone-50 p-6 rounded-2xl border border-stone-200/80 font-sans space-y-3">
         <h3 class="text-lg font-bold"><span class="custom-emoji">📸</span> Comparte tus recuerdos</h3>
@@ -575,12 +581,12 @@
     <div id="rsvp" class="mt-8 text-left bg-stone-50/80 p-6 rounded-2xl border border-stone-200/80 font-sans">
       <h3 class="text-xl font-bold text-center mb-4">Confirma tu Asistencia</h3>
       
-      <!-- Aviso de asistencia confirmada por AJAX -->
+      <!-- Aviso de asistencia confirmada -->
       <div id="alerta-enviado" class="hidden mb-4 p-4 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-xl text-center font-semibold text-xs animate-pulse">
         <span class="custom-emoji">✨</span> ¡Asistencia confirmada! Muchas gracias.
       </div>
 
-      <form id="rsvp-form" class="space-y-4 text-xs">
+      <form id="rsvp-form" action="/boda/<%= invitation.slug %>/rsvp" method="POST" class="space-y-4 text-xs">
         <div>
           <label class="block uppercase tracking-wider text-stone-500">Nombre Completo</label>
           <input type="text" name="nombre" required class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-xl">
@@ -607,24 +613,29 @@
           <input type="text" name="menuElegido" placeholder="Ej. Lomito / Alergia al maní" class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-xl">
         </div>
         
-        <button type="submit" class="w-full bg-stone-900 text-white py-3 rounded-xl hover:bg-stone-800 transition font-medium text-sm shadow-md cursor-pointer">Enviar Confirmación</button>
+        <button type="submit" id="btn-submit-rsvp" class="w-full bg-stone-900 text-white py-3 rounded-xl hover:bg-stone-800 transition font-medium text-sm shadow-md cursor-pointer">Enviar Confirmación</button>
       </form>
     </div>
 
     <script>
-      // Manejo de envío RSVP sin recargar la página (AJAX)
+      // Envío de RSVP por AJAX preservando la llamada HTTP tradicional del servidor
       document.getElementById('rsvp-form').addEventListener('submit', async function(e) {
         e.preventDefault();
         const form = e.target;
+        const btn = document.getElementById('btn-submit-rsvp');
+        btn.disabled = true;
+        btn.innerText = 'Enviando...';
+
         const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-        data.llevaAcompanante = form.querySelector('#llevaAcompanante').checked ? 'on' : undefined;
+        const urlEncodedData = new URLSearchParams(formData).toString();
 
         try {
-          const response = await fetch(form.action || window.location.pathname + '/rsvp', {
+          await fetch(form.action, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: urlEncodedData
           });
 
           const alerta = document.getElementById('alerta-enviado');
@@ -634,13 +645,10 @@
           }
           form.reset();
         } catch (error) {
-          // Fallback en caso de que la ruta espere URL encoded o redirección estándar
-          const alerta = document.getElementById('alerta-enviado');
-          if (alerta) {
-            alerta.classList.remove('hidden');
-            alerta.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-          form.reset();
+          alert('Hubo un error al guardar tu confirmación. Intenta nuevamente.');
+        } finally {
+          btn.disabled = false;
+          btn.innerText = 'Enviar Confirmación';
         }
       });
     </script>
