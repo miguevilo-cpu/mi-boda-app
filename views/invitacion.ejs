@@ -2,52 +2,90 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Boda de <%= invitation.novios %></title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@300;400;500;600&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
   <style>
     .font-serif { font-family: 'Playfair Display', serif; }
     .font-sans { font-family: 'Montserrat', sans-serif; }
+    .font-monogram { font-family: 'Cinzel', serif; }
     
-    .textura-cartulina {
+    /* Textura de cartulina de lino/hilo */
+    .textura-cartulina-hilo {
       background-color: <%= invitation.colorFondo %>;
       <% if (invitation.imagenFondo) { %>
-        background-image: linear-gradient(rgba(255,255,255,0.88), rgba(255,255,255,0.88)), url('<%= invitation.imagenFondo %>');
+        background-image: linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.92)), url('<%= invitation.imagenFondo %>');
         background-size: cover;
         background-position: center;
       <% } else if (invitation.textura) { %>
-        background-image: radial-gradient(rgba(0,0,0,0.04) 1px, transparent 0);
-        background-size: 4px 4px;
+        background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h16v16H0z' fill='none'/%3E%3Cpath d='M0 2h16M0 6h16M0 10h16M0 14h16M2 0v16M6 0v16M10 0v16M14 0v16' stroke='%20000000' stroke-opacity='0.03' stroke-width='0.6'/%3E%3C/svg%3E");
       <% } %>
     }
 
-    .flip-box {
-      background: #1c1917;
-      color: #fff;
-      padding: 6px 10px;
-      border-radius: 6px;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
-      font-weight: 700;
-      letter-spacing: -1px;
+    /* Doblez de Hoja con relieve físico */
+    .doblez-hoja {
+      position: relative;
+      margin: 2.5rem 0;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.08);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 -1px 2px rgba(255, 255, 255, 0.9);
     }
 
-    /* Animación del Sobre */
-    #envelope-screen {
-      transition: opacity 0.8s ease, transform 0.8s ease;
+    /* Reloj Mecánico con Mosaicos Caídos (Flip Cards) */
+    .flip-card {
+      background: linear-gradient(180deg, #262626 0%, #171717 100%);
+      color: #ffffff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 10px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      min-width: 44px;
+      text-align: center;
     }
+    .flip-card::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(0,0,0,0.6);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .flip-anim {
+      animation: flipDown 0.4s ease-in-out;
+    }
+    @keyframes flipDown {
+      0% { transform: rotateX(0deg); }
+      50% { transform: rotateX(-90deg); opacity: 0.7; }
+      100% { transform: rotateX(0deg); opacity: 1; }
+    }
+
+    /* Sobre 3D con Cera y Monograma */
+    .envelope-wrapper { perspective: 1000px; }
     .envelope-flap {
-      transition: transform 0.6s ease;
       transform-origin: top;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .open-envelope .envelope-flap {
+    .open-flap {
       transform: rotateX(180deg);
-      z-index: 10;
+      z-index: 5 !important;
+    }
+
+    /* Sello de Cera Rojo Borgoña */
+    .wax-seal {
+      background: radial-gradient(circle at 30% 30%, #a81c1c, #630a0a);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 2px 3px rgba(255,255,255,0.3);
+      border: 3px solid #851212;
     }
   </style>
 </head>
-<body class="<%= invitation.fuente %> textura-cartulina min-h-screen py-10 px-4" style="color: <%= invitation.colorTexto %>;">
+<body class="<%= invitation.fuente %> textura-cartulina-hilo min-h-screen py-10 px-4 select-none" style="color: <%= invitation.colorTexto %>;">
 
-  <!-- Reproductor de YouTube (Inicia vacío y se activa al abrir el sobre) -->
+  <!-- Reproductor de Audio YouTube -->
   <% if (invitation.youtubeUrl) { 
      let ytId = invitation.youtubeUrl.includes('v=') ? invitation.youtubeUrl.split('v=')[1].substring(0,11) : invitation.youtubeUrl.slice(-11);
   %>
@@ -56,57 +94,74 @@
     </div>
   <% } %>
 
-  <!-- Pantalla del Sobre de Bienvenida -->
-  <div id="envelope-screen" class="fixed inset-0 z-50 bg-stone-900/90 backdrop-blur-md flex flex-col items-center justify-center p-4 cursor-pointer" onclick="abrirInvitacion()">
-    <div class="relative w-80 md:w-96 h-56 md:h-64 bg-stone-100 rounded-xl shadow-2xl border border-stone-300 flex flex-col items-center justify-center p-6 text-center transform transition hover:scale-105" id="envelope">
-      
-      <!-- Tapa superior del sobre -->
-      <div class="absolute top-0 left-0 w-full h-28 bg-stone-200 rounded-t-xl envelope-flap border-b border-stone-300" style="clip-path: polygon(0 0, 100% 0, 50% 100%);"></div>
+  <!-- Iniciales para el Monograma del Sello de Cera -->
+  <% 
+    let nombres = invitation.novios.split(/[&yY]/);
+    let init1 = nombres[0] ? nombres[0].trim().charAt(0).toUpperCase() : 'N';
+    let init2 = nombres[1] ? nombres[1].trim().charAt(0).toUpperCase() : 'N';
+    let monograma = `${init1} & ${init2}`;
+  %>
 
-      <div class="z-20 mt-12 space-y-2">
-        <span class="text-xs uppercase tracking-widest text-stone-500 font-sans">Boda de</span>
+  <!-- Sobre 3D de Bienvenida con Sello de Cera -->
+  <div id="envelope-screen" class="fixed inset-0 z-50 bg-stone-900/90 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer envelope-wrapper" onclick="abrirInvitacion()">
+    <div class="relative w-80 md:w-96 h-60 bg-stone-50 rounded-2xl shadow-2xl border border-stone-300 flex flex-col items-center justify-center p-6 text-center overflow-hidden" id="envelope">
+      
+      <!-- Solapa del sobre -->
+      <div id="flap" class="absolute top-0 left-0 w-full h-32 bg-stone-200 border-b border-stone-300 z-30 envelope-flap shadow-md flex items-end justify-center pb-2" style="clip-path: polygon(0 0, 100% 0, 50% 100%);">
+        <!-- Sello de Cera -->
+        <div id="seal" class="wax-seal w-12 h-12 rounded-full flex items-center justify-center text-amber-200 font-monogram font-bold text-xs tracking-tighter transform translate-y-6 shadow-xl border">
+          <%= monograma %>
+        </div>
+      </div>
+
+      <div class="z-20 mt-10 space-y-2">
+        <span class="text-[10px] uppercase tracking-widest text-stone-500 font-sans">NUESTRA BODA</span>
         <h2 class="text-2xl md:text-3xl font-serif font-bold text-stone-900"><%= invitation.novios %></h2>
-        <p class="text-xs text-stone-600 font-sans mt-4 italic bg-white/80 px-4 py-1.5 rounded-full shadow-sm inline-block">Haz clic aquí para abrir tu invitación</p>
+        <p class="text-[11px] text-stone-600 font-sans mt-4 italic bg-white/90 px-4 py-1.5 rounded-full shadow-sm inline-block border border-stone-200">✉️ Toca el sello para abrir la invitación</p>
       </div>
     </div>
   </div>
 
   <script>
     function abrirInvitacion() {
-      // Activar Música de YouTube de inmediato gracias al clic en el sobre
+      const flap = document.getElementById('flap');
+      if (flap) flap.classList.add('open-flap');
+
       const iframe = document.getElementById('youtube-audio');
       if (iframe && iframe.getAttribute('data-src')) {
         iframe.src = iframe.getAttribute('data-src');
       }
 
-      // Animación de desvanecimiento del sobre
-      const screen = document.getElementById('envelope-screen');
-      screen.style.opacity = '0';
-      screen.style.transform = 'scale(1.05)';
       setTimeout(() => {
-        screen.style.display = 'none';
-      }, 800);
+        const screen = document.getElementById('envelope-screen');
+        screen.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+        screen.style.opacity = '0';
+        screen.style.transform = 'scale(1.05)';
+        setTimeout(() => { screen.style.display = 'none'; }, 700);
+      }, 500);
     }
   </script>
 
-  <!-- Contenido Principal de la Boda -->
-  <div class="max-w-xl mx-auto bg-white/95 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-2xl text-center border border-stone-200/80 relative">
+  <!-- Tarjeta Principal de Invitación -->
+  <div class="max-w-xl mx-auto bg-white/95 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-2xl text-center border border-stone-200/90 relative">
     
+    <!-- Botón Clave Admin -->
     <div class="absolute top-4 right-4">
-      <button onclick="toggleAdminModal()" class="text-xs uppercase tracking-widest text-stone-400 hover:text-stone-800 transition font-sans border border-stone-200 px-3 py-1 rounded-full">
+      <button onclick="toggleAdminModal()" class="text-[10px] uppercase tracking-widest text-stone-400 hover:text-stone-800 transition font-sans border border-stone-200 px-3 py-1 rounded-full">
         🔑 Admin
       </button>
     </div>
 
-    <div id="adminModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div class="bg-white p-6 rounded-2xl max-w-sm w-full shadow-xl text-center font-sans">
-        <h3 class="text-lg font-serif font-bold mb-3 text-stone-900">Acceso Administrador</h3>
-        <p class="text-xs text-stone-500 mb-4">Ingresa el PIN de seguridad para gestionar las confirmaciones y mesas.</p>
+    <!-- Modal Admin -->
+    <div id="adminModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-white p-6 rounded-2xl max-w-sm w-full shadow-2xl text-center font-sans">
+        <h3 class="text-lg font-serif font-bold mb-2 text-stone-900">Acceso Administrador</h3>
+        <p class="text-xs text-stone-500 mb-4">Ingresa el PIN de seguridad de tu boda:</p>
         <form action="/boda/<%= invitation.slug %>/admin-login" method="POST" class="space-y-3">
-          <input type="password" name="pin" maxlength="4" required placeholder="PIN (ej. 1234)" class="w-full p-2.5 border border-stone-300 rounded-lg text-center text-lg tracking-widest">
+          <input type="password" name="pin" maxlength="4" required placeholder="PIN (ej. 1234)" class="w-full p-2.5 border border-stone-300 rounded-xl text-center text-lg tracking-widest">
           <div class="flex gap-2">
-            <button type="submit" class="w-full bg-stone-900 text-white py-2 rounded-lg text-sm hover:bg-stone-800 transition">Entrar</button>
-            <button type="button" onclick="toggleAdminModal()" class="w-full bg-stone-100 text-stone-700 py-2 rounded-lg text-sm hover:bg-stone-200 transition">Cancelar</button>
+            <button type="submit" class="w-full bg-stone-900 text-white py-2 rounded-xl text-xs font-medium">Ingresar</button>
+            <button type="button" onclick="toggleAdminModal()" class="w-full bg-stone-100 text-stone-700 py-2 rounded-xl text-xs">Cancelar</button>
           </div>
         </form>
       </div>
@@ -117,115 +172,245 @@
       }
     </script>
 
-    <span class="text-xs uppercase tracking-widest opacity-60">Nuestra Boda</span>
-    <h1 class="text-4xl md:text-6xl font-bold my-4"><%= invitation.novios %></h1>
+    <!-- Nombres -->
+    <span class="text-xs uppercase tracking-widest opacity-60">Nos Casamos</span>
+    <h1 class="text-4xl md:text-6xl font-bold my-3"><%= invitation.novios %></h1>
     
+    <!-- Cuenta Regresiva Mosaicos Caídos (Flip Cards) -->
     <% if (invitation.fecha) { %>
       <div class="my-6 flex justify-center items-center gap-2 font-sans text-xs">
-        <div class="flex flex-col items-center"><span id="days" class="flip-box text-lg">00</span><span class="mt-1 opacity-50 uppercase text-[10px]">Días</span></div>
-        <span class="text-lg font-bold opacity-30 pb-4">:</span>
-        <div class="flex flex-col items-center"><span id="hours" class="flip-box text-lg">00</span><span class="mt-1 opacity-50 uppercase text-[10px]">Hrs</span></div>
-        <span class="text-lg font-bold opacity-30 pb-4">:</span>
-        <div class="flex flex-col items-center"><span id="minutes" class="flip-box text-lg">00</span><span class="mt-1 opacity-50 uppercase text-[10px]">Min</span></div>
-        <span class="text-lg font-bold opacity-30 pb-4">:</span>
-        <div class="flex flex-col items-center"><span id="seconds" class="flip-box text-lg">00</span><span class="mt-1 opacity-50 uppercase text-[10px]">Seg</span></div>
+        <div class="flex flex-col items-center">
+          <span id="days" class="flip-card text-xl font-bold">00</span>
+          <span class="mt-1.5 opacity-50 uppercase text-[9px] tracking-wider">Días</span>
+        </div>
+        <span class="text-xl font-bold opacity-30 pb-4">:</span>
+        <div class="flex flex-col items-center">
+          <span id="hours" class="flip-card text-xl font-bold">00</span>
+          <span class="mt-1.5 opacity-50 uppercase text-[9px] tracking-wider">Hrs</span>
+        </div>
+        <span class="text-xl font-bold opacity-30 pb-4">:</span>
+        <div class="flex flex-col items-center">
+          <span id="minutes" class="flip-card text-xl font-bold">00</span>
+          <span class="mt-1.5 opacity-50 uppercase text-[9px] tracking-wider">Min</span>
+        </div>
+        <span class="text-xl font-bold opacity-30 pb-4">:</span>
+        <div class="flex flex-col items-center">
+          <span id="seconds" class="flip-card text-xl font-bold">00</span>
+          <span class="mt-1.5 opacity-50 uppercase text-[9px] tracking-wider">Seg</span>
+        </div>
       </div>
       <script>
         const weddingDate = new Date("<%= invitation.fecha %>").getTime();
+        function updateValue(id, newValue) {
+          const el = document.getElementById(id);
+          if (el.innerText !== newValue) {
+            el.innerText = newValue;
+            el.classList.remove('flip-anim');
+            void el.offsetWidth;
+            el.classList.add('flip-anim');
+          }
+        }
         setInterval(() => {
           const now = new Date().getTime();
           const diff = weddingDate - now;
           if (diff > 0) {
-            document.getElementById('days').innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-            document.getElementById('hours').innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-            document.getElementById('minutes').innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-            document.getElementById('seconds').innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+            updateValue('days', String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0'));
+            updateValue('hours', String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0'));
+            updateValue('minutes', String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0'));
+            updateValue('seconds', String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0'));
           }
         }, 1000);
       </script>
     <% } %>
 
-    <p class="italic opacity-80 mb-6 text-lg">"<%= invitation.mensaje %>"</p>
+    <p class="italic opacity-80 my-4 text-base md:text-lg">"<%= invitation.mensaje %>"</p>
     
     <% if (invitation.fotos && invitation.fotos.length > 0) { %>
       <div class="my-6 grid grid-cols-2 gap-3">
         <% invitation.fotos.forEach(foto => { %>
-          <img src="<%= foto.trim() %>" alt="Foto novios" class="rounded-xl object-cover h-40 w-full shadow-md">
+          <img src="<%= foto.trim() %>" alt="Foto novios" class="rounded-2xl object-cover h-40 w-full shadow-md border border-stone-100">
         <% }) %>
       </div>
     <% } %>
 
-    <hr class="my-6 opacity-20">
+    <!-- DOBLEZ DE HOJA -->
+    <div class="doblez-hoja"></div>
 
-    <div class="my-6 space-y-3">
-      <h3 class="text-xl font-semibold tracking-wide">Cuándo y Dónde</h3>
-      <p>📅 <strong><%= invitation.fechaTexto %></strong></p>
-      <p>📍 <strong><%= invitation.lugar %></strong></p>
-      
-      <% if (invitation.mapaUrl) { %>
-        <div class="mt-4 rounded-xl overflow-hidden shadow-inner border border-stone-200">
-          <% if (invitation.mapaUrl.includes('<iframe')) { %>
-            <%- invitation.mapaUrl %>
-          <% } else { %>
-            <iframe src="<%= invitation.mapaUrl %>" width="100%" height="220" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    <!-- Ubicaciones: Ceremonia & Recepción -->
+    <div class="space-y-6">
+      <h3 class="text-2xl font-serif font-bold tracking-wide">¿Dónde y Cuándo?</h3>
+      <p class="text-sm font-semibold">📅 <%= invitation.fechaTexto %></p>
+
+      <!-- Ceremonia -->
+      <% if (invitation.lugarCeremonia) { %>
+        <div class="bg-stone-50/80 p-5 rounded-2xl border border-stone-200/80 text-center font-sans">
+          <span class="text-xs uppercase tracking-widest text-stone-400 font-semibold">Ceremonia Eucarística</span>
+          <p class="text-base font-serif font-bold text-stone-800 mt-1">⛪ <%= invitation.lugarCeremonia %></p>
+          <% if (invitation.mapaCeremoniaUrl) { %>
+            <div class="mt-3 rounded-xl overflow-hidden shadow-sm border border-stone-200">
+              <iframe src="<%= invitation.mapaCeremoniaUrl %>" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
+
+      <!-- Recepción -->
+      <% if (invitation.lugarRecepcion) { %>
+        <div class="bg-stone-50/80 p-5 rounded-2xl border border-stone-200/80 text-center font-sans">
+          <span class="text-xs uppercase tracking-widest text-stone-400 font-semibold">Recepción & Fiesta</span>
+          <p class="text-base font-serif font-bold text-stone-800 mt-1">🥂 <%= invitation.lugarRecepcion %></p>
+          <% if (invitation.mapaRecepcionUrl) { %>
+            <div class="mt-3 rounded-xl overflow-hidden shadow-sm border border-stone-200">
+              <iframe src="<%= invitation.mapaRecepcionUrl %>" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
           <% } %>
         </div>
       <% } %>
     </div>
 
-    <% if (invitation.menu) { %>
-      <hr class="my-6 opacity-20">
-      <div class="my-6 text-left bg-stone-50 p-6 rounded-2xl border border-stone-200">
-        <h3 class="text-xl font-semibold text-center mb-2">🍽️ Menú del Evento</h3>
-        <p class="text-sm opacity-90 whitespace-pre-line text-center"><%= invitation.menu %></p>
+    <!-- DOBLEZ DE HOJA -->
+    <div class="doblez-hoja"></div>
+
+    <!-- Dress Code & Paletas de Colores Restringidos -->
+    <div class="space-y-4 font-sans">
+      <h3 class="text-2xl font-serif font-bold tracking-wide">Código de Vestimenta</h3>
+      <div class="inline-block bg-stone-900 text-white px-5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
+        <%= invitation.dressCode %>
       </div>
+
+      <div class="bg-stone-50/80 p-5 rounded-2xl border border-stone-200/80 mt-4 text-xs space-y-4">
+        <p class="text-stone-500 italic">Reservamos los siguientes colores exclusivamente para los novios:</p>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Mujeres -->
+          <div class="flex flex-col items-center">
+            <span class="font-semibold text-stone-700 mb-2">Mujeres (No usar)</span>
+            <div class="flex gap-2">
+              <% invitation.coloresProhibidosDamas.forEach(col => { %>
+                <div class="w-7 h-7 rounded-full border border-stone-300 shadow-sm relative group" style="background-color: <%= col %>;" title="<%= col %>">
+                  <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-[8px] w-3.5 h-3.5 flex items-center justify-center font-bold">✕</span>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+
+          <!-- Hombres -->
+          <div class="flex flex-col items-center">
+            <span class="font-semibold text-stone-700 mb-2">Hombres (No usar)</span>
+            <div class="flex gap-2">
+              <% invitation.coloresProhibidosCaballeros.forEach(col => { %>
+                <div class="w-7 h-7 rounded-full border border-stone-300 shadow-sm relative group" style="background-color: <%= col %>;" title="<%= col %>">
+                  <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-[8px] w-3.5 h-3.5 flex items-center justify-center font-bold">✕</span>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOBLEZ DE HOJA -->
+    <div class="doblez-hoja"></div>
+
+    <!-- Mesa de Regalos (Zelle y Binance) -->
+    <% if (invitation.zelleEmail || invitation.binancePayId || invitation.binanceWalletUsdt) { %>
+      <div class="space-y-4 font-sans">
+        <h3 class="text-2xl font-serif font-bold tracking-wide">Mesa de Regalos</h3>
+        <p class="text-xs text-stone-500 italic">Tu presencia es nuestro mejor regalo. Si deseas realizarnos un presente económico, puedes hacerlo a través de:</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-left">
+          <!-- Zelle -->
+          <% if (invitation.zelleEmail) { %>
+            <div class="bg-stone-50/80 p-4 rounded-2xl border border-stone-200/80 relative">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-purple-700">💳 Zelle</span>
+              <p class="text-xs font-semibold text-stone-800 mt-1"><%= invitation.zelleEmail %></p>
+              <p class="text-[11px] text-stone-500"><%= invitation.zelleTitular %></p>
+              <button onclick="copiarTexto('<%= invitation.zelleEmail %>')" class="mt-2 text-[10px] bg-purple-100 hover:bg-purple-200 text-purple-800 font-medium px-3 py-1 rounded-lg transition">Copiar Correo</button>
+            </div>
+          <% } %>
+
+          <!-- Binance -->
+          <% if (invitation.binancePayId || invitation.binanceWalletUsdt) { %>
+            <div class="bg-stone-50/80 p-4 rounded-2xl border border-stone-200/80 relative">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-amber-600">🟡 Binance</span>
+              <% if (invitation.binancePayId) { %>
+                <p class="text-xs font-semibold text-stone-800 mt-1">ID: <%= invitation.binancePayId %></p>
+              <% } %>
+              <% if (invitation.binanceWalletUsdt) { %>
+                <p class="text-[10px] font-mono text-stone-500 truncate" title="<%= invitation.binanceWalletUsdt %>"><%= invitation.binanceWalletUsdt %></p>
+              <% } %>
+              <button onclick="copiarTexto('<%= invitation.binancePayId || invitation.binanceWalletUsdt %>')" class="mt-2 text-[10px] bg-amber-100 hover:bg-amber-200 text-amber-800 font-medium px-3 py-1 rounded-lg transition">Copiar ID/Wallet</button>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <script>
+        function copiarTexto(texto) {
+          navigator.clipboard.writeText(texto);
+          alert('¡Copiado al portapapeles!');
+        }
+      </script>
+
+      <!-- DOBLEZ DE HOJA -->
+      <div class="doblez-hoja"></div>
     <% } %>
 
-    <hr class="my-6 opacity-20">
+    <!-- Menú -->
+    <% if (invitation.menu) { %>
+      <div class="my-6 text-left bg-stone-50 p-6 rounded-2xl border border-stone-200/80 font-sans">
+        <h3 class="text-xl font-serif font-bold text-center mb-2">🍽️ Menú del Evento</h3>
+        <p class="text-xs text-stone-600 whitespace-pre-line text-center leading-relaxed"><%= invitation.menu %></p>
+      </div>
+      <!-- DOBLEZ DE HOJA -->
+      <div class="doblez-hoja"></div>
+    <% } %>
 
-    <div id="rsvp" class="mt-8 text-left bg-stone-50 p-6 rounded-2xl border border-stone-200">
-      <h3 class="text-xl font-semibold text-center mb-4">Confirma tu Asistencia</h3>
-      <form action="/boda/<%= invitation.slug %>/rsvp" method="POST" class="space-y-4 font-sans text-sm">
+    <!-- RSVP -->
+    <div id="rsvp" class="mt-8 text-left bg-stone-50/80 p-6 rounded-2xl border border-stone-200/80 font-sans">
+      <h3 class="text-xl font-serif font-bold text-center mb-4">Confirma tu Asistencia</h3>
+      <form action="/boda/<%= invitation.slug %>/rsvp" method="POST" class="space-y-4 text-xs">
         <div>
-          <label class="block text-xs uppercase tracking-wider opacity-60">Tu Nombre Completo</label>
-          <input type="text" name="nombre" required class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-lg">
+          <label class="block uppercase tracking-wider text-stone-500">Nombre Completo</label>
+          <input type="text" name="nombre" required class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-xl">
         </div>
         <div>
-          <label class="block text-xs uppercase tracking-wider opacity-60">Correo Electrónico</label>
-          <input type="email" name="correo" required placeholder="tucorreo@email.com" class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-lg">
+          <label class="block uppercase tracking-wider text-stone-500">Correo Electrónico</label>
+          <input type="email" name="correo" required placeholder="tucorreo@email.com" class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-xl">
         </div>
         <div>
-          <label class="block text-xs uppercase tracking-wider opacity-60">¿Asistirás?</label>
-          <select name="asistencia" class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-lg">
+          <label class="block uppercase tracking-wider text-stone-500">¿Asistirás?</label>
+          <select name="asistencia" class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-xl">
             <option value="Sí, ahí estaré">Sí, ahí estaré</option>
             <option value="No podré asistir">No podré asistir</option>
           </select>
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs uppercase tracking-wider opacity-60">Pases / Acompañantes</label>
-            <input type="number" name="personas" value="1" min="1" max="5" class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-lg">
+            <label class="block uppercase tracking-wider text-stone-500">Acompañantes / Pases</label>
+            <input type="number" name="personas" value="1" min="1" max="5" class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-xl">
           </div>
           <div>
-            <label class="block text-xs uppercase tracking-wider opacity-60">Opción de Menú</label>
-            <input type="text" name="menuElegido" placeholder="Ej. Lomito" class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-lg">
+            <label class="block uppercase tracking-wider text-stone-500">Opción de Menú</label>
+            <input type="text" name="menuElegido" placeholder="Ej. Lomito" class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-xl">
           </div>
         </div>
-        <button type="submit" class="w-full bg-stone-900 text-white py-3 rounded-xl hover:bg-stone-800 transition font-medium">Enviar Confirmación</button>
+        <button type="submit" class="w-full bg-stone-900 text-white py-3 rounded-xl hover:bg-stone-800 transition font-medium text-sm shadow-md">Enviar Confirmación</button>
       </form>
     </div>
 
-    <div id="buzon" class="mt-8 text-left bg-stone-50 p-6 rounded-2xl border border-stone-200">
-      <h3 class="text-xl font-semibold text-center mb-4">💌 Buzón de Deseos</h3>
-      <form action="/boda/<%= invitation.slug %>/buzon" method="POST" class="space-y-3 font-sans text-sm mb-6">
-        <input type="text" name="remitente" required placeholder="Tu nombre" class="w-full p-2.5 bg-white border border-stone-300 rounded-lg">
-        <textarea name="texto" rows="2" required placeholder="Mensaje para los novios..." class="w-full p-2.5 bg-white border border-stone-300 rounded-lg"></textarea>
-        <button type="submit" class="w-full bg-stone-800 text-white py-2 rounded-lg hover:bg-stone-700 transition">Enviar Mensaje</button>
+    <!-- Buzón -->
+    <div id="buzon" class="mt-8 text-left bg-stone-50/80 p-6 rounded-2xl border border-stone-200/80 font-sans">
+      <h3 class="text-xl font-serif font-bold text-center mb-4">💌 Buzón de Deseos</h3>
+      <form action="/boda/<%= invitation.slug %>/buzon" method="POST" class="space-y-3 text-xs mb-6">
+        <input type="text" name="remitente" required placeholder="Tu nombre" class="w-full p-2.5 bg-white border border-stone-300 rounded-xl">
+        <textarea name="texto" rows="2" required placeholder="Escribe un mensaje para los novios..." class="w-full p-2.5 bg-white border border-stone-300 rounded-xl"></textarea>
+        <button type="submit" class="w-full bg-stone-800 text-white py-2 rounded-xl hover:bg-stone-700 transition">Enviar Mensaje</button>
       </form>
       <div class="space-y-3 max-h-48 overflow-y-auto">
         <% if (invitation.mensajesBuzon && invitation.mensajesBuzon.length > 0) { %>
           <% invitation.mensajesBuzon.forEach(msg => { %>
-            <div class="bg-white p-3 rounded-xl border border-stone-200 text-xs font-sans">
+            <div class="bg-white p-3 rounded-xl border border-stone-200 text-xs">
               <strong class="text-stone-900"><%= msg.remitente %>:</strong>
               <p class="text-stone-600 mt-1">"<%= msg.texto %>"</p>
             </div>
