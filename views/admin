@@ -12,7 +12,7 @@
         <span class="text-xs uppercase tracking-widest text-stone-400">Panel de Control</span>
         <h1 class="text-3xl font-serif font-bold">Invitados & Mesas: <%= invitation.novios %></h1>
       </div>
-      <a href="/boda/<%= invitation.slug %>" target="_blank" class="text-sm bg-stone-100 hover:bg-stone-200 text-stone-800 px-4 py-2 rounded-lg transition">Ver Invitación Pública ↗</a>
+      <a href="/boda/<%= invitation.slug %>" class="text-sm bg-stone-100 hover:bg-stone-200 text-stone-800 px-4 py-2 rounded-lg transition">Ver Invitación Pública ↗</a>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -62,7 +62,7 @@
                 </td>
                 <td class="p-3"><%= rsvp.personas %></td>
                 <td class="p-3 text-xs italic"><%= rsvp.menuElegido || 'N/A' %></td>
-                <form action="/boda/<%= invitation.slug %>/admin/mesa" method="POST">
+                <form action="/boda/<%= invitation.slug %>/admin/mesa?auth=ok" method="POST">
                   <input type="hidden" name="rsvpId" value="<%= rsvp._id %>">
                   <td class="p-3">
                     <input type="text" name="mesa" value="<%= rsvp.mesa %>" class="p-1.5 border border-stone-300 rounded text-xs w-28 bg-white">
