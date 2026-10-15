@@ -80,39 +80,41 @@
       text-shadow: 0 1px 2px rgba(0,0,0,0.5);
     }
 
+    /* Abanico de fotos fluido y suave */
     .fan-gallery {
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 260px;
+      min-height: 240px;
       perspective: 1000px;
       padding: 20px 0;
     }
     .fan-card {
-      width: 140px;
-      height: 190px;
+      width: 130px;
+      height: 180px;
       object-fit: cover;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      border-radius: 14px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
       position: absolute;
       cursor: pointer;
       border: 3px solid #ffffff;
+      will-change: transform;
     }
-    .fan-card:nth-child(1) { transform: translateX(-60px) rotate(-12deg); z-index: 1; }
-    .fan-card:nth-child(2) { transform: translateX(-20px) rotate(-4deg); z-index: 2; }
-    .fan-card:nth-child(3) { transform: translateX(20px) rotate(4deg); z-index: 3; }
-    .fan-card:nth-child(4) { transform: translateX(60px) rotate(12deg); z-index: 4; }
+    .fan-card:nth-child(1) { transform: translateX(-55px) rotate(-10deg); z-index: 1; }
+    .fan-card:nth-child(2) { transform: translateX(-18px) rotate(-3deg); z-index: 2; }
+    .fan-card:nth-child(3) { transform: translateX(18px) rotate(3deg); z-index: 3; }
+    .fan-card:nth-child(4) { transform: translateX(55px) rotate(10deg); z-index: 4; }
 
-    .fan-gallery:hover .fan-card:nth-child(1) { transform: translateX(-110px) rotate(-18deg) scale(0.95); }
-    .fan-gallery:hover .fan-card:nth-child(2) { transform: translateX(-40px) rotate(-6deg) scale(0.98); }
-    .fan-gallery:hover .fan-card:nth-child(3) { transform: translateX(40px) rotate(6deg) scale(0.98); }
-    .fan-gallery:hover .fan-card:nth-child(4) { transform: translateX(110px) rotate(18deg) scale(0.95); }
+    .fan-gallery:hover .fan-card:nth-child(1) { transform: translateX(-95px) rotate(-14deg) scale(0.98); }
+    .fan-gallery:hover .fan-card:nth-child(2) { transform: translateX(-32px) rotate(-4deg) scale(1); }
+    .fan-gallery:hover .fan-card:nth-child(3) { transform: translateX(32px) rotate(4deg) scale(1); }
+    .fan-gallery:hover .fan-card:nth-child(4) { transform: translateX(95px) rotate(14deg) scale(0.98); }
 
     .fan-card:hover {
-      transform: translateY(-15px) scale(1.25) rotate(0deg) !important;
+      transform: translateY(-12px) scale(1.15) rotate(0deg) !important;
       z-index: 50 !important;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      box-shadow: 0 16px 30px rgba(0,0,0,0.3);
     }
   </style>
 </head>
@@ -277,19 +279,26 @@
         </div>
       </div>
 
-      <div id="lightbox" class="hidden fixed inset-0 z-50 bg-stone-950/85 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer" onclick="cerrarLightbox()">
-        <img id="lightbox-img" src="" class="max-w-[92vw] max-h-[88vh] rounded-2xl shadow-2xl object-contain border-4 border-white transition-transform duration-300">
+      <!-- Lightbox posicionado exactamente en el scroll actual de la pantalla -->
+      <div id="lightbox" class="hidden absolute left-0 right-0 z-50 bg-stone-950/90 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer" onclick="cerrarLightbox()">
+        <img id="lightbox-img" src="" class="max-w-[92vw] max-h-[85vh] rounded-2xl shadow-2xl object-contain border-4 border-white transition-transform duration-300">
       </div>
 
       <script>
         function abrirLightbox(url) {
           const lb = document.getElementById('lightbox');
           const img = document.getElementById('lightbox-img');
+          // Posicionar exactamente a la altura actual de la pantalla del usuario
+          lb.style.top = window.pageYOffset + 'px';
+          lb.style.height = window.innerHeight + 'px';
           img.src = url;
           lb.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
         }
         function cerrarLightbox() {
-          document.getElementById('lightbox').classList.add('hidden');
+          const lb = document.getElementById('lightbox');
+          lb.classList.add('hidden');
+          document.body.style.overflow = 'auto';
         }
       </script>
     <% } %>
@@ -480,11 +489,12 @@
     <div id="rsvp" class="mt-8 text-left bg-stone-50/80 p-6 rounded-2xl border border-stone-200/80 font-sans">
       <h3 class="text-xl font-bold text-center mb-4">Confirma tu Asistencia</h3>
       
+      <!-- Aviso de asistencia confirmada -->
       <div id="alerta-enviado" class="hidden mb-4 p-4 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-xl text-center font-semibold text-xs animate-pulse">
         ✨ ¡Confirmada tu asistencia! Muchas gracias.
       </div>
 
-      <form action="/boda/<%= invitation.slug %>/rsvp" method="POST" class="space-y-4 text-xs">
+      <form id="rsvp-form" action="/boda/<%= invitation.slug %>/rsvp" method="POST" class="space-y-4 text-xs">
         <div>
           <label class="block uppercase tracking-wider text-stone-500">Nombre Completo</label>
           <input type="text" name="nombre" required class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-xl">
