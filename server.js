@@ -20,7 +20,6 @@ const invitationSchema = new mongoose.Schema({
   fecha: String,
   fechaTexto: String,
   
-  // Ubicaciones
   lugarCeremonia: String,
   mapaCeremoniaUrl: String,
   lugarRecepcion: String,
@@ -31,18 +30,15 @@ const invitationSchema = new mongoose.Schema({
   menu: String,
   pinAdmin: { type: String, default: '1234' },
 
-  // Dress Code
   dressCode: { type: String, default: 'Formal Elegante' },
   coloresProhibidosDamas: [String],
   coloresProhibidosCaballeros: [String],
 
-  // Regalos
   zelleEmail: String,
   zelleTitular: String,
   binancePayId: String,
   binanceWalletUsdt: String,
 
-  // Estilos
   fuente: { type: String, default: 'font-serif' },
   colorTexto: { type: String, default: '#1c1917' },
   colorFondo: { type: String, default: '#fafaf9' },
