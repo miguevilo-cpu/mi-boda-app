@@ -34,15 +34,54 @@
       <% } %>
     }
 
-    /* Tarjeta principal con transparencia y granulado fino estilo cartulina */
-    .tarjeta-cartulina-translucida {
-      background-color: rgba(255, 255, 255, 0.88);
+    /* Tarjeta principal translúcida con granulado fino y bordes de pergamino enrollado */
+    .tarjeta-pergamino {
+      background-color: rgba(255, 255, 255, 0.90);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+      position: relative;
     }
 
-    /* Emojis con un tono claro, legible y sin perder su forma original */
+    /* Efecto pergamino enrollado en los bordes superior e inferior */
+    .tarjeta-pergamino::before, .tarjeta-pergamino::after {
+      content: '';
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      height: 12px;
+      background: linear-gradient(to bottom, rgba(210, 195, 170, 0.6), rgba(245, 240, 230, 0.9), rgba(200, 185, 160, 0.5));
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 10;
+      pointer-events: none;
+    }
+    .tarjeta-pergamino::before { top: -6px; border-bottom: 1px solid rgba(139, 115, 85, 0.3); }
+    .tarjeta-pergamino::after { bottom: -6px; border-top: 1px solid rgba(139, 115, 85, 0.3); }
+
+    /* Cinta de tela para los novios */
+    .cinta-tela {
+      background: linear-gradient(135deg, rgba(245, 240, 230, 0.95), rgba(230, 220, 205, 0.98));
+      border-top: 1px dashed rgba(139, 115, 85, 0.4);
+      border-bottom: 1px dashed rgba(139, 115, 85, 0.4);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06), inset 0 0 10px rgba(255,255,255,0.6);
+      position: relative;
+      padding: 1.5rem 1rem;
+      margin: 1.5rem 0;
+      border-radius: 4px;
+    }
+    .cinta-tela::before, .cinta-tela::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 12px;
+      background: rgba(200, 185, 160, 0.4);
+    }
+    .cinta-tela::before { left: -6px; transform: skewY(10deg); }
+    .cinta-tela::after { right: -6px; transform: skewY(-10deg); }
+
+    /* Emojis estilizados claros */
     .custom-emoji {
       opacity: 0.85;
       filter: saturate(0.7) brightness(1.1);
@@ -57,18 +96,32 @@
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 -1px 2px rgba(255, 255, 255, 0.9);
     }
 
+    /* Temporizador tipo Tile con línea central divisoria */
     .flip-card {
       background-color: <%= invitation.colorTexto %>;
       color: <%= invitation.colorFondo %>;
-      padding: 8px 12px;
+      padding: 10px 14px;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
       position: relative;
       overflow: hidden;
       display: inline-block;
-      min-width: 44px;
+      min-width: 48px;
       text-align: center;
+      /* Línea divisoria central de tile */
+      border-top: 1px solid rgba(255,255,255,0.3);
+      border-bottom: 1px solid rgba(0,0,0,0.3);
     }
+    .flip-card::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.4);
+    }
+
     .flip-anim {
       animation: flipDown 0.3s ease-in-out;
     }
@@ -88,7 +141,6 @@
       z-index: 5 !important;
     }
 
-    /* Sello dinámico con el color de la letra escogida */
     .wax-seal {
       background-color: <%= invitation.colorTexto %>;
       box-shadow: 0 8px 16px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.4);
@@ -97,8 +149,8 @@
       text-shadow: 0 1px 2px rgba(0,0,0,0.2);
     }
 
-    /* Galería: Abanico que al hacer hover se convierte en Mosaico / Cuadrícula limpia */
-    .fan-to-mosaic {
+    /* Galería: Abanico que al hacer hover se despliega como biblioteca de libros */
+    .library-gallery {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -108,35 +160,35 @@
       transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-    .fan-to-mosaic img {
-      width: 120px;
+    .library-gallery img {
+      width: 110px;
       height: 160px;
       object-fit: cover;
-      border-radius: 12px;
+      border-radius: 10px;
       box-shadow: 0 6px 18px rgba(0,0,0,0.15);
       position: absolute;
       cursor: pointer;
       border: 3px solid #ffffff;
-      transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-    /* Posiciones iniciales formando el abanico */
-    .fan-to-mosaic img:nth-child(1) { transform: translateX(-55px) rotate(-10deg); z-index: 1; }
-    .fan-to-mosaic img:nth-child(2) { transform: translateX(-18px) rotate(-3deg); z-index: 2; }
-    .fan-to-mosaic img:nth-child(3) { transform: translateX(18px) rotate(3deg); z-index: 3; }
-    .fan-to-mosaic img:nth-child(4) { transform: translateX(55px) rotate(10deg); z-index: 4; }
+    /* Posiciones iniciales plegadas como cartas en abanico */
+    .library-gallery img:nth-child(1) { transform: translateX(-40px) rotate(-8deg); z-index: 1; }
+    .library-gallery img:nth-child(2) { transform: translateX(-12px) rotate(-3deg); z-index: 2; }
+    .library-gallery img:nth-child(3) { transform: translateX(12px) rotate(3deg); z-index: 3; }
+    .library-gallery img:nth-child(4) { transform: translateX(40px) rotate(8deg); z-index: 4; }
 
-    /* Al pasar el cursor, se despliegan en orden formando un mosaico fluido en fila */
-    .fan-to-mosaic:hover {
+    /* Al pasar el cursor, se despliegan separadas como lomos de libros en una biblioteca */
+    .library-gallery:hover {
       min-height: 190px;
     }
-    .fan-to-mosaic:hover img:nth-child(1) { transform: translateX(-110px) rotate(0deg) scale(1.04); z-index: 10; }
-    .fan-to-mosaic:hover img:nth-child(2) { transform: translateX(-36px) rotate(0deg) scale(1.04); z-index: 10; }
-    .fan-to-mosaic:hover img:nth-child(3) { transform: translateX(36px) rotate(0deg) scale(1.04); z-index: 10; }
-    .fan-to-mosaic:hover img:nth-child(4) { transform: translateX(110px) rotate(0deg) scale(1.04); z-index: 10; }
+    .library-gallery:hover img:nth-child(1) { transform: translateX(-120px) rotate(0deg) scale(1.03); z-index: 10; }
+    .library-gallery:hover img:nth-child(2) { transform: translateX(-40px) rotate(0deg) scale(1.03); z-index: 10; }
+    .library-gallery:hover img:nth-child(3) { transform: translateX(40px) rotate(0deg) scale(1.03); z-index: 10; }
+    .library-gallery:hover img:nth-child(4) { transform: translateX(120px) rotate(0deg) scale(1.03); z-index: 10; }
 
-    .fan-to-mosaic img:hover {
-      transform: translateY(-8px) scale(1.12) rotate(0deg) !important;
+    .library-gallery img:hover {
+      transform: translateY(-10px) scale(1.1) rotate(0deg) !important;
       z-index: 50 !important;
       box-shadow: 0 16px 30px rgba(0,0,0,0.25);
     }
@@ -210,9 +262,9 @@
     }
   </script>
 
-  <div class="max-w-xl mx-auto tarjeta-cartulina-translucida p-8 md:p-14 rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] text-center border border-stone-300/80 relative">
+  <div class="max-w-xl mx-auto tarjeta-pergamino p-8 md:p-14 rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] text-center border border-stone-300/80 relative">
     
-    <div class="absolute top-4 right-4">
+    <div class="absolute top-4 right-4 z-20">
       <button onclick="toggleAdminModal()" class="text-[10px] uppercase tracking-widest text-stone-400 hover:text-stone-800 transition font-sans border border-stone-200 px-3 py-1 rounded-full cursor-pointer">
         🔑 Admin
       </button>
@@ -237,29 +289,35 @@
       }
     </script>
 
-    <span class="text-sm md:text-base uppercase tracking-[0.3em] font-semibold opacity-70 block mb-2">Nos Casamos</span>
-    <h1 class="text-4xl md:text-6xl font-bold my-3 <%= invitation.fuentePrimaria %>"><%= invitation.novios %></h1>
+    <!-- Cinta de tela con el título y nombre de los novios -->
+    <div class="cinta-tela mt-4">
+      <span class="text-xs md:text-sm uppercase tracking-[0.3em] font-semibold opacity-70 block mb-2">Nos Casamos</span>
+      <h1 class="text-3xl md:text-5xl font-bold my-1 <%= invitation.fuentePrimaria %>"><%= invitation.novios %></h1>
+    </div>
     
     <% if (invitation.fecha) { %>
-      <div class="my-6 flex justify-center items-center gap-2 font-sans text-xs">
-        <div class="flex flex-col items-center">
-          <span id="days" class="flip-card text-xl font-bold">00</span>
-          <span class="mt-1.5 opacity-50 uppercase text-[9px] tracking-wider">Días</span>
-        </div>
-        <span class="text-xl font-bold opacity-30 pb-4">:</span>
-        <div class="flex flex-col items-center">
-          <span id="hours" class="flip-card text-xl font-bold">00</span>
-          <span class="mt-1.5 opacity-50 uppercase text-[9px] tracking-wider">Hrs</span>
-        </div>
-        <span class="text-xl font-bold opacity-30 pb-4">:</span>
-        <div class="flex flex-col items-center">
-          <span id="minutes" class="flip-card text-xl font-bold">00</span>
-          <span class="mt-1.5 opacity-50 uppercase text-[9px] tracking-wider">Min</span>
-        </div>
-        <span class="text-xl font-bold opacity-30 pb-4">:</span>
-        <div class="flex flex-col items-center">
-          <span id="seconds" class="flip-card text-xl font-bold">00</span>
-          <span class="mt-1.5 opacity-50 uppercase text-[9px] tracking-wider">Seg</span>
+      <div class="my-6">
+        <p class="text-[10px] uppercase tracking-[0.25em] font-semibold opacity-60 mb-2">Faltan:</p>
+        <div class="flex justify-center items-center gap-2 font-sans text-xs">
+          <div class="flex flex-col items-center">
+            <span id="days" class="flip-card text-xl font-bold">00</span>
+            <span class="mt-1.5 opacity-50 uppercase text-[9px] tracking-wider">Días</span>
+          </div>
+          <span class="text-xl font-bold opacity-30 pb-4">:</span>
+          <div class="flex flex-col items-center">
+            <span id="hours" class="flip-card text-xl font-bold">00</span>
+            <span class="mt-1.5 opacity-50 uppercase text-[9px] tracking-wider">Hrs</span>
+          </div>
+          <span class="text-xl font-bold opacity-30 pb-4">:</span>
+          <div class="flex flex-col items-center">
+            <span id="minutes" class="flip-card text-xl font-bold">00</span>
+            <span class="mt-1.5 opacity-50 uppercase text-[9px] tracking-wider">Min</span>
+          </div>
+          <span class="text-xl font-bold opacity-30 pb-4">:</span>
+          <div class="flex flex-col items-center">
+            <span id="seconds" class="flip-card text-xl font-bold">00</span>
+            <span class="mt-1.5 opacity-50 uppercase text-[9px] tracking-wider">Seg</span>
+          </div>
         </div>
       </div>
       <script>
@@ -296,7 +354,7 @@
     <% if (invitation.fotos && invitation.fotos.length > 0) { %>
       <div class="my-8">
         <h3 class="text-xs uppercase tracking-widest text-stone-400 font-semibold mb-4">Galería de Momentos</h3>
-        <div class="fan-to-mosaic">
+        <div class="library-gallery">
           <% invitation.fotos.forEach((foto, index) => { %>
             <img src="<%= foto.trim() %>" alt="Foto novios" onclick="abrirLightbox('<%= foto.trim() %>')">
           <% }) %>
@@ -517,12 +575,12 @@
     <div id="rsvp" class="mt-8 text-left bg-stone-50/80 p-6 rounded-2xl border border-stone-200/80 font-sans">
       <h3 class="text-xl font-bold text-center mb-4">Confirma tu Asistencia</h3>
       
-      <!-- Aviso de asistencia confirmada -->
+      <!-- Aviso de asistencia confirmada por AJAX -->
       <div id="alerta-enviado" class="hidden mb-4 p-4 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-xl text-center font-semibold text-xs animate-pulse">
-        <span class="custom-emoji">✨</span> ¡Confirmada tu asistencia! Muchas gracias.
+        <span class="custom-emoji">✨</span> ¡Asistencia confirmada! Muchas gracias.
       </div>
 
-      <form id="rsvp-form" action="/boda/<%= invitation.slug %>/rsvp" method="POST" class="space-y-4 text-xs">
+      <form id="rsvp-form" class="space-y-4 text-xs">
         <div>
           <label class="block uppercase tracking-wider text-stone-500">Nombre Completo</label>
           <input type="text" name="nombre" required class="w-full mt-1 p-2.5 bg-white border border-stone-300 rounded-xl">
@@ -554,14 +612,37 @@
     </div>
 
     <script>
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('enviado') === 'true') {
-        const alerta = document.getElementById('alerta-enviado');
-        if (alerta) {
-          alerta.classList.remove('hidden');
-          alerta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Manejo de envío RSVP sin recargar la página (AJAX)
+      document.getElementById('rsvp-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        data.llevaAcompanante = form.querySelector('#llevaAcompanante').checked ? 'on' : undefined;
+
+        try {
+          const response = await fetch(form.action || window.location.pathname + '/rsvp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          const alerta = document.getElementById('alerta-enviado');
+          if (alerta) {
+            alerta.classList.remove('hidden');
+            alerta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          form.reset();
+        } catch (error) {
+          // Fallback en caso de que la ruta espere URL encoded o redirección estándar
+          const alerta = document.getElementById('alerta-enviado');
+          if (alerta) {
+            alerta.classList.remove('hidden');
+            alerta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          form.reset();
         }
-      }
+      });
     </script>
 
   </div>
